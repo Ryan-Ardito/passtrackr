@@ -1,0 +1,60 @@
+:root {
+  /* font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 24px;
+  font-weight: 400; */
+
+  font-size: 18px;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+.wrapper {
+  height: 88.2vh;
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex: 2;
+  gap: 10px;
+  flex-direction: column;
+  justify-content: top;
+}
+
+button {
+  padding: 10;
+}
+
+.holder-box {
+  flex: 2;
+}
+
+.form-text-input {
+  padding: 8;
+  width: 100%
+}
+
+.edit-box {
+  display: flex;
+  gap: 5px;
+  height: 100%;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.searchbar {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.search-results {
+  flex: 3;
+}
+
+#search-input {
+  flex: 1;
+}
