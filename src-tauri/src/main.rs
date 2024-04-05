@@ -23,16 +23,20 @@
 
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use tauri::{Menu, Submenu, MenuItem, CustomMenuItem};
+use std::sync::Mutex;
+
+use tauri::{Menu, Submenu, MenuItem, CustomMenuItem, State};
 use serde::Serialize;
 
-#[derive(Serialize, Debug)]
+struct Holders(Mutex<Vec<HolderData>>);
+
+#[derive(Serialize, Debug, Clone)]
 struct PassType {
     name: String,
     code: String,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Clone)]
 struct HolderData {
     id: u32,
     first_name: String,
@@ -51,15 +55,13 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command(async)]
-fn fetch_holders(search: &str) -> Vec<HolderData> {
+fn fetch_holders(search: &str, holders: State<Holders>) -> Vec<HolderData> {
     // std::thread::sleep(Duration::from_millis(200));
 
-    let mut result = vec![];
-
+    let mut hldrs = holders.0.lock().unwrap();
     for i in 0..10_000 {
         let pass_type = PassType { name: format!("annual"), code: format!("Annual") };
-
-        result.push(HolderData {
+        let holder_data = HolderData {
             id: i + 64,
             first_name: format!("{search}{i}"),
             last_name: format!("smith{i}"),
@@ -68,10 +70,12 @@ fn fetch_holders(search: &str) -> Vec<HolderData> {
             passtype: pass_type,
             active: i % 7 != 0,
             notes: format!("These are editable notes displayed to the user {i}."),
-        });
+        };
+
+        hldrs.push(holder_data);
     }
 
-    result
+    hldrs.to_vec()
 }
 
 fn main() {
@@ -83,6 +87,7 @@ fn main() {
         .add_submenu(submenu);
 
     tauri::Builder::default()
+        .manage(Holders(Default::default()))
         .menu(menu)
         .on_menu_event(|event| {
             match event.menu_item_id() {

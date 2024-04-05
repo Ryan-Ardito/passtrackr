@@ -4,12 +4,6 @@ import { PrimeReactProvider } from 'primereact/api';
 import App from "./App";
 
 import "primereact/resources/themes/mdc-light-indigo/theme.css";
-// import "primereact/resources/themes/mdc-dark-indigo/theme.css";
-
-// import "primereact/resources/themes/soho-light/theme.css";
-// import "primereact/resources/themes/soho-dark/theme.css";
-// import "primereact/resources/themes/mira/theme.css";
-
 import "primereact/resources/primereact.min.css";
 import "./styles.css";
 

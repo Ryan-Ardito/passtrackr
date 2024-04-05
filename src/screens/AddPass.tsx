@@ -1,4 +1,4 @@
-import { HolderData, PassType, blankHolder } from "../App"
+import { HolderData, HolderAction, PassType, blankHolder } from "../App"
 
 import { ScrollPanel } from "primereact/scrollpanel";
 import { InputText } from "primereact/inputtext";
@@ -23,15 +23,6 @@ const passtypes: PassType[] = [
   { name: "three_facial", code: "3x Facial" },
   { name: "six_facial", code: "6x Facial" },
 ];
-
-type HolderAction =
-  | { type: "replace"; data: HolderData }
-  | { type: "set_first_name"; data: string }
-  | { type: "set_last_name"; data: string }
-  | { type: "set_town"; data: string }
-  | { type: "set_passtype"; data: PassType | null }
-  | { type: "set_active"; data: boolean }
-  | { type: "set_notes"; data: string }
 
 interface ChildProps {
   selectedHolder: HolderData,

@@ -7,44 +7,7 @@ import { Button } from "primereact/button"
 import { AddPass } from "./AddPass"
 import { SearchBar } from "../components/SearchBar"
 import { SearchResults } from "../components/SearchResults"
-import { Screen } from "../App"
-
-export interface PassType {
-  name: string,
-  code: string,
-}
-
-export interface HolderData {
-  id: number | null,
-  first_name: string,
-  last_name: string,
-  town: string,
-  remaining: number,
-  passtype: PassType | null,
-  active: boolean,
-  notes: string,
-}
-
-export const blankHolder: HolderData = {
-  id: null,
-  first_name: "",
-  last_name: "",
-  town: "",
-  remaining: 0,
-  passtype: {name: "annual", code: "Annual"},
-  active: false,
-  notes: "",
-}
-
-export type HolderAction =
-  | { type: "replace"; data: HolderData }
-  | { type: "set_first_name"; data: string }
-  | { type: "set_last_name"; data: string }
-  | { type: "set_town"; data: string }
-  | { type: "set_passtype"; data: PassType | null }
-  | { type: "set_active"; data: boolean }
-  | { type: "set_notes"; data: string }
-
+import { HolderData, HolderAction, Screen } from "../App"
 
 interface ChildProps {
   setScreen: React.Dispatch<React.SetStateAction<Screen>>,
