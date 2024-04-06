@@ -10,6 +10,8 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.29.0",
+    "@tanstack/react-query-devtools": "^5.29.0",
     "@tauri-apps/api": "^1.4.0",
     "bootstrap": "5.3.1",
     "formik": "^2.4.5",
