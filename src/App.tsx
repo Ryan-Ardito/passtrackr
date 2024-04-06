@@ -1,6 +1,5 @@
 import { useState, FormEvent, useReducer } from "react";
 // import { Dispatch, SetStateAction, createContext, ReactNode, useContext } from "react";
-import { invoke } from "@tauri-apps/api/tauri";
 
 import { SearchBar } from "./components/SearchBar";
 import { PassInfo } from "./components/PassInfo";
@@ -11,6 +10,7 @@ import { Button } from 'primereact/button';
 import 'primeicons/primeicons.css';
 import { Divider } from "primereact/divider";
 import { AddPass } from "./screens/AddPass";
+import { fetchHolders } from "./api/api";
 
 export interface PassType {
   name: string,
@@ -93,13 +93,10 @@ function App() {
   const [passholders, setPassholders] = useState<HolderData[]>([]);
   const [selectedHolder, setSelectedHolder] = useReducer(holderReducer, blankHolder);
 
-  async function fetchHolders() {
-    setPassholders(await invoke("fetch_holders", {search: search}))
-  }
-
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    fetchHolders();
+    let res = fetchHolders(search);
+    setPassholders(await res);
   }
   
   // const NewPass = 

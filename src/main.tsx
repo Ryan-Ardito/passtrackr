@@ -4,7 +4,7 @@ import { PrimeReactProvider } from 'primereact/api';
 import {
   QueryClient,
   QueryClientProvider,
-  useQuery,
+  // useQuery,
 } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import App from "./App";

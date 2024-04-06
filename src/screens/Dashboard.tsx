@@ -1,4 +1,3 @@
-import { invoke } from "@tauri-apps/api/tauri"
 import { FormEvent, useState } from "react"
 
 import { Divider } from "primereact/divider"
@@ -8,6 +7,7 @@ import { AddPass } from "./AddPass"
 import { SearchBar } from "../components/SearchBar"
 import { SearchResults } from "../components/SearchResults"
 import { HolderData, HolderAction, Screen } from "../App"
+import { fetchHolders } from "../api/api";
 
 interface ChildProps {
   setScreen: React.Dispatch<React.SetStateAction<Screen>>,
@@ -21,13 +21,10 @@ export function Dashboard({setScreen, selectedHolder, setSelectedHolder}: ChildP
   const [passholders, setPassholders] = useState<HolderData[]>([]);
   // const [selectedHolder, setSelectedHolder] = useReducer(holderReducer, blankHolder);
 
-  async function fetchHolders() {
-    setPassholders(await invoke("fetch_holders", {search: search}))
-  }
-
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    fetchHolders();
+    let res = fetchHolders(search);
+    setPassholders(await res);
   }
 
   function PassInteraction() {
