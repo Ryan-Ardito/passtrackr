@@ -1,9 +1,8 @@
 import { useState, FormEvent, useReducer } from "react";
 // import { Dispatch, SetStateAction, createContext, ReactNode, useContext } from "react";
-import { emit, listen } from '@tauri-apps/api/event'
+import { listen } from '@tauri-apps/api/event'
 
 import { SearchBar } from "./components/SearchBar";
-import { PassInfo } from "./components/PassInfo";
 import { SearchResults } from "./components/SearchResults";
 
 import { Button } from 'primereact/button';
@@ -12,6 +11,7 @@ import 'primeicons/primeicons.css';
 import { Divider } from "primereact/divider";
 import { AddPass } from "./screens/AddPass";
 import { Settings } from "./screens/Settings";
+import { ViewPass } from "./screens/ViewPass";
 import { fetchHolders } from "./api/api";
 
 export interface PassType {
@@ -148,17 +148,6 @@ function App() {
       </div>
     </div>
 
-  const ViewPass =
-    <div className="wrapper">
-      <div className="container">
-        <PassInfo selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} />
-        <Button label="Back" onClick={(e) => {
-          e.preventDefault();
-          setScreen(Screen.Dashboard);
-        }} />
-      </div>
-    </div>
-
   listen('settings', () => {
     setScreen(Screen.Settings)
   })
@@ -167,7 +156,7 @@ function App() {
     case Screen.Dashboard:
       return Dashboard;
     case Screen.ViewPass:
-      return ViewPass;
+      return ViewPass({ setScreen, selectedHolder, setSelectedHolder });
     case Screen.Settings:
       return Settings({ setScreen });
   }
