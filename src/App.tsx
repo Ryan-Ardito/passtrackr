@@ -1,5 +1,6 @@
 import { useState, FormEvent, useReducer } from "react";
 // import { Dispatch, SetStateAction, createContext, ReactNode, useContext } from "react";
+import { emit, listen } from '@tauri-apps/api/event'
 
 import { SearchBar } from "./components/SearchBar";
 import { PassInfo } from "./components/PassInfo";
@@ -50,8 +51,8 @@ export type HolderAction =
 
 export enum Screen {
   Dashboard,
-  // AddPass,
   ViewPass,
+  Settings,
 }
 
 function holderReducer(holder: HolderData, action: HolderAction): HolderData {
@@ -98,15 +99,6 @@ function App() {
     let res = fetchHolders(search);
     setPassholders(await res);
   }
-  
-  // const NewPass = 
-  //   <div className="wrapper">
-  //     <Button label="Dashboard" onClick={(e) => {
-  //       e.preventDefault();
-  //       setScreen(Screen.Dashboard);
-  //     }} />
-  //     <AddPass selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} />
-  //   </div>
 
   function PassInteraction() {
     return (
@@ -153,14 +145,28 @@ function App() {
         }} />
       </div>
     </div>
+
+  const Settings = 
+    <div className="wrapper">
+      <div className="container">
+        <Button label="Back" onClick={(e) => {
+            e.preventDefault();
+            setScreen(Screen.Dashboard);
+        }} />
+      </div>
+    </div>
+
+  listen('settings', () => {
+    setScreen(Screen.Settings)
+  })
   
   switch (screen) {
     case Screen.Dashboard:
       return Dashboard;
-    // case Screen.AddPass:
-    //   return NewPass;
     case Screen.ViewPass:
       return ViewPass;
+    case Screen.Settings:
+      return Settings;
   }
 }
 
