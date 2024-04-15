@@ -11,6 +11,7 @@ import { Button } from 'primereact/button';
 import 'primeicons/primeicons.css';
 import { Divider } from "primereact/divider";
 import { AddPass } from "./screens/AddPass";
+import { Settings } from "./screens/Settings";
 import { fetchHolders } from "./api/api";
 
 export interface PassType {
@@ -61,28 +62,40 @@ function holderReducer(holder: HolderData, action: HolderAction): HolderData {
       return action.data
     }
     case "set_first_name": {
-      return { ...holder,
-        first_name: action.data, }
+      return {
+        ...holder,
+        first_name: action.data,
+      }
     }
     case "set_last_name": {
-      return { ...holder,
-        last_name: action.data, }
+      return {
+        ...holder,
+        last_name: action.data,
+      }
     }
     case "set_town": {
-      return { ...holder,
-        town: action.data, }
+      return {
+        ...holder,
+        town: action.data,
+      }
     }
     case "set_passtype": {
-      return { ...holder,
-        passtype: action.data, }
+      return {
+        ...holder,
+        passtype: action.data,
+      }
     }
     case "set_active": {
-      return { ...holder,
-        active: action.data, }
+      return {
+        ...holder,
+        active: action.data,
+      }
     }
     case "set_notes": {
-      return { ...holder,
-        notes: action.data, }
+      return {
+        ...holder,
+        notes: action.data,
+      }
     }
   }
 }
@@ -102,56 +115,46 @@ function App() {
 
   function PassInteraction() {
     return (
-      <div style={{display: "flex", flexDirection: "column", gap: "5px", flex: 1}}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "5px", flex: 1 }}>
         <Button disabled={!selectedHolder.id} label="Log Visit" onClick={(e) => {
-            e.preventDefault();
+          e.preventDefault();
         }} />
         <Button disabled={!selectedHolder.id} label="Add Visits" onClick={(e) => {
-            e.preventDefault();
+          e.preventDefault();
         }} />
         <Button disabled={!selectedHolder.id} label="View Pass" onClick={(e) => {
-            e.preventDefault();
-            setScreen(Screen.ViewPass);
+          e.preventDefault();
+          setScreen(Screen.ViewPass);
         }} />
         <Divider />
         <Button label="New Pass" onClick={(e) => {
-            e.preventDefault();
-            setAddPass(true);
-            // setScreen(Screen.AddPass);
+          e.preventDefault();
+          setAddPass(true);
+          // setScreen(Screen.AddPass);
         }} />
       </div>
     )
   }
 
-  const Dashboard = 
+  const Dashboard =
     <div className="wrapper">
       <div className="container">
-        <SearchBar setSearch={setSearch} handleSubmit={handleSubmit}/>
+        <SearchBar setSearch={setSearch} handleSubmit={handleSubmit} />
         <div className="edit-box">
-          <SearchResults passholders={passholders} selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder}/>
-          <Divider layout="vertical" style={{margin: 5}}/>
-          {addPass ? <AddPass selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} setAddPass={setAddPass}/> : <PassInteraction />}
+          <SearchResults passholders={passholders} selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} />
+          <Divider layout="vertical" style={{ margin: 5 }} />
+          {addPass ? <AddPass selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} setAddPass={setAddPass} /> : <PassInteraction />}
         </div>
       </div>
     </div>
-  
-  const ViewPass = 
+
+  const ViewPass =
     <div className="wrapper">
       <div className="container">
         <PassInfo selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} />
         <Button label="Back" onClick={(e) => {
-            e.preventDefault();
-            setScreen(Screen.Dashboard);
-        }} />
-      </div>
-    </div>
-
-  const Settings = 
-    <div className="wrapper">
-      <div className="container">
-        <Button label="Back" onClick={(e) => {
-            e.preventDefault();
-            setScreen(Screen.Dashboard);
+          e.preventDefault();
+          setScreen(Screen.Dashboard);
         }} />
       </div>
     </div>
@@ -159,14 +162,14 @@ function App() {
   listen('settings', () => {
     setScreen(Screen.Settings)
   })
-  
+
   switch (screen) {
     case Screen.Dashboard:
       return Dashboard;
     case Screen.ViewPass:
       return ViewPass;
     case Screen.Settings:
-      return Settings;
+      return Settings({ setScreen });
   }
 }
 
