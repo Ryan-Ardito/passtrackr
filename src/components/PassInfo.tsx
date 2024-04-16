@@ -19,29 +19,34 @@ interface ChildProps {
   setSelectedHolder: React.Dispatch<HolderAction>,
 }
 
+interface InputFieldProps {
+  label: string,
+  value: string,
+  onChange: (value: string) => void,
+}
+
+const InputField: React.FC<InputFieldProps> = ({ label, value, onChange }) => {
+  return (
+    <>
+      <div>{label}</div>
+      <InputText className="form-text-input" value={value} style={{ padding: 8 }}
+        onChange={(e) => onChange(e.target.value)} />
+    </>
+  );
+};
+
+
 export function PassInfo({ selectedHolder, setSelectedHolder }: ChildProps) {
   return (
     <ScrollPanel className="holder-box">
-      <div>First Name:</div>
-      <InputText className="form-text-input" value={selectedHolder.first_name} style={{ padding: 8 }}
-        onChange={(e) => setSelectedHolder({
-          type: 'set_first_name',
-          data: e.target.value,
-        })} />
+      <InputField label="First Name:" value={selectedHolder.first_name}
+        onChange={(value) => setSelectedHolder({ type: "set_first_name", data: value })} />
 
-      <div> Last Name:</div>
-      <InputText className="form-text-input" value={selectedHolder.last_name} style={{ padding: 8 }}
-        onChange={(e) => setSelectedHolder({
-          type: 'set_last_name',
-          data: e.target.value,
-        })} />
+      <InputField label="Last Name:" value={selectedHolder.last_name}
+        onChange={(value) => setSelectedHolder({ type: "set_last_name", data: value })} />
 
-      <div> Town:</div>
-      <InputText className="form-text-input" value={selectedHolder.town} style={{ padding: 8 }}
-        onChange={(e) => setSelectedHolder({
-          type: 'set_town',
-          data: e.target.value,
-        })} />
+      <InputField label="Town:" value={selectedHolder.town}
+        onChange={(value) => setSelectedHolder({ type: "set_town", data: value })} />
 
       <div>Passtype:</div>
       <Dropdown style={{ padding: 0 }} scrollHeight="400px"

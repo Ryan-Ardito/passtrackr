@@ -25,8 +25,8 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use std::sync::Mutex;
 
-use tauri::{Menu, Submenu, MenuItem, CustomMenuItem, State};
 use serde::Serialize;
+use tauri::{CustomMenuItem, Menu, MenuItem, State, Submenu};
 
 struct Holders(Mutex<Vec<HolderData>>);
 
@@ -59,8 +59,11 @@ fn fetch_holders(search: &str, holders: State<Holders>) -> Vec<HolderData> {
     // std::thread::sleep(Duration::from_millis(200));
 
     let mut hldrs = holders.0.lock().unwrap();
-    for i in 0..10_000 {
-        let pass_type = PassType { name: format!("annual"), code: format!("Annual") };
+    for i in 0..1_000 {
+        let pass_type = PassType {
+            name: format!("annual"),
+            code: format!("Annual"),
+        };
         let holder_data = HolderData {
             id: i + 64,
             first_name: format!("{search}{i}"),
@@ -79,9 +82,9 @@ fn fetch_holders(search: &str, holders: State<Holders>) -> Vec<HolderData> {
 }
 
 fn main() {
-    let new_todo = CustomMenuItem::new("settings".to_string(), "Settings");
+    let settings = CustomMenuItem::new("settings".to_string(), "Settings");
     let close = CustomMenuItem::new("quit".to_string(), "Quit");
-    let submenu = Submenu::new("File", Menu::new().add_item(new_todo).add_item(close));
+    let submenu = Submenu::new("File", Menu::new().add_item(settings).add_item(close));
     let menu = Menu::new()
         .add_native_item(MenuItem::Copy)
         .add_submenu(submenu);
@@ -89,12 +92,10 @@ fn main() {
     tauri::Builder::default()
         .manage(Holders(Default::default()))
         .menu(menu)
-        .on_menu_event(|event| {
-            match event.menu_item_id() {
-                "settings" => event.window().emit("settings", "").unwrap(),
-                "quit" => std::process::exit(0),
-                _ => (),
-            }
+        .on_menu_event(|event| match event.menu_item_id() {
+            "settings" => event.window().emit("settings", "").unwrap(),
+            "quit" => std::process::exit(0),
+            _ => (),
         })
         .invoke_handler(tauri::generate_handler![greet, fetch_holders])
         .run(tauri::generate_context!())
