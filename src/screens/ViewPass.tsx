@@ -1,6 +1,6 @@
 import { Button } from "primereact/button"
 
-import { Screen, HolderData, HolderAction } from "../App"
+import { Screen, HolderData, HolderAction } from "../types"
 import { PassInfo } from "../components/PassInfo";
 
 interface ChildProps {

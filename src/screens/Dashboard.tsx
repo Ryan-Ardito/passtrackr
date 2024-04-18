@@ -1,13 +1,13 @@
 import { FormEvent, useState } from "react"
 
 import { Divider } from "primereact/divider"
-import { Button } from "primereact/button"
 
 import { AddPass } from "./AddPass"
 import { SearchBar } from "../components/SearchBar"
 import { SearchResults } from "../components/SearchResults"
-import { HolderData, HolderAction, Screen } from "../App"
+import { HolderData, HolderAction, Screen } from "../types"
 import { fetchHolders } from "../api/api";
+import { PassInteraction } from "../components/PassInteraction"
 
 interface ChildProps {
   setScreen: React.Dispatch<React.SetStateAction<Screen>>,
@@ -27,37 +27,28 @@ export function Dashboard({ setScreen, selectedHolder, setSelectedHolder }: Chil
     setPassholders(await res);
   }
 
-  function PassInteraction() {
-    return (
-      <div style={{ display: "flex", flexDirection: "column", gap: "5px", flex: 1 }}>
-        <Button disabled={!selectedHolder.id} label="Log Visit" onClick={(e) => {
-          e.preventDefault();
-        }} />
-        <Button disabled={!selectedHolder.id} label="Add Visits" onClick={(e) => {
-          e.preventDefault();
-        }} />
-        <Button disabled={!selectedHolder.id} label="View Pass" onClick={(e) => {
-          e.preventDefault();
-          setScreen(Screen.ViewPass);
-        }} />
-        <Divider />
-        <Button label="New Pass" onClick={(e) => {
-          e.preventDefault();
-          setAddPass(true);
-          // setScreen(Screen.AddPass);
-        }} />
-      </div>
-    )
-  }
-
   return (
     <div className="wrapper">
       <div className="container">
         <SearchBar setSearch={setSearch} handleSubmit={handleSubmit} />
         <div className="edit-box">
-          <SearchResults passholders={passholders} selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} />
+          <SearchResults
+            passholders={passholders}
+            selectedHolder={selectedHolder}
+            setSelectedHolder={setSelectedHolder}
+          />
           <Divider layout="vertical" style={{ margin: 5 }} />
-          {addPass ? <AddPass selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} setAddPass={setAddPass} /> : <PassInteraction />}
+          {addPass ? (
+            <AddPass
+              selectedHolder={selectedHolder}
+              setSelectedHolder={setSelectedHolder}
+              setAddPass={setAddPass} />
+          ) : (
+            <PassInteraction
+              selectedHolder={selectedHolder}
+              setScreen={setScreen}
+              setAddPass={setAddPass} />
+          )}
         </div>
       </div>
     </div>

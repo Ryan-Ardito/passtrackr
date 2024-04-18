@@ -1,4 +1,4 @@
-import { HolderData, HolderAction, blankHolder, Msg } from "../App";
+import { HolderData, HolderAction, blankHolder, Msg } from "../types";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 // import { useContext } from "react";

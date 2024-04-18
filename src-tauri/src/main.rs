@@ -82,10 +82,18 @@ fn fetch_holders(search: &str, holders: State<Holders>) -> Result<Vec<HolderData
 }
 
 fn main() {
+    let dashboard = CustomMenuItem::new("dashboard".to_string(), "Dashboard");
     let settings = CustomMenuItem::new("settings".to_string(), "Settings...");
     // let close = CustomMenuItem::new("quit".to_string(), "Quit");
     let about = CustomMenuItem::new("about".to_string(), "About...");
-    let submenu = Submenu::new("File", Menu::new().add_item(settings).add_native_item(MenuItem::Separator).add_item(about));
+    let submenu = Submenu::new(
+        "File",
+        Menu::new()
+            .add_item(dashboard)
+            .add_item(settings)
+            .add_native_item(MenuItem::Separator)
+            .add_item(about),
+    );
     let menu = Menu::new()
         .add_native_item(MenuItem::Copy)
         .add_submenu(submenu);
@@ -94,6 +102,7 @@ fn main() {
         .manage(Holders(Default::default()))
         .menu(menu)
         .on_menu_event(|event| match event.menu_item_id() {
+            "dashboard" => event.window().emit("dashboard", "").unwrap(),
             "settings" => event.window().emit("settings", "").unwrap(),
             "about" => event.window().emit("about", "").unwrap(),
             // "quit" => std::process::exit(0),
