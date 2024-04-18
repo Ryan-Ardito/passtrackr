@@ -4,16 +4,10 @@ import { Column } from "primereact/column";
 // import { useContext } from "react";
 
 const activeBodyTemplate = (rowData: HolderData) => {
-  return (
-    <i className={rowData.active ? "pi pi-check" : "pi pi-times"} />
-  )
+  return <i className={rowData.active ? "pi pi-check" : "pi pi-times"} />
 }
 
-const passtypeTemplate = (rowData: HolderData) => {
-  return (
-    rowData.passtype?.code
-  )
-}
+const passtypeTemplate = (rowData: HolderData) => rowData.passtype?.code
 
 interface ChildProps {
   passholders: HolderData[],
@@ -22,7 +16,6 @@ interface ChildProps {
 }
 
 export function SearchResults({ passholders, selectedHolder, setSelectedHolder }: ChildProps) {
-
   return (
     <DataTable showGridlines className="search-results" size="small"
       scrollable scrollHeight="87%" paginator rows={32}

@@ -18,7 +18,7 @@ interface InputFieldProps {
 const InputField: React.FC<InputFieldProps> = ({ label, value, onChange }) => {
   return (
     <>
-      <div>{label}</div>
+      <div className="form-text">{label}</div>
       <InputText className="form-text-input" value={value} style={{ padding: 8 }}
         onChange={(e) => onChange(e.target.value)} />
     </>
@@ -37,7 +37,7 @@ export function PassInfo({ selectedHolder, setSelectedHolder }: ChildProps) {
       <InputField label="Town:" value={selectedHolder.town}
         onChange={(value) => setSelectedHolder({ type: Msg.SetTown, data: value })} />
 
-      <div>Passtype:</div>
+      <div className="form-text">Passtype:</div>
       <Dropdown style={{ padding: 0 }} scrollHeight="400px"
         // filter resetFilterOnHide
         value={selectedHolder.passtype} options={passtypes} optionLabel="code"

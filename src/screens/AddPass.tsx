@@ -97,9 +97,9 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
             formik.setFieldValue('payMethod', e.value);
           }}
         />
-        <div></div>
 
-        <div className="form-text" style={{ display: 'inline-block', marginRight: '16px' }}>
+        <div></div>
+        <div className="form-text required">
           Last Four:
         </div>
         {formik.touched.lastFour && formik.errors.lastFour && (
@@ -112,7 +112,7 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           onChange={formik.handleChange}
         />
 
-        <div className="form-text" style={{ display: 'inline-block', marginRight: '16px' }}>
+        <div className="form-text required">
           Amount Paid:
         </div>
         {formik.touched.amountPaid && formik.errors.amountPaid && (
@@ -125,7 +125,7 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           onChange={formik.handleChange}
         />
 
-        <div className="form-text" style={{ display: 'inline-block', marginRight: '16px' }}>
+        <div className="form-text required">
           Employee Signature:
         </div>
         {formik.touched.signature && formik.errors.signature && (
