@@ -7,7 +7,7 @@ import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 
-import { HolderData, HolderAction, PassType, blankHolder, Msg } from "../App"
+import { HolderData, HolderAction, PassType, Msg, blankHolder } from "../types"
 
 const payMethods = [
   { name: "Credit", code: "credit" },
@@ -39,7 +39,9 @@ interface InputFieldProps {
 const InputField: React.FC<InputFieldProps> = ({ label, value, onChange }) => {
   return (
     <>
-      <div>{label}</div>
+      <div className="form-text">
+        {label}
+      </div>
       <InputText className="form-text-input p-inputtext-sm" value={value}
         onChange={(e) => onChange(e.target.value)}
       />
@@ -82,7 +84,9 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           onChange={(e) => setSelectedHolder({ type: Msg.SetTown, data: e })}
         />
 
-        <div>Passtype:</div>
+        <div className="form-text">
+          Passtype:
+        </div>
         <Dropdown
           scrollHeight="400px"
           value={selectedHolder.passtype}
@@ -96,7 +100,9 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           }}
         />
 
-        <div>Payment Method:</div>
+        <div className="form-text">
+          Payment Method:
+        </div>
         <Dropdown
           scrollHeight="400px"
           value={formik.values.payMethod}
@@ -108,7 +114,7 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
         />
         <div></div>
 
-        <div style={{ display: 'inline-block', marginRight: '16px' }}>
+        <div className="form-text" style={{ display: 'inline-block', marginRight: '16px' }}>
           Last Four:
         </div>
         {formik.touched.lastFour && formik.errors.lastFour && (
@@ -121,7 +127,7 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           onChange={formik.handleChange}
         />
 
-        <div style={{ display: 'inline-block', marginRight: '16px' }}>
+        <div className="form-text" style={{ display: 'inline-block', marginRight: '16px' }}>
           Amount Paid:
         </div>
         {formik.touched.amountPaid && formik.errors.amountPaid && (
@@ -134,7 +140,7 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           onChange={formik.handleChange}
         />
 
-        <div style={{ display: 'inline-block', marginRight: '16px' }}>
+        <div className="form-text" style={{ display: 'inline-block', marginRight: '16px' }}>
           Employee Signature:
         </div>
         {formik.touched.signature && formik.errors.signature && (

@@ -1,4 +1,4 @@
-import { HolderData, HolderAction, PassType, Msg } from "../App"
+import { HolderData, HolderAction, PassType, Msg } from "../types"
 
 import { ScrollPanel } from "primereact/scrollpanel";
 import { InputText } from "primereact/inputtext";

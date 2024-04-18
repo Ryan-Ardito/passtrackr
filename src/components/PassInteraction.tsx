@@ -1,8 +1,7 @@
 import { Button } from "primereact/button"
 import { Divider } from "primereact/divider"
 
-import { HolderData } from "../App"
-import { Screen } from "../App"
+import { HolderData, Screen } from "../types"
 
 interface ChildProps {
   selectedHolder: HolderData,

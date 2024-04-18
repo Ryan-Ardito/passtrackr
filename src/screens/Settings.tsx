@@ -1,6 +1,6 @@
 import { Button } from "primereact/button"
 
-import { Screen } from "../App"
+import { Screen } from "../types"
 
 interface ChildProps {
   setScreen: React.Dispatch<React.SetStateAction<Screen>>,
