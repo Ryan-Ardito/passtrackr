@@ -25,6 +25,7 @@ function App() {
   const [screen, setScreen] = useState(Screen.Dashboard);
   const [selectedHolder, setSelectedHolder] = useReducer(holderReducer, blankHolder);
 
+  // Window menu emissions from Tauri
   listen('dashboard', () => { setScreen(Screen.Dashboard) });
   listen('settings', () => { setScreen(Screen.Settings) });
   listen('about', () => { setScreen(Screen.About) });

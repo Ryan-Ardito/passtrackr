@@ -61,8 +61,8 @@ fn fetch_holders(search: &str, holders: State<Holders>) -> Result<Vec<HolderData
     let mut hldrs = holders.0.lock().unwrap();
     for i in 0..1_000 {
         let pass_type = PassType {
-            name: format!("annual"),
-            code: format!("Annual"),
+            name: format!("Annual"),
+            code: format!("annual"),
         };
         let holder_data = HolderData {
             id: i + 64,

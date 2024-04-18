@@ -26,13 +26,13 @@ export const payMethods = [
 ]
 
 export const passtypes: PassType[] = [
-  { name: "ten_punch", code: "10x Punch" },
-  { name: "six_punch", code: "6x Punch" },
-  { name: "annual", code: "Annual" },
-  { name: "six_month", code: "6 Month" },
-  { name: "free_pass", code: "Free Pass" },
-  { name: "three_facial", code: "3x Facial" },
-  { name: "six_facial", code: "6x Facial" },
+  { name: "10x Punch", code: "ten_punch" },
+  { name: "6x Punch", code: "six_punch" },
+  { name: "Annual", code: "annual" },
+  { name: "6 Month", code: "six_month" },
+  { name: "Free Pass", code: "free_pass" },
+  { name: "3x Facial", code: "three_facial" },
+  { name: "6x Facial", code: "six_facial" },
 ];
 
 export interface HolderData {

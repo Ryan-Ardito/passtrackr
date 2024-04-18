@@ -3,11 +3,11 @@ import * as Yup from 'yup';
 
 import { ScrollPanel } from "primereact/scrollpanel";
 import { InputText } from "primereact/inputtext";
-import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 
 import { HolderData, HolderAction, passtypes, payMethods, Msg, blankHolder } from "../types"
+import { LabeledDropdown } from '../components/FormInput';
 
 interface ChildProps {
   selectedHolder: HolderData,
@@ -69,31 +69,23 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           onChange={(e) => setSelectedHolder({ type: Msg.SetTown, data: e })}
         />
 
-        <div className="form-text">
-          Passtype:
-        </div>
-        <Dropdown
-          scrollHeight="400px"
+        <LabeledDropdown
+          label="Passtype:"
           value={selectedHolder.passtype}
           options={passtypes}
-          optionLabel="code"
-          onChange={(e) => {
+          dropdownHandler={(e) => {
             setSelectedHolder({
               type: Msg.SetPasstype,
               data: e.value,
-            });
+            })
           }}
         />
 
-        <div className="form-text">
-          Payment Method:
-        </div>
-        <Dropdown
-          scrollHeight="400px"
+        <LabeledDropdown
+          label="Payment Method: "
           value={formik.values.payMethod}
           options={payMethods}
-          optionLabel="name"
-          onChange={(e) => {
+          dropdownHandler={(e) => {
             formik.setFieldValue('payMethod', e.value);
           }}
         />
