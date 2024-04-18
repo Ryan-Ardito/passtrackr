@@ -35,7 +35,6 @@ const InputField: React.FC<InputFieldProps> = ({ label, value, onChange }) => {
   );
 };
 
-
 export function PassInfo({ selectedHolder, setSelectedHolder }: ChildProps) {
   return (
     <ScrollPanel className="holder-box">

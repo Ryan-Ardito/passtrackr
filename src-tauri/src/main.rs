@@ -55,7 +55,7 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command(async)]
-fn fetch_holders(search: &str, holders: State<Holders>) -> Vec<HolderData> {
+fn fetch_holders(search: &str, holders: State<Holders>) -> Result<Vec<HolderData>, String> {
     // std::thread::sleep(Duration::from_millis(200));
 
     let mut hldrs = holders.0.lock().unwrap();
@@ -78,13 +78,14 @@ fn fetch_holders(search: &str, holders: State<Holders>) -> Vec<HolderData> {
         hldrs.push(holder_data);
     }
 
-    hldrs.to_vec()
+    Ok(hldrs.to_vec())
 }
 
 fn main() {
-    let settings = CustomMenuItem::new("settings".to_string(), "Settings");
-    let close = CustomMenuItem::new("quit".to_string(), "Quit");
-    let submenu = Submenu::new("File", Menu::new().add_item(settings).add_item(close));
+    let settings = CustomMenuItem::new("settings".to_string(), "Settings...");
+    // let close = CustomMenuItem::new("quit".to_string(), "Quit");
+    let about = CustomMenuItem::new("about".to_string(), "About...");
+    let submenu = Submenu::new("File", Menu::new().add_item(settings).add_native_item(MenuItem::Separator).add_item(about));
     let menu = Menu::new()
         .add_native_item(MenuItem::Copy)
         .add_submenu(submenu);
@@ -94,7 +95,8 @@ fn main() {
         .menu(menu)
         .on_menu_event(|event| match event.menu_item_id() {
             "settings" => event.window().emit("settings", "").unwrap(),
-            "quit" => std::process::exit(0),
+            "about" => event.window().emit("about", "").unwrap(),
+            // "quit" => std::process::exit(0),
             _ => (),
         })
         .invoke_handler(tauri::generate_handler![greet, fetch_holders])

@@ -30,7 +30,7 @@ interface ChildProps {
   setAddPass: React.Dispatch<boolean>,
 }
 
-export function AddPass({ selectedHolder, setSelectedHolder, setAddPass }: ChildProps) {
+export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: ChildProps) => {
   const formik = useFormik({
     initialValues: {
       lastFour: '',
@@ -39,8 +39,8 @@ export function AddPass({ selectedHolder, setSelectedHolder, setAddPass }: Child
       signature: '',
     },
     validationSchema: Yup.object().shape({
-      lastFour: Yup.string().required('Last Four is required'),
-      amountPaid: Yup.string().required('Amount Paid is required'),
+      lastFour: Yup.number(),
+      amountPaid: Yup.number().required('Amount Paid is required'),
       paymentMethod: Yup.string().required('Payment method is required'),
       signature: Yup.string().required('Employee Signature is required'),
     }),

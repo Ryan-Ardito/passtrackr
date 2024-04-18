@@ -1,18 +1,24 @@
 import { useState, FormEvent, useReducer } from "react";
-// import { Dispatch, SetStateAction, createContext, ReactNode, useContext } from "react";
 import { listen } from '@tauri-apps/api/event'
-
-import { SearchBar } from "./components/SearchBar";
-import { SearchResults } from "./components/SearchResults";
-
-import { Button } from 'primereact/button';
 
 import 'primeicons/primeicons.css';
 import { Divider } from "primereact/divider";
+
+import { fetchHolders } from "./api/api";
+import { SearchBar } from "./components/SearchBar";
+import { SearchResults } from "./components/SearchResults";
+import { PassInteraction } from "./components/PassInteraction";
 import { AddPass } from "./screens/AddPass";
 import { Settings } from "./screens/Settings";
 import { ViewPass } from "./screens/ViewPass";
-import { fetchHolders } from "./api/api";
+import { About } from "./screens/About";
+
+export enum Screen {
+  Dashboard,
+  ViewPass,
+  Settings,
+  About,
+}
 
 export interface PassType {
   name: string,
@@ -50,53 +56,15 @@ export type HolderAction =
   | { type: "set_active"; data: boolean }
   | { type: "set_notes"; data: string }
 
-export enum Screen {
-  Dashboard,
-  ViewPass,
-  Settings,
-}
-
 function holderReducer(holder: HolderData, action: HolderAction): HolderData {
   switch (action.type) {
-    case "replace": {
-      return action.data
-    }
-    case "set_first_name": {
-      return {
-        ...holder,
-        first_name: action.data,
-      }
-    }
-    case "set_last_name": {
-      return {
-        ...holder,
-        last_name: action.data,
-      }
-    }
-    case "set_town": {
-      return {
-        ...holder,
-        town: action.data,
-      }
-    }
-    case "set_passtype": {
-      return {
-        ...holder,
-        passtype: action.data,
-      }
-    }
-    case "set_active": {
-      return {
-        ...holder,
-        active: action.data,
-      }
-    }
-    case "set_notes": {
-      return {
-        ...holder,
-        notes: action.data,
-      }
-    }
+    case "replace": { return action.data }
+    case "set_first_name": { return { ...holder, first_name: action.data, } }
+    case "set_last_name": { return { ...holder, last_name: action.data } }
+    case "set_town": { return { ...holder, town: action.data } }
+    case "set_passtype": { return { ...holder, passtype: action.data } }
+    case "set_active": { return { ...holder, active: action.data } }
+    case "set_notes": { return { ...holder, notes: action.data } }
   }
 }
 
@@ -113,29 +81,6 @@ function App() {
     setPassholders(await res);
   }
 
-  function PassInteraction() {
-    return (
-      <div style={{ display: "flex", flexDirection: "column", gap: "5px", flex: 1 }}>
-        <Button disabled={!selectedHolder.id} label="Log Visit" onClick={(e) => {
-          e.preventDefault();
-        }} />
-        <Button disabled={!selectedHolder.id} label="Add Visits" onClick={(e) => {
-          e.preventDefault();
-        }} />
-        <Button disabled={!selectedHolder.id} label="View Pass" onClick={(e) => {
-          e.preventDefault();
-          setScreen(Screen.ViewPass);
-        }} />
-        <Divider />
-        <Button label="New Pass" onClick={(e) => {
-          e.preventDefault();
-          setAddPass(true);
-          // setScreen(Screen.AddPass);
-        }} />
-      </div>
-    )
-  }
-
   const Dashboard =
     <div className="wrapper">
       <div className="container">
@@ -143,14 +88,23 @@ function App() {
         <div className="edit-box">
           <SearchResults passholders={passholders} selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} />
           <Divider layout="vertical" style={{ margin: 5 }} />
-          {addPass ? <AddPass selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} setAddPass={setAddPass} /> : <PassInteraction />}
+          {addPass ? (
+            <AddPass
+              selectedHolder={selectedHolder}
+              setSelectedHolder={setSelectedHolder}
+              setAddPass={setAddPass} />
+          ) : (
+            <PassInteraction
+              selectedHolder={selectedHolder}
+              setScreen={setScreen}
+              setAddPass={setAddPass} />
+          )}
         </div>
       </div>
     </div>
 
-  listen('settings', () => {
-    setScreen(Screen.Settings)
-  })
+  listen('settings', () => { setScreen(Screen.Settings) })
+  listen('about', () => { setScreen(Screen.About) })
 
   switch (screen) {
     case Screen.Dashboard:
@@ -159,6 +113,8 @@ function App() {
       return ViewPass({ setScreen, selectedHolder, setSelectedHolder });
     case Screen.Settings:
       return Settings({ setScreen });
+    case Screen.About:
+      return About({ setScreen });
   }
 }
 
