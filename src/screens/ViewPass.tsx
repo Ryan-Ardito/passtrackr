@@ -12,7 +12,7 @@ interface ChildProps {
 export function ViewPass({ setScreen, selectedHolder, setSelectedHolder }: ChildProps) {
   return (
     <div className="wrapper">
-      <div className="container" style={{ width: '400px', margin: '0 auto' }}>
+      <div className="container center-box">
         <PassInfo selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} />
         <Button label="Back" onClick={(e) => {
           e.preventDefault();

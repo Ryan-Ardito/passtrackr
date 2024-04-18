@@ -31,6 +31,10 @@
   flex-direction: column;
   justify-content: top;
 }
+.center-box {
+  width: 400px;
+  margin: 0 auto;
+}
 
 button {
   padding: 10;

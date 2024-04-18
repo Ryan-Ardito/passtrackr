@@ -1,29 +1,14 @@
 import { HolderData, HolderAction, passtypes, Msg } from "../types"
 
 import { ScrollPanel } from "primereact/scrollpanel";
-import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
+
+import { InputField } from "./FormInput";
 
 interface ChildProps {
   selectedHolder: HolderData,
   setSelectedHolder: React.Dispatch<HolderAction>,
 }
-
-interface InputFieldProps {
-  label: string,
-  value: string,
-  onChange: (value: string) => void,
-}
-
-const InputField: React.FC<InputFieldProps> = ({ label, value, onChange }) => {
-  return (
-    <>
-      <div className="form-text">{label}</div>
-      <InputText className="form-text-input" value={value} style={{ padding: 8 }}
-        onChange={(e) => onChange(e.target.value)} />
-    </>
-  );
-};
 
 export function PassInfo({ selectedHolder, setSelectedHolder }: ChildProps) {
   return (
