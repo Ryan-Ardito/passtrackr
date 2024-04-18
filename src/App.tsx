@@ -47,24 +47,34 @@ export const blankHolder: HolderData = {
   notes: "",
 }
 
+export enum Msg {
+  Replace = "REPLACE",
+  SetFirstName = "SET_FIRST_NAME",
+  SetLastName = "SET_LAST_NAME",
+  SetTown = "SET_TOWN",
+  SetPasstype = "SET_PASSTYPE",
+  SetActive = "SET_ACTIVE",
+  SetNotes = "SET_NOTES",
+}
+
 export type HolderAction =
-  | { type: "replace"; data: HolderData }
-  | { type: "set_first_name"; data: string }
-  | { type: "set_last_name"; data: string }
-  | { type: "set_town"; data: string }
-  | { type: "set_passtype"; data: PassType | null }
-  | { type: "set_active"; data: boolean }
-  | { type: "set_notes"; data: string }
+  | { type: Msg.Replace; data: HolderData }
+  | { type: Msg.SetFirstName; data: string }
+  | { type: Msg.SetLastName; data: string }
+  | { type: Msg.SetTown; data: string }
+  | { type: Msg.SetPasstype; data: PassType | null }
+  | { type: Msg.SetActive; data: boolean }
+  | { type: Msg.SetNotes; data: string }
 
 function holderReducer(holder: HolderData, action: HolderAction): HolderData {
   switch (action.type) {
-    case "replace": { return action.data }
-    case "set_first_name": { return { ...holder, first_name: action.data, } }
-    case "set_last_name": { return { ...holder, last_name: action.data } }
-    case "set_town": { return { ...holder, town: action.data } }
-    case "set_passtype": { return { ...holder, passtype: action.data } }
-    case "set_active": { return { ...holder, active: action.data } }
-    case "set_notes": { return { ...holder, notes: action.data } }
+    case Msg.Replace: { return action.data }
+    case Msg.SetFirstName: { return { ...holder, first_name: action.data } }
+    case Msg.SetLastName: { return { ...holder, last_name: action.data } }
+    case Msg.SetTown: { return { ...holder, town: action.data } }
+    case Msg.SetPasstype: { return { ...holder, passtype: action.data } }
+    case Msg.SetActive: { return { ...holder, active: action.data } }
+    case Msg.SetNotes: { return { ...holder, notes: action.data } }
   }
 }
 

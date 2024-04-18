@@ -27,7 +27,6 @@ export const PassInteraction = ({selectedHolder, setScreen, setAddPass}: ChildPr
       <Button label="New Pass" onClick={(e) => {
         e.preventDefault();
         setAddPass(true);
-        // setScreen(Screen.AddPass);
       }} />
     </div>
   )

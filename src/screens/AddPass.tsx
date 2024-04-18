@@ -1,4 +1,4 @@
-import { HolderData, HolderAction, PassType, blankHolder } from "../App"
+import { HolderData, HolderAction, PassType, blankHolder, Msg } from "../App"
 
 import { ScrollPanel } from "primereact/scrollpanel";
 import { InputText } from "primereact/inputtext";
@@ -30,6 +30,23 @@ interface ChildProps {
   setAddPass: React.Dispatch<boolean>,
 }
 
+interface InputFieldProps {
+  label: string,
+  value: string,
+  onChange: (value: string) => void,
+}
+
+const InputField: React.FC<InputFieldProps> = ({ label, value, onChange }) => {
+  return (
+    <>
+      <div>{label}</div>
+      <InputText className="form-text-input p-inputtext-sm" value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    </>
+  )
+}
+
 export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: ChildProps) => {
   const formik = useFormik({
     initialValues: {
@@ -40,7 +57,7 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
     },
     validationSchema: Yup.object().shape({
       lastFour: Yup.number(),
-      amountPaid: Yup.number().required('Amount Paid is required'),
+      amountPaid: Yup.number().positive().required('Amount Paid is required'),
       paymentMethod: Yup.string().required('Payment method is required'),
       signature: Yup.string().required('Employee Signature is required'),
     }),
@@ -53,34 +70,16 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
   return (
     <ScrollPanel className="holder-box">
       <form onSubmit={formik.handleSubmit}>
-        <div>First Name:</div>
-        <InputText
-          className="form-text-input p-inputtext-sm"
-          value={selectedHolder.first_name}
-          onChange={(e) => setSelectedHolder({
-            type: 'set_first_name',
-            data: e.target.value,
-          })}
+        <InputField label="First Name:" value={selectedHolder.first_name}
+          onChange={(e) => setSelectedHolder({ type: Msg.SetFirstName, data: e })}
         />
 
-        <div>Last Name:</div>
-        <InputText
-          className="form-text-input p-inputtext-sm"
-          value={selectedHolder.last_name}
-          onChange={(e) => setSelectedHolder({
-            type: 'set_last_name',
-            data: e.target.value,
-          })}
+        <InputField label="Last Name:" value={selectedHolder.last_name}
+          onChange={(e) => setSelectedHolder({ type: Msg.SetLastName, data: e })}
         />
 
-        <div>Town:</div>
-        <InputText
-          className="form-text-input p-inputtext-sm"
-          value={selectedHolder.town}
-          onChange={(e) => setSelectedHolder({
-            type: 'set_town',
-            data: e.target.value,
-          })}
+        <InputField label="Town:" value={selectedHolder.town}
+          onChange={(e) => setSelectedHolder({ type: Msg.SetTown, data: e })}
         />
 
         <div>Passtype:</div>
@@ -91,7 +90,7 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           optionLabel="code"
           onChange={(e) => {
             setSelectedHolder({
-              type: 'set_passtype',
+              type: Msg.SetPasstype,
               data: e.value,
             });
           }}
@@ -143,7 +142,7 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
 
         <Divider />
         <Button style={{ marginRight: 5 }} type="submit" label="Create Pass" />
-        <Button label="Cancel" onClick={() => {setSelectedHolder({type: "replace", data: blankHolder}); setAddPass(false);}} />
+        <Button label="Cancel" onClick={() => { setSelectedHolder({ type: Msg.Replace, data: blankHolder }); setAddPass(false); }} />
       </form>
     </ScrollPanel>
   );

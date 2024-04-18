@@ -1,4 +1,4 @@
-import { HolderData, HolderAction, PassType } from "../App"
+import { HolderData, HolderAction, PassType, Msg } from "../App"
 
 import { ScrollPanel } from "primereact/scrollpanel";
 import { InputText } from "primereact/inputtext";
@@ -39,13 +39,13 @@ export function PassInfo({ selectedHolder, setSelectedHolder }: ChildProps) {
   return (
     <ScrollPanel className="holder-box">
       <InputField label="First Name:" value={selectedHolder.first_name}
-        onChange={(value) => setSelectedHolder({ type: "set_first_name", data: value })} />
+        onChange={(value) => setSelectedHolder({ type: Msg.SetFirstName, data: value })} />
 
       <InputField label="Last Name:" value={selectedHolder.last_name}
-        onChange={(value) => setSelectedHolder({ type: "set_last_name", data: value })} />
+        onChange={(value) => setSelectedHolder({ type: Msg.SetLastName, data: value })} />
 
       <InputField label="Town:" value={selectedHolder.town}
-        onChange={(value) => setSelectedHolder({ type: "set_town", data: value })} />
+        onChange={(value) => setSelectedHolder({ type: Msg.SetTown, data: value })} />
 
       <div>Passtype:</div>
       <Dropdown style={{ padding: 0 }} scrollHeight="400px"
@@ -53,7 +53,7 @@ export function PassInfo({ selectedHolder, setSelectedHolder }: ChildProps) {
         value={selectedHolder.passtype} options={passtypes} optionLabel="code"
         onChange={(e) => {
           setSelectedHolder({
-            type: 'set_passtype',
+            type: Msg.SetPasstype,
             data: e.value,
           })
         }} />

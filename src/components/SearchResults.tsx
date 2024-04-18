@@ -1,4 +1,4 @@
-import { HolderData, HolderAction, blankHolder } from "../App";
+import { HolderData, HolderAction, blankHolder, Msg } from "../App";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 // import { useContext } from "react";
@@ -28,7 +28,7 @@ export function SearchResults({ passholders, selectedHolder, setSelectedHolder }
       scrollable scrollHeight="87%" paginator rows={32}
       // virtualScrollerOptions={{ itemSize: 46 }}  // broken
       value={passholders} metaKeySelection={false} selectionMode="single" selection={selectedHolder}
-      onSelectionChange={(e) => setSelectedHolder({ type: "replace", data: e.value || blankHolder })} dataKey="id"
+      onSelectionChange={(e) => setSelectedHolder({ type: Msg.Replace, data: e.value || blankHolder })} dataKey="id"
     >
       <Column field="first_name" header="First Name" style={{ width: "35%" }} />
       <Column field="last_name" header="Last Name" style={{ width: "35%" }} />
