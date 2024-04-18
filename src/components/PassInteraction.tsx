@@ -10,7 +10,7 @@ interface ChildProps {
   setAddPass: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-export const PassInteraction = ({selectedHolder, setScreen, setAddPass}: ChildProps) => {
+export const PassInteraction = ({ selectedHolder, setScreen, setAddPass }: ChildProps) => {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "5px", flex: 1 }}>
       <Button disabled={!selectedHolder.id} label="Log Visit" onClick={(e) => {

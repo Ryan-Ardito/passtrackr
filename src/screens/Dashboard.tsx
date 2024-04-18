@@ -15,7 +15,7 @@ interface ChildProps {
   setSelectedHolder: React.Dispatch<HolderAction>,
 }
 
-export function Dashboard({setScreen, selectedHolder, setSelectedHolder}: ChildProps) {
+export function Dashboard({ setScreen, selectedHolder, setSelectedHolder }: ChildProps) {
   const [search, setSearch] = useState("");
   const [addPass, setAddPass] = useState(false);
   const [passholders, setPassholders] = useState<HolderData[]>([]);

@@ -125,7 +125,7 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           Amount Paid:
         </div>
         {formik.touched.amountPaid && formik.errors.amountPaid && (
-          <div style={{ color: 'red', display: 'inline-block'}}>{formik.errors.amountPaid}</div>
+          <div style={{ color: 'red', display: 'inline-block' }}>{formik.errors.amountPaid}</div>
         )}
         <InputText
           className="form-text-input p-inputtext-sm"
