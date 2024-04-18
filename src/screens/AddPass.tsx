@@ -1,4 +1,5 @@
-import { HolderData, HolderAction, PassType, blankHolder, Msg } from "../App"
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 import { ScrollPanel } from "primereact/scrollpanel";
 import { InputText } from "primereact/inputtext";
@@ -6,8 +7,7 @@ import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { HolderData, HolderAction, PassType, blankHolder, Msg } from "../App"
 
 const payMethods = [
   { name: "Credit", code: "credit" },
@@ -57,9 +57,9 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
     },
     validationSchema: Yup.object().shape({
       lastFour: Yup.number(),
-      amountPaid: Yup.number().positive().required('Amount Paid is required'),
-      paymentMethod: Yup.string().required('Payment method is required'),
-      signature: Yup.string().required('Employee Signature is required'),
+      amountPaid: Yup.number().positive().required('required'),
+      paymentMethod: Yup.string().required('required'),
+      signature: Yup.string().required('required'),
     }),
     onSubmit: values => {
       console.log('Form submitted:', values);
@@ -106,39 +106,46 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
             formik.setFieldValue('payMethod', e.value);
           }}
         />
+        <div></div>
 
-        <div>Last Four:</div>
+        <div style={{ display: 'inline-block', marginRight: '16px' }}>
+          Last Four:
+        </div>
+        {formik.touched.lastFour && formik.errors.lastFour && (
+          <div style={{ color: 'red', display: 'inline-block' }}>{formik.errors.lastFour}</div>
+        )}
         <InputText
           className="form-text-input p-inputtext-sm"
           name="lastFour"
           value={formik.values.lastFour}
           onChange={formik.handleChange}
         />
-        {formik.touched.lastFour && formik.errors.lastFour && (
-          <div style={{ color: 'red' }}>{formik.errors.lastFour}</div>
-        )}
 
-        <div>Amount Paid:</div>
+        <div style={{ display: 'inline-block', marginRight: '16px' }}>
+          Amount Paid:
+        </div>
+        {formik.touched.amountPaid && formik.errors.amountPaid && (
+          <div style={{ color: 'red', display: 'inline-block'}}>{formik.errors.amountPaid}</div>
+        )}
         <InputText
           className="form-text-input p-inputtext-sm"
           name="amountPaid"
           value={formik.values.amountPaid}
           onChange={formik.handleChange}
         />
-        {formik.touched.amountPaid && formik.errors.amountPaid && (
-          <div style={{ color: 'red' }}>{formik.errors.amountPaid}</div>
-        )}
 
-        <div>Employee Signature:</div>
+        <div style={{ display: 'inline-block', marginRight: '16px' }}>
+          Employee Signature:
+        </div>
+        {formik.touched.signature && formik.errors.signature && (
+          <div style={{ color: 'red', display: 'inline-block' }}>{formik.errors.signature}</div>
+        )}
         <InputText
           className="form-text-input p-inputtext-sm"
           name="signature"
           value={formik.values.signature}
           onChange={formik.handleChange}
         />
-        {formik.touched.signature && formik.errors.signature && (
-          <div style={{ color: 'red' }}>{formik.errors.signature}</div>
-        )}
 
         <Divider />
         <Button style={{ marginRight: 5 }} type="submit" label="Create Pass" />

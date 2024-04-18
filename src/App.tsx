@@ -96,7 +96,11 @@ function App() {
       <div className="container">
         <SearchBar setSearch={setSearch} handleSubmit={handleSubmit} />
         <div className="edit-box">
-          <SearchResults passholders={passholders} selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} />
+          <SearchResults
+            passholders={passholders}
+            selectedHolder={selectedHolder}
+            setSelectedHolder={setSelectedHolder}
+          />
           <Divider layout="vertical" style={{ margin: 5 }} />
           {addPass ? (
             <AddPass
