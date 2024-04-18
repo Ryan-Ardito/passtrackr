@@ -1,4 +1,5 @@
-import { HolderData, HolderAction, PassType, blankHolder } from "../App"
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 import { ScrollPanel } from "primereact/scrollpanel";
 import { InputText } from "primereact/inputtext";
@@ -6,8 +7,7 @@ import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { HolderData, HolderAction, PassType, blankHolder, Msg } from "../App"
 
 const payMethods = [
   { name: "Credit", code: "credit" },
@@ -30,7 +30,24 @@ interface ChildProps {
   setAddPass: React.Dispatch<boolean>,
 }
 
-export function AddPass({ selectedHolder, setSelectedHolder, setAddPass }: ChildProps) {
+interface InputFieldProps {
+  label: string,
+  value: string,
+  onChange: (value: string) => void,
+}
+
+const InputField: React.FC<InputFieldProps> = ({ label, value, onChange }) => {
+  return (
+    <>
+      <div>{label}</div>
+      <InputText className="form-text-input p-inputtext-sm" value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    </>
+  )
+}
+
+export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: ChildProps) => {
   const formik = useFormik({
     initialValues: {
       lastFour: '',
@@ -39,10 +56,10 @@ export function AddPass({ selectedHolder, setSelectedHolder, setAddPass }: Child
       signature: '',
     },
     validationSchema: Yup.object().shape({
-      lastFour: Yup.string().required('Last Four is required'),
-      amountPaid: Yup.string().required('Amount Paid is required'),
-      paymentMethod: Yup.string().required('Payment method is required'),
-      signature: Yup.string().required('Employee Signature is required'),
+      lastFour: Yup.number(),
+      amountPaid: Yup.number().positive().required('required'),
+      paymentMethod: Yup.string().required('required'),
+      signature: Yup.string().required('required'),
     }),
     onSubmit: values => {
       console.log('Form submitted:', values);
@@ -53,34 +70,16 @@ export function AddPass({ selectedHolder, setSelectedHolder, setAddPass }: Child
   return (
     <ScrollPanel className="holder-box">
       <form onSubmit={formik.handleSubmit}>
-        <div>First Name:</div>
-        <InputText
-          className="form-text-input p-inputtext-sm"
-          value={selectedHolder.first_name}
-          onChange={(e) => setSelectedHolder({
-            type: 'set_first_name',
-            data: e.target.value,
-          })}
+        <InputField label="First Name:" value={selectedHolder.first_name}
+          onChange={(e) => setSelectedHolder({ type: Msg.SetFirstName, data: e })}
         />
 
-        <div>Last Name:</div>
-        <InputText
-          className="form-text-input p-inputtext-sm"
-          value={selectedHolder.last_name}
-          onChange={(e) => setSelectedHolder({
-            type: 'set_last_name',
-            data: e.target.value,
-          })}
+        <InputField label="Last Name:" value={selectedHolder.last_name}
+          onChange={(e) => setSelectedHolder({ type: Msg.SetLastName, data: e })}
         />
 
-        <div>Town:</div>
-        <InputText
-          className="form-text-input p-inputtext-sm"
-          value={selectedHolder.town}
-          onChange={(e) => setSelectedHolder({
-            type: 'set_town',
-            data: e.target.value,
-          })}
+        <InputField label="Town:" value={selectedHolder.town}
+          onChange={(e) => setSelectedHolder({ type: Msg.SetTown, data: e })}
         />
 
         <div>Passtype:</div>
@@ -91,7 +90,7 @@ export function AddPass({ selectedHolder, setSelectedHolder, setAddPass }: Child
           optionLabel="code"
           onChange={(e) => {
             setSelectedHolder({
-              type: 'set_passtype',
+              type: Msg.SetPasstype,
               data: e.value,
             });
           }}
@@ -107,43 +106,50 @@ export function AddPass({ selectedHolder, setSelectedHolder, setAddPass }: Child
             formik.setFieldValue('payMethod', e.value);
           }}
         />
+        <div></div>
 
-        <div>Last Four:</div>
+        <div style={{ display: 'inline-block', marginRight: '16px' }}>
+          Last Four:
+        </div>
+        {formik.touched.lastFour && formik.errors.lastFour && (
+          <div style={{ color: 'red', display: 'inline-block' }}>{formik.errors.lastFour}</div>
+        )}
         <InputText
           className="form-text-input p-inputtext-sm"
           name="lastFour"
           value={formik.values.lastFour}
           onChange={formik.handleChange}
         />
-        {formik.touched.lastFour && formik.errors.lastFour && (
-          <div style={{ color: 'red' }}>{formik.errors.lastFour}</div>
-        )}
 
-        <div>Amount Paid:</div>
+        <div style={{ display: 'inline-block', marginRight: '16px' }}>
+          Amount Paid:
+        </div>
+        {formik.touched.amountPaid && formik.errors.amountPaid && (
+          <div style={{ color: 'red', display: 'inline-block'}}>{formik.errors.amountPaid}</div>
+        )}
         <InputText
           className="form-text-input p-inputtext-sm"
           name="amountPaid"
           value={formik.values.amountPaid}
           onChange={formik.handleChange}
         />
-        {formik.touched.amountPaid && formik.errors.amountPaid && (
-          <div style={{ color: 'red' }}>{formik.errors.amountPaid}</div>
-        )}
 
-        <div>Employee Signature:</div>
+        <div style={{ display: 'inline-block', marginRight: '16px' }}>
+          Employee Signature:
+        </div>
+        {formik.touched.signature && formik.errors.signature && (
+          <div style={{ color: 'red', display: 'inline-block' }}>{formik.errors.signature}</div>
+        )}
         <InputText
           className="form-text-input p-inputtext-sm"
           name="signature"
           value={formik.values.signature}
           onChange={formik.handleChange}
         />
-        {formik.touched.signature && formik.errors.signature && (
-          <div style={{ color: 'red' }}>{formik.errors.signature}</div>
-        )}
 
         <Divider />
         <Button style={{ marginRight: 5 }} type="submit" label="Create Pass" />
-        <Button label="Cancel" onClick={() => {setSelectedHolder({type: "replace", data: blankHolder}); setAddPass(false);}} />
+        <Button label="Cancel" onClick={() => { setSelectedHolder({ type: Msg.Replace, data: blankHolder }); setAddPass(false); }} />
       </form>
     </ScrollPanel>
   );

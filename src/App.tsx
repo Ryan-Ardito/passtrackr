@@ -1,17 +1,24 @@
 import { useState, FormEvent, useReducer } from "react";
-// import { Dispatch, SetStateAction, createContext, ReactNode, useContext } from "react";
-import { emit, listen } from '@tauri-apps/api/event'
-
-import { SearchBar } from "./components/SearchBar";
-import { PassInfo } from "./components/PassInfo";
-import { SearchResults } from "./components/SearchResults";
-
-import { Button } from 'primereact/button';
+import { listen } from '@tauri-apps/api/event'
 
 import 'primeicons/primeicons.css';
 import { Divider } from "primereact/divider";
-import { AddPass } from "./screens/AddPass";
+
 import { fetchHolders } from "./api/api";
+import { SearchBar } from "./components/SearchBar";
+import { SearchResults } from "./components/SearchResults";
+import { PassInteraction } from "./components/PassInteraction";
+import { AddPass } from "./screens/AddPass";
+import { Settings } from "./screens/Settings";
+import { ViewPass } from "./screens/ViewPass";
+import { About } from "./screens/About";
+
+export enum Screen {
+  Dashboard,
+  ViewPass,
+  Settings,
+  About,
+}
 
 export interface PassType {
   name: string,
@@ -40,50 +47,34 @@ export const blankHolder: HolderData = {
   notes: "",
 }
 
-export type HolderAction =
-  | { type: "replace"; data: HolderData }
-  | { type: "set_first_name"; data: string }
-  | { type: "set_last_name"; data: string }
-  | { type: "set_town"; data: string }
-  | { type: "set_passtype"; data: PassType | null }
-  | { type: "set_active"; data: boolean }
-  | { type: "set_notes"; data: string }
-
-export enum Screen {
-  Dashboard,
-  ViewPass,
-  Settings,
+export enum Msg {
+  Replace = "REPLACE",
+  SetFirstName = "SET_FIRST_NAME",
+  SetLastName = "SET_LAST_NAME",
+  SetTown = "SET_TOWN",
+  SetPasstype = "SET_PASSTYPE",
+  SetActive = "SET_ACTIVE",
+  SetNotes = "SET_NOTES",
 }
+
+export type HolderAction =
+  | { type: Msg.Replace; data: HolderData }
+  | { type: Msg.SetFirstName; data: string }
+  | { type: Msg.SetLastName; data: string }
+  | { type: Msg.SetTown; data: string }
+  | { type: Msg.SetPasstype; data: PassType | null }
+  | { type: Msg.SetActive; data: boolean }
+  | { type: Msg.SetNotes; data: string }
 
 function holderReducer(holder: HolderData, action: HolderAction): HolderData {
   switch (action.type) {
-    case "replace": {
-      return action.data
-    }
-    case "set_first_name": {
-      return { ...holder,
-        first_name: action.data, }
-    }
-    case "set_last_name": {
-      return { ...holder,
-        last_name: action.data, }
-    }
-    case "set_town": {
-      return { ...holder,
-        town: action.data, }
-    }
-    case "set_passtype": {
-      return { ...holder,
-        passtype: action.data, }
-    }
-    case "set_active": {
-      return { ...holder,
-        active: action.data, }
-    }
-    case "set_notes": {
-      return { ...holder,
-        notes: action.data, }
-    }
+    case Msg.Replace: { return action.data }
+    case Msg.SetFirstName: { return { ...holder, first_name: action.data } }
+    case Msg.SetLastName: { return { ...holder, last_name: action.data } }
+    case Msg.SetTown: { return { ...holder, town: action.data } }
+    case Msg.SetPasstype: { return { ...holder, passtype: action.data } }
+    case Msg.SetActive: { return { ...holder, active: action.data } }
+    case Msg.SetNotes: { return { ...holder, notes: action.data } }
   }
 }
 
@@ -100,73 +91,44 @@ function App() {
     setPassholders(await res);
   }
 
-  function PassInteraction() {
-    return (
-      <div style={{display: "flex", flexDirection: "column", gap: "5px", flex: 1}}>
-        <Button disabled={!selectedHolder.id} label="Log Visit" onClick={(e) => {
-            e.preventDefault();
-        }} />
-        <Button disabled={!selectedHolder.id} label="Add Visits" onClick={(e) => {
-            e.preventDefault();
-        }} />
-        <Button disabled={!selectedHolder.id} label="View Pass" onClick={(e) => {
-            e.preventDefault();
-            setScreen(Screen.ViewPass);
-        }} />
-        <Divider />
-        <Button label="New Pass" onClick={(e) => {
-            e.preventDefault();
-            setAddPass(true);
-            // setScreen(Screen.AddPass);
-        }} />
-      </div>
-    )
-  }
-
-  const Dashboard = 
+  const Dashboard =
     <div className="wrapper">
       <div className="container">
-        <SearchBar setSearch={setSearch} handleSubmit={handleSubmit}/>
+        <SearchBar setSearch={setSearch} handleSubmit={handleSubmit} />
         <div className="edit-box">
-          <SearchResults passholders={passholders} selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder}/>
-          <Divider layout="vertical" style={{margin: 5}}/>
-          {addPass ? <AddPass selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} setAddPass={setAddPass}/> : <PassInteraction />}
+          <SearchResults
+            passholders={passholders}
+            selectedHolder={selectedHolder}
+            setSelectedHolder={setSelectedHolder}
+          />
+          <Divider layout="vertical" style={{ margin: 5 }} />
+          {addPass ? (
+            <AddPass
+              selectedHolder={selectedHolder}
+              setSelectedHolder={setSelectedHolder}
+              setAddPass={setAddPass} />
+          ) : (
+            <PassInteraction
+              selectedHolder={selectedHolder}
+              setScreen={setScreen}
+              setAddPass={setAddPass} />
+          )}
         </div>
       </div>
     </div>
-  
-  const ViewPass = 
-    <div className="wrapper">
-      <div className="container">
-        <PassInfo selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} />
-        <Button label="Back" onClick={(e) => {
-            e.preventDefault();
-            setScreen(Screen.Dashboard);
-        }} />
-      </div>
-    </div>
 
-  const Settings = 
-    <div className="wrapper">
-      <div className="container">
-        <Button label="Back" onClick={(e) => {
-            e.preventDefault();
-            setScreen(Screen.Dashboard);
-        }} />
-      </div>
-    </div>
+  listen('settings', () => { setScreen(Screen.Settings) })
+  listen('about', () => { setScreen(Screen.About) })
 
-  listen('settings', () => {
-    setScreen(Screen.Settings)
-  })
-  
   switch (screen) {
     case Screen.Dashboard:
       return Dashboard;
     case Screen.ViewPass:
-      return ViewPass;
+      return ViewPass({ setScreen, selectedHolder, setSelectedHolder });
     case Screen.Settings:
-      return Settings;
+      return Settings({ setScreen });
+    case Screen.About:
+      return About({ setScreen });
   }
 }
 

@@ -29,22 +29,22 @@ export function Dashboard({setScreen, selectedHolder, setSelectedHolder}: ChildP
 
   function PassInteraction() {
     return (
-      <div style={{display: "flex", flexDirection: "column", gap: "5px", flex: 1}}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "5px", flex: 1 }}>
         <Button disabled={!selectedHolder.id} label="Log Visit" onClick={(e) => {
-            e.preventDefault();
+          e.preventDefault();
         }} />
         <Button disabled={!selectedHolder.id} label="Add Visits" onClick={(e) => {
-            e.preventDefault();
+          e.preventDefault();
         }} />
         <Button disabled={!selectedHolder.id} label="View Pass" onClick={(e) => {
-            e.preventDefault();
-            setScreen(Screen.ViewPass);
+          e.preventDefault();
+          setScreen(Screen.ViewPass);
         }} />
         <Divider />
         <Button label="New Pass" onClick={(e) => {
-            e.preventDefault();
-            setAddPass(true);
-            // setScreen(Screen.AddPass);
+          e.preventDefault();
+          setAddPass(true);
+          // setScreen(Screen.AddPass);
         }} />
       </div>
     )
@@ -53,11 +53,11 @@ export function Dashboard({setScreen, selectedHolder, setSelectedHolder}: ChildP
   return (
     <div className="wrapper">
       <div className="container">
-        <SearchBar setSearch={setSearch} handleSubmit={handleSubmit}/>
+        <SearchBar setSearch={setSearch} handleSubmit={handleSubmit} />
         <div className="edit-box">
-          <SearchResults passholders={passholders} selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder}/>
-          <Divider layout="vertical" style={{margin: 5}}/>
-          {addPass ? <AddPass selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} setAddPass={setAddPass}/> : <PassInteraction />}
+          <SearchResults passholders={passholders} selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} />
+          <Divider layout="vertical" style={{ margin: 5 }} />
+          {addPass ? <AddPass selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} setAddPass={setAddPass} /> : <PassInteraction />}
         </div>
       </div>
     </div>
