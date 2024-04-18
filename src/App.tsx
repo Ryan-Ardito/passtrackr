@@ -25,9 +25,9 @@ function App() {
   const [screen, setScreen] = useState(Screen.Dashboard);
   const [selectedHolder, setSelectedHolder] = useReducer(holderReducer, blankHolder);
 
-  listen('dashboard', () => { setScreen(Screen.Dashboard) })
-  listen('settings', () => { setScreen(Screen.Settings) })
-  listen('about', () => { setScreen(Screen.About) })
+  listen('dashboard', () => { setScreen(Screen.Dashboard) });
+  listen('settings', () => { setScreen(Screen.Settings) });
+  listen('about', () => { setScreen(Screen.About) });
 
   switch (screen) {
     case Screen.Dashboard:

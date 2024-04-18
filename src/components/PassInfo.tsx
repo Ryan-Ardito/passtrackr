@@ -1,18 +1,8 @@
-import { HolderData, HolderAction, PassType, Msg } from "../types"
+import { HolderData, HolderAction, passtypes, Msg } from "../types"
 
 import { ScrollPanel } from "primereact/scrollpanel";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
-
-const passtypes: PassType[] = [
-  { name: "ten_punch", code: "10x Punch" },
-  { name: "six_punch", code: "6x Punch" },
-  { name: "annual", code: "Annual" },
-  { name: "six_month", code: "6 Month" },
-  { name: "free_pass", code: "Free Pass" },
-  { name: "three_facial", code: "3x Facial" },
-  { name: "six_facial", code: "6x Facial" },
-];
 
 interface ChildProps {
   selectedHolder: HolderData,

@@ -12,9 +12,6 @@ interface ChildProps {
 export const PassInteraction = ({ selectedHolder, setScreen, setAddPass }: ChildProps) => {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "5px", flex: 1 }}>
-      <Button disabled={!selectedHolder.id} label="Log Visit" onClick={(e) => {
-        e.preventDefault();
-      }} />
       <Button disabled={!selectedHolder.id} label="Add Visits" onClick={(e) => {
         e.preventDefault();
       }} />
@@ -22,10 +19,13 @@ export const PassInteraction = ({ selectedHolder, setScreen, setAddPass }: Child
         e.preventDefault();
         setScreen(Screen.ViewPass);
       }} />
-      <Divider />
       <Button label="New Pass" onClick={(e) => {
         e.preventDefault();
         setAddPass(true);
+      }} />
+      <Divider />
+      <Button disabled={!selectedHolder.id} label="Log Visit" onClick={(e) => {
+        e.preventDefault();
       }} />
     </div>
   )

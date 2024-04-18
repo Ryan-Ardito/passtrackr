@@ -5,10 +5,35 @@ export enum Screen {
   About,
 }
 
+export enum Msg {
+  Replace = "REPLACE",
+  SetFirstName = "SET_FIRST_NAME",
+  SetLastName = "SET_LAST_NAME",
+  SetTown = "SET_TOWN",
+  SetPasstype = "SET_PASSTYPE",
+  SetActive = "SET_ACTIVE",
+  SetNotes = "SET_NOTES",
+}
+
 export interface PassType {
   name: string,
   code: string,
 }
+
+export const payMethods = [
+  { name: "Credit", code: "credit" },
+  { name: "Cash", code: "cash" },
+]
+
+export const passtypes: PassType[] = [
+  { name: "ten_punch", code: "10x Punch" },
+  { name: "six_punch", code: "6x Punch" },
+  { name: "annual", code: "Annual" },
+  { name: "six_month", code: "6 Month" },
+  { name: "free_pass", code: "Free Pass" },
+  { name: "three_facial", code: "3x Facial" },
+  { name: "six_facial", code: "6x Facial" },
+];
 
 export interface HolderData {
   id: number | null,
@@ -30,16 +55,6 @@ export const blankHolder: HolderData = {
   passtype: null,
   active: false,
   notes: "",
-}
-
-export enum Msg {
-  Replace = "REPLACE",
-  SetFirstName = "SET_FIRST_NAME",
-  SetLastName = "SET_LAST_NAME",
-  SetTown = "SET_TOWN",
-  SetPasstype = "SET_PASSTYPE",
-  SetActive = "SET_ACTIVE",
-  SetNotes = "SET_NOTES",
 }
 
 export type HolderAction =
