@@ -21,8 +21,6 @@ export function Dashboard({ setScreen, selectedHolder, setSelectedHolder }: Chil
   const [passholders, setPassholders] = useState<HolderData[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // const [selectedHolder, setSelectedHolder] = useReducer(holderReducer, blankHolder);
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -34,24 +32,14 @@ export function Dashboard({ setScreen, selectedHolder, setSelectedHolder }: Chil
   return (
     <div className="wrapper">
       <div className="dashboard">
-        <SearchBar setSearch={setSearch} handleSubmit={handleSubmit} loading={loading} />
+        <SearchBar {...{setSearch, handleSubmit, loading,}} />
         <div className="edit-box">
-          <SearchResults
-            passholders={passholders}
-            selectedHolder={selectedHolder}
-            setSelectedHolder={setSelectedHolder}
-          />
+          <SearchResults {...{ passholders, selectedHolder, setSelectedHolder }} />
           <Divider layout="vertical" style={{ margin: 5 }} />
           {addPass ? (
-            <AddPass
-              selectedHolder={selectedHolder}
-              setSelectedHolder={setSelectedHolder}
-              setAddPass={setAddPass} />
+            <AddPass {...{ selectedHolder, setSelectedHolder, setAddPass }} />
           ) : (
-            <PassInteraction
-              selectedHolder={selectedHolder}
-              setScreen={setScreen}
-              setAddPass={setAddPass} />
+            <PassInteraction {...{ selectedHolder, setScreen, setAddPass }} />
           )}
         </div>
       </div>
