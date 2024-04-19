@@ -27,10 +27,7 @@ export function PassInfo({ selectedHolder, setSelectedHolder }: ChildProps) {
         // filter resetFilterOnHide
         value={selectedHolder.passtype} options={passtypes} optionLabel="code"
         onChange={(e) => {
-          setSelectedHolder({
-            type: Msg.SetPasstype,
-            data: e.value,
-          })
+          setSelectedHolder({ type: Msg.SetPasstype, data: e.value, })
         }} />
     </ScrollPanel>
   )

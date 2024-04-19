@@ -1,6 +1,6 @@
+import { FormikContextType } from "formik";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext"
-import { ChangeEventHandler } from "react";
 
 interface InputFieldProps {
   label: string,
@@ -18,31 +18,40 @@ export const InputField: React.FC<InputFieldProps> = ({ label, value, onChange }
   );
 };
 
-interface FormikFieldProps {
+interface LabelRequiredProps {
   label: string,
-  name: string,
-  value: string,
-  touched: boolean | undefined,
+  touched: any,
   error: string | undefined,
-  disabled: boolean | undefined,
-  onChange: ChangeEventHandler<HTMLInputElement>,
 }
 
-export const FormikField: React.FC<FormikFieldProps> = ({ label, name, touched, value, error, disabled, onChange }) => {
+export const LabelRequired: React.FC<LabelRequiredProps> = ({ label, touched, error }) => {
   return (
     <>
+      <div></div>
       <div className="form-text required">
         {label}
       </div>
       {touched && error && (
         <div style={{ color: 'red', display: 'inline-block' }}>{error}</div>
       )}
-      <InputText style={{ padding: 8}}
-        disabled={disabled}
-        className="form-text-input"
-        name={name}
-        value={value}
-        onChange={onChange}
+    </>
+  );
+};
+
+interface FormikFieldProps {
+  label: string,
+  name: string,
+  formik: FormikContextType<any>,
+}
+
+export const FormikField: React.FC<FormikFieldProps> = ({ label, name, formik }) => {
+  const { values, touched, errors, isSubmitting, handleChange } = formik;
+
+  return (
+    <>
+      <LabelRequired label={label} error={errors[name]?.toString()} touched={touched[name]?.valueOf()} />
+      <InputText style={{ padding: 8 }} className="form-text-input"
+        disabled={isSubmitting} name={name} value={values[name]} onChange={handleChange}
       />
     </>
   );
@@ -51,33 +60,20 @@ export const FormikField: React.FC<FormikFieldProps> = ({ label, name, touched, 
 interface FormikDropdownProps {
   label: string,
   name: string,
-  value: any,
-  touched: boolean | undefined,
-  error: string | undefined,
   options: any[],
-  disabled: boolean | undefined,
-  onChange: (event: DropdownChangeEvent) => void,
+  formik: FormikContextType<any>,
 }
 
-export const FormikDropdown: React.FC<FormikDropdownProps> = ({ label, name, value, touched, error, options, disabled, onChange }) => {
+export const FormikDropdown: React.FC<FormikDropdownProps> = ({ label, name, options, formik }) => {
+  const { values, touched, errors, isSubmitting, handleChange } = formik;
+
   return (
     <>
       <div></div>
-      <div className="form-text required">
-        {label}
-      </div>
-      {touched && error && (
-        <div style={{ color: 'red', display: 'inline-block' }}>{error}</div>
-      )}
+      <LabelRequired error={errors[name]?.toString()} {...{ label, touched }} />
       <div></div>
-      <Dropdown
-        disabled={disabled}
-        name={name}
-        scrollHeight="400px"
-        value={value}
-        options={options}
-        optionLabel="name"
-        onChange={(e) => onChange(e)}
+      <Dropdown optionLabel="name" scrollHeight="400px" options={options}
+        disabled={isSubmitting} name={name} value={values[name]} onChange={handleChange}
       />
     </>
   )
@@ -97,13 +93,8 @@ export const LabeledDropdown: React.FC<DropdownProps> = ({ label, name, value, o
       <div className="form-text">
         {label}
       </div>
-      <Dropdown
-        name={name}
-        scrollHeight="400px"
-        value={value}
-        options={options}
-        optionLabel="name"
-        onChange={(e) => onChange(e)}
+      <Dropdown optionLabel="name" scrollHeight="400px"
+        {...{ name, value, options, onChange }}
       />
     </>
   )

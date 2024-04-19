@@ -10,15 +10,9 @@ interface ChildProps {
 
 export function SearchBar({ setSearch, handleSubmit, loading }: ChildProps) {
   return (
-    <form
-      className="searchbar"
-      onSubmit={handleSubmit}
-    >
-      <InputText
-        autoFocus
-        id="search-input"
+    <form className="searchbar" onSubmit={handleSubmit} >
+      <InputText id="search-input" placeholder="Search passes..." autoFocus
         onChange={(e) => setSearch(e.currentTarget.value)}
-        placeholder="Search passes..."
       />
       <Button type="submit" label="Search" loading={loading} />
     </form>
