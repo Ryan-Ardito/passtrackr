@@ -24,10 +24,11 @@ interface FormikFieldProps {
   value: string,
   touched: boolean | undefined,
   error: string | undefined,
+  disabled: boolean | undefined,
   onChange: ChangeEventHandler<HTMLInputElement>,
 }
 
-export const FormikField: React.FC<FormikFieldProps> = ({ label, name, touched, value, error, onChange }) => {
+export const FormikField: React.FC<FormikFieldProps> = ({ label, name, touched, value, error, disabled, onChange }) => {
   return (
     <>
       <div className="form-text required">
@@ -37,6 +38,7 @@ export const FormikField: React.FC<FormikFieldProps> = ({ label, name, touched, 
         <div style={{ color: 'red', display: 'inline-block' }}>{error}</div>
       )}
       <InputText style={{ padding: 8}}
+        disabled={disabled}
         className="form-text-input"
         name={name}
         value={value}
@@ -53,10 +55,11 @@ interface FormikDropdownProps {
   touched: boolean | undefined,
   error: string | undefined,
   options: any[],
+  disabled: boolean | undefined,
   onChange: (event: DropdownChangeEvent) => void,
 }
 
-export const FormikDropdown: React.FC<FormikDropdownProps> = ({ label, name, value, touched, error, options, onChange }) => {
+export const FormikDropdown: React.FC<FormikDropdownProps> = ({ label, name, value, touched, error, options, disabled, onChange }) => {
   return (
     <>
       <div></div>
@@ -68,6 +71,7 @@ export const FormikDropdown: React.FC<FormikDropdownProps> = ({ label, name, val
       )}
       <div></div>
       <Dropdown
+        disabled={disabled}
         name={name}
         scrollHeight="400px"
         value={value}

@@ -7,7 +7,7 @@ import { Divider } from "primereact/divider";
 
 import { HolderData, HolderAction, passtypes, payMethods, Msg, blankHolder } from "../types"
 import { FormikDropdown, FormikField } from '../components/FormInput';
-import { useState } from 'react';
+import { asyncSleep } from '../api/api';
 
 interface ChildProps {
   selectedHolder: HolderData,
@@ -16,8 +16,6 @@ interface ChildProps {
 }
 
 export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: ChildProps) => {
-  const [saving, setSaving] = useState(false);
-
   const formik = useFormik({
     initialValues: {
       firstName: selectedHolder.first_name,
@@ -52,9 +50,11 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
         .positive('must be a positive number'),
       signature: Yup.string().required('required'),
     }),
-    onSubmit: (values) => {
-      setSaving(true);
+    onSubmit: async (values) => {
+      console.log('Submitting...');
+      await asyncSleep(800);
       console.log('Form submitted:', values);
+      formik.setSubmitting(false);
       // setAddPass(false);
     },
   });
@@ -68,6 +68,7 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           value={formik.values.firstName}
           touched={formik.touched.firstName}
           error={formik.errors.firstName}
+          disabled={formik.isSubmitting}
           onChange={formik.handleChange}
         />
 
@@ -77,6 +78,7 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           value={formik.values.lastName}
           touched={formik.touched.lastName}
           error={formik.errors.lastName}
+          disabled={formik.isSubmitting}
           onChange={formik.handleChange}
         />
 
@@ -86,6 +88,7 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           value={formik.values.town}
           touched={formik.touched.town}
           error={formik.errors.town}
+          disabled={formik.isSubmitting}
           onChange={formik.handleChange}
         />
 
@@ -96,6 +99,7 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           touched={formik.touched.passtype}
           error={formik.errors.passtype}
           options={passtypes}
+          disabled={formik.isSubmitting}
           onChange={formik.handleChange}
         />
 
@@ -106,6 +110,7 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           touched={formik.touched.payMethod?.code}
           error={formik.errors.payMethod?.code}
           options={payMethods}
+          disabled={formik.isSubmitting}
           onChange={formik.handleChange}
         />
         <div></div>
@@ -116,6 +121,7 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           value={formik.values.lastFour}
           touched={formik.touched.lastFour}
           error={formik.errors.lastFour}
+          disabled={formik.isSubmitting}
           onChange={formik.handleChange}
         />
 
@@ -125,6 +131,7 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           value={formik.values.amountPaid}
           touched={formik.touched.amountPaid}
           error={formik.errors.amountPaid}
+          disabled={formik.isSubmitting}
           onChange={formik.handleChange}
         />
 
@@ -134,11 +141,12 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           value={formik.values.signature}
           touched={formik.touched.signature}
           error={formik.errors.signature}
+          disabled={formik.isSubmitting}
           onChange={formik.handleChange}
         />
 
         <Divider />
-        <Button style={{ marginRight: 5 }} type="submit" label="Create Pass" loading={saving} />
+        <Button style={{ marginRight: 5 }} type="submit" label="Create Pass" loading={formik.isSubmitting} />
         <Button label="Cancel" onClick={() => { setSelectedHolder({ type: Msg.Replace, data: blankHolder }); setAddPass(false); }} />
       </form>
     </ScrollPanel>
