@@ -6,7 +6,8 @@ import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 
 import { HolderData, HolderAction, passtypes, payMethods, Msg, blankHolder } from "../types"
-import { FormikField, InputField, LabeledDropdown } from '../components/FormInput';
+import { FormikDropdown, FormikField } from '../components/FormInput';
+import { useState } from 'react';
 
 interface ChildProps {
   selectedHolder: HolderData,
@@ -15,14 +16,31 @@ interface ChildProps {
 }
 
 export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: ChildProps) => {
+  const [saving, setSaving] = useState(false);
+
   const formik = useFormik({
     initialValues: {
+      firstName: selectedHolder.first_name,
+      lastName: selectedHolder.last_name,
+      town: selectedHolder.town,
+      passtype: selectedHolder.passtype,
+      payMethod: { name: "Credit", code: "credit" },
       lastFour: '',
       amountPaid: '',
-      payMethod: { name: "Credit", code: "credit" },
       signature: '',
     },
     validationSchema: Yup.object().shape({
+      firstName: Yup.string().required("required"),
+      lastName: Yup.string().required("required"),
+      town: Yup.string().required("required"),
+      passtype: Yup.object().shape({
+        name: Yup.string().required('required'),
+        code: Yup.string().required('required'),
+      }),
+      payMethod: Yup.object().shape({
+        name: Yup.string().required('required'),
+        code: Yup.string().required('required'),
+      }),
       lastFour: Yup.number()
         .typeError('must be a number')
         .positive('must be a positive number')
@@ -32,55 +50,71 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
       amountPaid: Yup.number().required('required')
         .typeError('must be a number')
         .positive('must be a positive number'),
-      paymentMethod: Yup.string().required('required'),
       signature: Yup.string().required('required'),
     }),
-    onSubmit: values => {
+    onSubmit: (values) => {
+      setSaving(true);
       console.log('Form submitted:', values);
-      setAddPass(false);
+      // setAddPass(false);
     },
   });
 
   return (
     <ScrollPanel className="holder-box">
       <form onSubmit={formik.handleSubmit}>
-        <InputField label="First Name:" value={selectedHolder.first_name}
-          onChange={(e) => setSelectedHolder({ type: Msg.SetFirstName, data: e })}
+        <FormikField
+          label="First Name:"
+          name="firstName"
+          value={formik.values.firstName}
+          touched={formik.touched.firstName}
+          error={formik.errors.firstName}
+          onChange={formik.handleChange}
         />
 
-        <InputField label="Last Name:" value={selectedHolder.last_name}
-          onChange={(e) => setSelectedHolder({ type: Msg.SetLastName, data: e })}
+        <FormikField
+          label="Last Name:"
+          name="lastName"
+          value={formik.values.lastName}
+          touched={formik.touched.lastName}
+          error={formik.errors.lastName}
+          onChange={formik.handleChange}
         />
 
-        <InputField label="Town:" value={selectedHolder.town}
-          onChange={(e) => setSelectedHolder({ type: Msg.SetTown, data: e })}
+        <FormikField
+          label="Town:"
+          name="town"
+          value={formik.values.town}
+          touched={formik.touched.town}
+          error={formik.errors.town}
+          onChange={formik.handleChange}
         />
 
-        <LabeledDropdown label="Passtype:"
-          value={selectedHolder.passtype}
+        <FormikDropdown
+          label="Passtype:"
+          name="passtype"
+          value={formik.values.passtype}
+          touched={formik.touched.passtype}
+          error={formik.errors.passtype}
           options={passtypes}
-          onChange={(e) => {
-            setSelectedHolder({
-              type: Msg.SetPasstype,
-              data: e.value,
-            })
-          }}
+          onChange={formik.handleChange}
         />
 
-        <LabeledDropdown label="Payment Method: "
+        <FormikDropdown
+          label="Payment Method:"
+          name="payMethod"
           value={formik.values.payMethod}
+          touched={formik.touched.payMethod?.code}
+          error={formik.errors.payMethod?.code}
           options={payMethods}
-          onChange={(e) => {
-            formik.setFieldValue('payMethod', e.value);
-          }}
+          onChange={formik.handleChange}
         />
         <div></div>
 
         <FormikField
           label="Last Four:"
           name="lastFour"
-          touched={formik.touched.lastFour}
           value={formik.values.lastFour}
+          touched={formik.touched.lastFour}
           error={formik.errors.lastFour}
           onChange={formik.handleChange}
         />
@@ -88,8 +122,8 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
         <FormikField
           label="Amount Paid:"
           name="amountPaid"
-          touched={formik.touched.amountPaid}
           value={formik.values.amountPaid}
+          touched={formik.touched.amountPaid}
           error={formik.errors.amountPaid}
           onChange={formik.handleChange}
         />
@@ -97,14 +131,14 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
         <FormikField
           label="Employee Signature:"
           name="signature"
-          touched={formik.touched.signature}
           value={formik.values.signature}
+          touched={formik.touched.signature}
           error={formik.errors.signature}
           onChange={formik.handleChange}
         />
 
         <Divider />
-        <Button style={{ marginRight: 5 }} type="submit" label="Create Pass" />
+        <Button style={{ marginRight: 5 }} type="submit" label="Create Pass" loading={saving} />
         <Button label="Cancel" onClick={() => { setSelectedHolder({ type: Msg.Replace, data: blankHolder }); setAddPass(false); }} />
       </form>
     </ScrollPanel>

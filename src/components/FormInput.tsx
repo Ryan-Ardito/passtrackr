@@ -21,8 +21,8 @@ export const InputField: React.FC<InputFieldProps> = ({ label, value, onChange }
 interface FormikFieldProps {
   label: string,
   name: string,
-  touched: boolean | undefined,
   value: string,
+  touched: boolean | undefined,
   error: string | undefined,
   onChange: ChangeEventHandler<HTMLInputElement>,
 }
@@ -36,8 +36,8 @@ export const FormikField: React.FC<FormikFieldProps> = ({ label, name, touched, 
       {touched && error && (
         <div style={{ color: 'red', display: 'inline-block' }}>{error}</div>
       )}
-      <InputText
-        className="form-text-input p-inputtext-sm"
+      <InputText style={{ padding: 8}}
+        className="form-text-input"
         name={name}
         value={value}
         onChange={onChange}
@@ -46,25 +46,60 @@ export const FormikField: React.FC<FormikFieldProps> = ({ label, name, touched, 
   );
 };
 
+interface FormikDropdownProps {
+  label: string,
+  name: string,
+  value: any,
+  touched: boolean | undefined,
+  error: string | undefined,
+  options: any[],
+  onChange: (event: DropdownChangeEvent) => void,
+}
+
+export const FormikDropdown: React.FC<FormikDropdownProps> = ({ label, name, value, touched, error, options, onChange }) => {
+  return (
+    <>
+      <div></div>
+      <div className="form-text required">
+        {label}
+      </div>
+      {touched && error && (
+        <div style={{ color: 'red', display: 'inline-block' }}>{error}</div>
+      )}
+      <div></div>
+      <Dropdown
+        name={name}
+        scrollHeight="400px"
+        value={value}
+        options={options}
+        optionLabel="name"
+        onChange={(e) => onChange(e)}
+      />
+    </>
+  )
+}
+
 interface DropdownProps {
   label: string,
+  name: string,
   value: any,
   options: any[],
   onChange: (event: DropdownChangeEvent) => void,
 }
 
-export const LabeledDropdown: React.FC<DropdownProps> = ({ label, value, options, onChange }) => {
+export const LabeledDropdown: React.FC<DropdownProps> = ({ label, name, value, options, onChange }) => {
   return (
     <>
       <div className="form-text">
         {label}
       </div>
       <Dropdown
+        name={name}
         scrollHeight="400px"
         value={value}
         options={options}
         optionLabel="name"
-        onChange={(e) => onChange(e.value)}
+        onChange={(e) => onChange(e)}
       />
     </>
   )

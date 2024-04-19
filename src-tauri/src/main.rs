@@ -23,7 +23,7 @@
 
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use std::sync::Mutex;
+use std::{sync::Mutex, time::Duration};
 
 use serde::Serialize;
 use tauri::{CustomMenuItem, Menu, MenuItem, State, Submenu};
@@ -49,14 +49,23 @@ struct HolderData {
 }
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
+#[tauri::command(async)]
+fn log_visit() -> Result<(), String> {
+    std::thread::sleep(Duration::from_secs(1));
+    // std::thread::sleep(Duration::from_millis(200));
+    // Err(format!("{}", pass_id))
+    Ok(())
+}
+
+#[tauri::command(async)]
+fn async_sleep(millis: u64) -> Result<(), String> {
+    std::thread::sleep(Duration::from_millis(millis));
+    Ok(())
 }
 
 #[tauri::command(async)]
 fn fetch_holders(search: &str, holders: State<Holders>) -> Result<Vec<HolderData>, String> {
-    // std::thread::sleep(Duration::from_millis(200));
+    std::thread::sleep(Duration::from_millis(200));
 
     let mut hldrs = holders.0.lock().unwrap();
     for i in 0..1_000 {
@@ -108,7 +117,7 @@ fn main() {
             // "quit" => std::process::exit(0),
             _ => (),
         })
-        .invoke_handler(tauri::generate_handler![greet, fetch_holders])
+        .invoke_handler(tauri::generate_handler![log_visit, fetch_holders, async_sleep])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

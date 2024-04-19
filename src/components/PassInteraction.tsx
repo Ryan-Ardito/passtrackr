@@ -2,6 +2,8 @@ import { Button } from "primereact/button"
 import { Divider } from "primereact/divider"
 
 import { HolderData, Screen } from "../types"
+import { logVisit } from "../api/api"
+import { useState } from "react"
 
 interface ChildProps {
   selectedHolder: HolderData,
@@ -10,6 +12,8 @@ interface ChildProps {
 }
 
 export const PassInteraction = ({ selectedHolder, setScreen, setAddPass }: ChildProps) => {
+  const [loggingVisit, setLoggingVisit] = useState(false);
+
   return (
     <div className="pass-interaction">
       <Button disabled={!selectedHolder.id} label="Add Visits" onClick={(e) => {
@@ -24,9 +28,14 @@ export const PassInteraction = ({ selectedHolder, setScreen, setAddPass }: Child
         setAddPass(true);
       }} />
       <Divider />
-      <Button disabled={!selectedHolder.id} label="Log Visit" onClick={(e) => {
-        e.preventDefault();
-      }} />
+      <Button disabled={!selectedHolder.id} label="Log Visit" loading={loggingVisit}
+        onClick={async (e) => {
+          e.preventDefault();
+          setLoggingVisit(true);
+          await logVisit();
+          setLoggingVisit(false);
+        }}
+      />
     </div>
   )
 }

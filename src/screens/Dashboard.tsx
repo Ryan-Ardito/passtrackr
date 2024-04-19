@@ -6,7 +6,7 @@ import { AddPass } from "./AddPass"
 import { SearchBar } from "../components/SearchBar"
 import { SearchResults } from "../components/SearchResults"
 import { HolderData, HolderAction, Screen } from "../types"
-import { fetchHolders } from "../api/api";
+import { searchPasses } from "../api/api";
 import { PassInteraction } from "../components/PassInteraction"
 
 interface ChildProps {
@@ -19,18 +19,22 @@ export function Dashboard({ setScreen, selectedHolder, setSelectedHolder }: Chil
   const [search, setSearch] = useState("");
   const [addPass, setAddPass] = useState(false);
   const [passholders, setPassholders] = useState<HolderData[]>([]);
+  const [loading, setLoading] = useState(false);
+
   // const [selectedHolder, setSelectedHolder] = useReducer(holderReducer, blankHolder);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    let res = fetchHolders(search);
+    setLoading(true);
+    let res = searchPasses(search);
     setPassholders(await res);
+    setLoading(false);
   }
 
   return (
     <div className="wrapper">
       <div className="dashboard">
-        <SearchBar setSearch={setSearch} handleSubmit={handleSubmit} />
+        <SearchBar setSearch={setSearch} handleSubmit={handleSubmit} loading={loading} />
         <div className="edit-box">
           <SearchResults
             passholders={passholders}
