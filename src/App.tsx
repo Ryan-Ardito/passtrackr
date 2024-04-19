@@ -32,21 +32,13 @@ function App() {
 
   switch (screen) {
     case Screen.Dashboard:
-      return <Dashboard
-        setScreen={setScreen}
-        selectedHolder={selectedHolder}
-        setSelectedHolder={setSelectedHolder}
-      />
+      return <Dashboard {...{ setScreen, selectedHolder, setSelectedHolder }} />
     case Screen.ViewPass:
-      return <ViewPass
-        setScreen={setScreen}
-        selectedHolder={selectedHolder}
-        setSelectedHolder={setSelectedHolder}
-      />
+      return <ViewPass {...{ setScreen, selectedHolder, setSelectedHolder }} />
     case Screen.Settings:
-      return <Settings setScreen={setScreen} />
+      return <Settings {...{ setScreen }} />
     case Screen.About:
-      return <About setScreen={setScreen} />
+      return <About {...{ setScreen }} />
   }
 }
 
