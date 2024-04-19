@@ -29,7 +29,7 @@ export function Dashboard({ setScreen, selectedHolder, setSelectedHolder }: Chil
 
   return (
     <div className="wrapper">
-      <div className="container">
+      <div className="dashboard">
         <SearchBar setSearch={setSearch} handleSubmit={handleSubmit} />
         <div className="edit-box">
           <SearchResults

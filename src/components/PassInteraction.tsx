@@ -11,7 +11,7 @@ interface ChildProps {
 
 export const PassInteraction = ({ selectedHolder, setScreen, setAddPass }: ChildProps) => {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "5px", flex: 1 }}>
+    <div className="pass-interaction">
       <Button disabled={!selectedHolder.id} label="Add Visits" onClick={(e) => {
         e.preventDefault();
       }} />

@@ -12,7 +12,7 @@ interface ChildProps {
 
 export function PassInfo({ selectedHolder, setSelectedHolder }: ChildProps) {
   return (
-    <ScrollPanel className="holder-box">
+    <ScrollPanel className="pass-info">
       <InputField label="First Name:" value={selectedHolder.first_name}
         onChange={(value) => setSelectedHolder({ type: Msg.SetFirstName, data: value })} />
 

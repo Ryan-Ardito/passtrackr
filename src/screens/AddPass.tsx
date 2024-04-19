@@ -2,36 +2,16 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { ScrollPanel } from "primereact/scrollpanel";
-import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 
 import { HolderData, HolderAction, passtypes, payMethods, Msg, blankHolder } from "../types"
-import { LabeledDropdown } from '../components/FormInput';
+import { FormikField, InputField, LabeledDropdown } from '../components/FormInput';
 
 interface ChildProps {
   selectedHolder: HolderData,
   setSelectedHolder: React.Dispatch<HolderAction>,
   setAddPass: React.Dispatch<boolean>,
-}
-
-interface InputFieldProps {
-  label: string,
-  value: string,
-  onChange: (value: string) => void,
-}
-
-const InputField: React.FC<InputFieldProps> = ({ label, value, onChange }) => {
-  return (
-    <>
-      <div className="form-text">
-        {label}
-      </div>
-      <InputText className="form-text-input p-inputtext-sm" value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
-    </>
-  )
 }
 
 export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: ChildProps) => {
@@ -43,8 +23,15 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
       signature: '',
     },
     validationSchema: Yup.object().shape({
-      lastFour: Yup.number(),
-      amountPaid: Yup.number().positive().required('required'),
+      lastFour: Yup.number()
+        .typeError('must be a number')
+        .positive('must be a positive number')
+        .integer('must be a whole number')
+        .min(1000, 'must be a 4-digit number')
+        .max(9999, 'must be a 4-digit number'),
+      amountPaid: Yup.number().required('required')
+        .typeError('must be a number')
+        .positive('must be a positive number'),
       paymentMethod: Yup.string().required('required'),
       signature: Yup.string().required('required'),
     }),
@@ -69,11 +56,10 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           onChange={(e) => setSelectedHolder({ type: Msg.SetTown, data: e })}
         />
 
-        <LabeledDropdown
-          label="Passtype:"
+        <LabeledDropdown label="Passtype:"
           value={selectedHolder.passtype}
           options={passtypes}
-          dropdownHandler={(e) => {
+          onChange={(e) => {
             setSelectedHolder({
               type: Msg.SetPasstype,
               data: e.value,
@@ -81,52 +67,39 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
           }}
         />
 
-        <LabeledDropdown
-          label="Payment Method: "
+        <LabeledDropdown label="Payment Method: "
           value={formik.values.payMethod}
           options={payMethods}
-          dropdownHandler={(e) => {
+          onChange={(e) => {
             formik.setFieldValue('payMethod', e.value);
           }}
         />
-
         <div></div>
-        <div className="form-text required">
-          Last Four:
-        </div>
-        {formik.touched.lastFour && formik.errors.lastFour && (
-          <div style={{ color: 'red', display: 'inline-block' }}>{formik.errors.lastFour}</div>
-        )}
-        <InputText
-          className="form-text-input p-inputtext-sm"
+
+        <FormikField
+          label="Last Four:"
           name="lastFour"
+          touched={formik.touched.lastFour}
           value={formik.values.lastFour}
+          error={formik.errors.lastFour}
           onChange={formik.handleChange}
         />
 
-        <div className="form-text required">
-          Amount Paid:
-        </div>
-        {formik.touched.amountPaid && formik.errors.amountPaid && (
-          <div style={{ color: 'red', display: 'inline-block' }}>{formik.errors.amountPaid}</div>
-        )}
-        <InputText
-          className="form-text-input p-inputtext-sm"
+        <FormikField
+          label="Amount Paid:"
           name="amountPaid"
+          touched={formik.touched.amountPaid}
           value={formik.values.amountPaid}
+          error={formik.errors.amountPaid}
           onChange={formik.handleChange}
         />
 
-        <div className="form-text required">
-          Employee Signature:
-        </div>
-        {formik.touched.signature && formik.errors.signature && (
-          <div style={{ color: 'red', display: 'inline-block' }}>{formik.errors.signature}</div>
-        )}
-        <InputText
-          className="form-text-input p-inputtext-sm"
+        <FormikField
+          label="Employee Signature:"
           name="signature"
+          touched={formik.touched.signature}
           value={formik.values.signature}
+          error={formik.errors.signature}
           onChange={formik.handleChange}
         />
 
