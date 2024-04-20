@@ -63,14 +63,14 @@ export const AddPass = ({ selectedHolder, setAddPass }: ChildProps) => {
   return (
     <ScrollPanel className="holder-box">
       <form onSubmit={formik.handleSubmit}>
-        <FormikField label="First Name:" name="firstName" formik={formik} />
-        <FormikField label="Last Name:" name="lastName" formik={formik} />
-        <FormikField label="Town:" name="town" formik={formik} />
+        <FormikField label="First Name:" name="firstName" {...{ formik }} />
+        <FormikField label="Last Name:" name="lastName" {...{ formik }} />
+        <FormikField label="Town:" name="town" {...{ formik }} />
         <FormikDropdown label="Passtype:" name="passtype" options={passtypes} {...{ formik }} />
         <FormikDropdown label="Payment Method:" name="payMethod" options={payMethods} {...{ formik }} />
-        <FormikField label="Last Four:" name="lastFour" formik={formik} />
-        <FormikField label="Amount Paid:" name="amountPaid" formik={formik} />
-        <FormikField label="Employee Signature:" name="signature" formik={formik} />
+        <FormikField label="Last Four:" name="lastFour" {...{ formik }} />
+        <FormikField label="Amount Paid:" name="amountPaid" {...{ formik }} />
+        <FormikField label="Employee Signature:" name="signature" {...{ formik }} />
         <Divider />
         <Button style={{ marginRight: 5 }} type="submit" label="Create Pass" loading={formik.isSubmitting} />
         <Button label="Cancel" onClick={() => { setAddPass(false); }} />

@@ -10,7 +10,7 @@ const activeBodyTemplate = (rowData: HolderData) => {
 const passtypeTemplate = (rowData: HolderData) => rowData.passtype?.code
 
 interface ChildProps {
-  passholders: HolderData[],
+  passholders: HolderData[] | undefined,
   selectedHolder: HolderData,
   setSelectedHolder: React.Dispatch<HolderAction>,
 }
@@ -20,7 +20,7 @@ export function SearchResults({ passholders, selectedHolder, setSelectedHolder }
     <DataTable showGridlines className="search-results" size="small"
       scrollable scrollHeight="87%" paginator rows={32}
       // virtualScrollerOptions={{ itemSize: 46 }}  // broken
-      value={passholders} metaKeySelection={false} selectionMode="single" selection={selectedHolder}
+      value={passholders || []} metaKeySelection={false} selectionMode="single" selection={selectedHolder}
       onSelectionChange={(e) => setSelectedHolder({ type: Msg.Replace, data: e.value || blankHolder })} dataKey="id"
     >
       <Column field="first_name" header="First Name" style={{ width: "35%" }} />

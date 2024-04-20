@@ -28,9 +28,7 @@ export const LabelRequired: React.FC<LabelRequiredProps> = ({ label, touched, er
   return (
     <>
       <div></div>
-      <div className="form-text required">
-        {label}
-      </div>
+      <div className="form-text required">{label}</div>
       {touched && error && (
         <div style={{ color: 'red', display: 'inline-block' }}>{error}</div>
       )}
@@ -50,8 +48,8 @@ export const FormikField: React.FC<FormikFieldProps> = ({ label, name, formik })
   return (
     <>
       <LabelRequired label={label} error={errors[name]?.toString()} touched={touched[name]?.valueOf()} />
-      <InputText style={{ padding: 8 }} className="form-text-input"
-        disabled={isSubmitting} name={name} value={values[name]} onChange={handleChange}
+      <InputText style={{ padding: 8 }} className="form-text-input" name={name}
+        disabled={isSubmitting} value={values[name]} onChange={handleChange}
       />
     </>
   );
@@ -72,8 +70,8 @@ export const FormikDropdown: React.FC<FormikDropdownProps> = ({ label, name, opt
       <div></div>
       <LabelRequired error={errors[name]?.toString()} {...{ label, touched }} />
       <div></div>
-      <Dropdown optionLabel="name" scrollHeight="400px" options={options}
-        disabled={isSubmitting} name={name} value={values[name]} onChange={handleChange}
+      <Dropdown optionLabel="name" scrollHeight="400px" {...{options, name}}
+        disabled={isSubmitting} value={values[name]} onChange={handleChange}
       />
     </>
   )
@@ -90,9 +88,7 @@ interface DropdownProps {
 export const LabeledDropdown: React.FC<DropdownProps> = ({ label, name, value, options, onChange }) => {
   return (
     <>
-      <div className="form-text">
-        {label}
-      </div>
+      <div className="form-text">{label} </div>
       <Dropdown optionLabel="name" scrollHeight="400px"
         {...{ name, value, options, onChange }}
       />

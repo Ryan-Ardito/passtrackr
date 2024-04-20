@@ -67,6 +67,8 @@ fn async_sleep(millis: u64) -> Result<(), String> {
 fn fetch_holders(search: &str, holders: State<Holders>) -> Result<Vec<HolderData>, String> {
     std::thread::sleep(Duration::from_millis(200));
 
+    if search.is_empty() { return Ok(vec![]); }
+
     let mut hldrs = holders.0.lock().unwrap();
     for i in 0..300 {
         let pass_type = PassType {
