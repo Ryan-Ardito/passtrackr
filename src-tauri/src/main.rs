@@ -12,7 +12,7 @@
 //     signature: String,
 // }
 
-// struct PassHoler {
+// struct PassHolder {
 //     id: u32,
 //     first_name: String,
 //     last_name: String,
@@ -35,7 +35,7 @@ struct PassType {
 }
 
 #[derive(Serialize, Clone)]
-struct HolderData {
+struct PassData {
     id: u32,
     first_name: String,
     last_name: String,
@@ -62,16 +62,16 @@ fn async_sleep(millis: u64) -> Result<(), String> {
 }
 
 #[tauri::command(async)]
-fn search_passes(search: &str, delay_millis: u64, fail: bool) -> Result<Vec<HolderData>, String> {
+fn search_passes(search: &str, delay_millis: u64, fail: bool) -> Result<Vec<PassData>, String> {
     std::thread::sleep(Duration::from_millis(delay_millis));
 
-    let mut holders = Vec::new();
+    let mut passes = Vec::new();
     for i in 0..300 {
         let pass_type = PassType {
             name: format!("Annual"),
             code: format!("annual"),
         };
-        let holder_data = HolderData {
+        let pass_data = PassData {
             id: i + 64,
             first_name: format!("jean luc{i}"),
             last_name: format!("{search}{i}"),
@@ -82,11 +82,11 @@ fn search_passes(search: &str, delay_millis: u64, fail: bool) -> Result<Vec<Hold
             notes: format!("These are editable notes displayed to the user {i}."),
         };
 
-        holders.push(holder_data);
+        passes.push(pass_data);
     }
 
     match fail {
-        false => Ok(holders),
+        false => Ok(passes),
         true => Err("error!!".to_string()),
     }
 }
