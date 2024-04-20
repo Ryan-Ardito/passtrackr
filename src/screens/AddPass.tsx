@@ -26,7 +26,7 @@ const validationSchema = Yup.object().shape({
     .integer('must be a whole number')
     .min(1000, 'must be a 4-digit number')
     .max(9999, 'must be a 4-digit number'),
-  amountPaid: Yup.number().required('required')
+  amountPaid: Yup.number()
     .typeError('must be a number')
     .min(0, 'must be a positive number'),
   signature: Yup.string().required('required'),

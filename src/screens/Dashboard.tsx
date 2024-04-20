@@ -10,16 +10,8 @@ import { PassData, PassAction, Screen, Msg, blankPass } from "../types"
 import { searchPasses } from "../api/api";
 import { PassInteraction } from "../components/PassInteraction"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { Toast, ToastMessage } from "primereact/toast";
-
-export const showMessage = (
-  summary: string,
-  detail: string,
-  ref: React.RefObject<Toast>,
-  severity: ToastMessage['severity']
-) => {
-  ref.current?.show({ ...{ severity, summary, detail, life: 6500 } });
-};
+import { Toast } from "primereact/toast";
+import { showMessage } from "../utils/toast";
 
 interface ChildProps {
   setScreen: React.Dispatch<React.SetStateAction<Screen>>,

@@ -7,7 +7,7 @@ export const searchPasses = async (search_string: string): Promise<PassData[]> =
 }
 
 export const logVisit = async (): Promise<void> => {
-  return invoke("log_visit", { delayMillis: 600, willFail: true });
+  return invoke("log_visit", { delayMillis: 600, willFail: false });
 }
 
 export const createPass = async (pass_data: string): Promise<void> => {
