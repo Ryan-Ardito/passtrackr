@@ -12,6 +12,15 @@ import { PassInteraction } from "../components/PassInteraction"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { Toast, ToastMessage } from "primereact/toast";
 
+export const showMessage = (
+  summary: string,
+  detail: string,
+  ref: React.RefObject<Toast>,
+  severity: ToastMessage['severity']
+) => {
+  ref.current?.show({ ...{ severity, summary, detail, life: 6500 } });
+};
+
 interface ChildProps {
   setScreen: React.Dispatch<React.SetStateAction<Screen>>,
   selectedPass: PassData,
@@ -31,9 +40,6 @@ export function Dashboard({ setScreen, selectedPass, setSelectedPass }: ChildPro
   })
 
   const toast = useRef<Toast>(null);
-  const showMessage = (summary: string, detail: string, ref: React.RefObject<Toast>, severity: ToastMessage['severity']) => {
-    ref.current?.show({...{ severity, summary, detail, life: 6500 }});
-  };
   useEffect(() => {
     if (status === "error") {
       showMessage(error.name, error.message, toast, "warn");
@@ -54,7 +60,7 @@ export function Dashboard({ setScreen, selectedPass, setSelectedPass }: ChildPro
           {addPass ? (
             <AddPass {...{ selectedPass, setAddPass, isSuccess }} />
           ) : (
-            <PassInteraction {...{ selectedPass, setScreen, setAddPass }} />
+            <PassInteraction {...{ selectedPass, setScreen, setAddPass, toast }} />
           )}
         </div>
       </div>

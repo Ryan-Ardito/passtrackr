@@ -54,11 +54,17 @@ struct PassData {
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command(async)]
-fn log_visit() -> Result<(), String> {
-    std::thread::sleep(Duration::from_secs(1));
+fn log_visit(delay_millis: u64, will_fail: bool) -> Result<(), QueryError> {
+    std::thread::sleep(Duration::from_millis(delay_millis));
     // std::thread::sleep(Duration::from_millis(200));
     // Err(format!("{}", pass_id))
-    Ok(())
+    match will_fail {
+        false => Ok(()),
+        true => Err(QueryError {
+            name: "Log visit".to_string(),
+            message: "failed".to_string(),
+        }),
+    }
 }
 
 #[tauri::command(async)]
