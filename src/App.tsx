@@ -11,27 +11,20 @@ import { PassData, PassAction, Msg, Screen, blankPass } from "./types";
 
 function passReducer(pass_data: PassData, action: PassAction): PassData {
   switch (action.type) {
-    case Msg.Replace: {
+    case Msg.Replace:
       return action.data;
-    }
-    case Msg.SetFirstName: {
+    case Msg.SetFirstName:
       return { ...pass_data, first_name: action.data };
-    }
-    case Msg.SetLastName: {
+    case Msg.SetLastName:
       return { ...pass_data, last_name: action.data };
-    }
-    case Msg.SetTown: {
+    case Msg.SetTown:
       return { ...pass_data, town: action.data };
-    }
-    case Msg.SetPasstype: {
+    case Msg.SetPasstype:
       return { ...pass_data, passtype: action.data };
-    }
-    case Msg.SetActive: {
+    case Msg.SetActive:
       return { ...pass_data, active: action.data };
-    }
-    case Msg.SetNotes: {
+    case Msg.SetNotes:
       return { ...pass_data, notes: action.data };
-    }
   }
 }
 
@@ -40,15 +33,9 @@ function App() {
   const [selectedPass, setSelectedPass] = useReducer(passReducer, blankPass);
 
   // Window menu emissions from Tauri
-  listen("dashboard", () => {
-    setScreen(Screen.Dashboard);
-  });
-  listen("settings", () => {
-    setScreen(Screen.Settings);
-  });
-  listen("about", () => {
-    setScreen(Screen.About);
-  });
+  listen("dashboard", () => setScreen(Screen.Dashboard));
+  listen("settings", () => setScreen(Screen.Settings));
+  listen("about", () => setScreen(Screen.About));
 
   switch (screen) {
     case Screen.Dashboard:
