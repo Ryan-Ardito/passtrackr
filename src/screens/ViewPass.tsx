@@ -1,19 +1,19 @@
 import { Button } from "primereact/button"
 
-import { Screen, HolderData, HolderAction } from "../types"
+import { Screen, PassData, PassAction } from "../types"
 import { PassInfo } from "../components/PassInfo";
 
 interface ChildProps {
   setScreen: React.Dispatch<React.SetStateAction<Screen>>,
-  selectedHolder: HolderData,
-  setSelectedHolder: React.Dispatch<HolderAction>,
+  selectedPass: PassData,
+  setSelectedPass: React.Dispatch<PassAction>,
 }
 
-export function ViewPass({ setScreen, selectedHolder, setSelectedHolder }: ChildProps) {
+export function ViewPass({ setScreen, selectedPass, setSelectedPass }: ChildProps) {
   return (
     <div className="wrapper">
       <div className="center-box">
-        <PassInfo selectedHolder={selectedHolder} setSelectedHolder={setSelectedHolder} />
+        <PassInfo {...{selectedPass, setSelectedPass}} />
         <Button label="Back" onClick={(e) => {
           e.preventDefault();
           setScreen(Screen.Dashboard);

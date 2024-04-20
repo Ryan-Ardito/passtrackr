@@ -62,7 +62,7 @@ fn async_sleep(millis: u64) -> Result<(), String> {
 }
 
 #[tauri::command(async)]
-fn fetch_holders(search: &str, delay_millis: u64, fail: bool) -> Result<Vec<HolderData>, String> {
+fn search_passes(search: &str, delay_millis: u64, fail: bool) -> Result<Vec<HolderData>, String> {
     std::thread::sleep(Duration::from_millis(delay_millis));
 
     let mut holders = Vec::new();
@@ -117,7 +117,7 @@ fn main() {
             // "quit" => std::process::exit(0),
             _ => (),
         })
-        .invoke_handler(tauri::generate_handler![log_visit, fetch_holders, async_sleep])
+        .invoke_handler(tauri::generate_handler![log_visit, search_passes, async_sleep])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

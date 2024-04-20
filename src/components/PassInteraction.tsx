@@ -1,25 +1,25 @@
 import { Button } from "primereact/button"
 import { Divider } from "primereact/divider"
 
-import { HolderData, Screen } from "../types"
+import { PassData, Screen } from "../types"
 import { logVisit } from "../api/api"
 import { useState } from "react"
 
 interface ChildProps {
-  selectedHolder: HolderData,
+  selectedPass: PassData,
   setScreen: React.Dispatch<React.SetStateAction<Screen>>,
   setAddPass: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-export const PassInteraction = ({ selectedHolder, setScreen, setAddPass }: ChildProps) => {
+export const PassInteraction = ({ selectedPass, setScreen, setAddPass }: ChildProps) => {
   const [loggingVisit, setLoggingVisit] = useState(false);
 
   return (
     <div className="pass-interaction">
-      <Button disabled={!selectedHolder.id} label="Add Visits" onClick={(e) => {
+      <Button disabled={!selectedPass.id} label="Add Visits" onClick={(e) => {
         e.preventDefault();
       }} />
-      <Button disabled={!selectedHolder.id} label="View Pass" onClick={(e) => {
+      <Button disabled={!selectedPass.id} label="View Pass" onClick={(e) => {
         e.preventDefault();
         setScreen(Screen.ViewPass);
       }} />
@@ -28,7 +28,7 @@ export const PassInteraction = ({ selectedHolder, setScreen, setAddPass }: Child
         setAddPass(true);
       }} />
       <Divider />
-      <Button disabled={!selectedHolder.id} label="Log Visit" loading={loggingVisit}
+      <Button disabled={!selectedPass.id} label="Log Visit" loading={loggingVisit}
         onClick={async (e) => {
           e.preventDefault();
           setLoggingVisit(true);

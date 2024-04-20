@@ -6,7 +6,7 @@ import { Divider } from "primereact/divider"
 import { AddPass } from "./AddPass"
 import { SearchBar } from "../components/SearchBar"
 import { SearchResults } from "../components/SearchResults"
-import { HolderData, HolderAction, Screen, Msg, blankHolder } from "../types"
+import { PassData, PassAction, Screen, Msg, blankPass } from "../types"
 import { searchPasses } from "../api/api";
 import { PassInteraction } from "../components/PassInteraction"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
@@ -14,11 +14,11 @@ import { Toast, ToastMessage } from "primereact/toast";
 
 interface ChildProps {
   setScreen: React.Dispatch<React.SetStateAction<Screen>>,
-  selectedHolder: HolderData,
-  setSelectedHolder: React.Dispatch<HolderAction>,
+  selectedPass: PassData,
+  setSelectedPass: React.Dispatch<PassAction>,
 }
 
-export function Dashboard({ setScreen, selectedHolder, setSelectedHolder }: ChildProps) {
+export function Dashboard({ setScreen, selectedPass, setSelectedPass }: ChildProps) {
   const [search, setSearch] = useState("");
   const debouncedSetSearch = debounce(setSearch, 350);
   const [addPass, setAddPass] = useState(false);
@@ -41,7 +41,7 @@ export function Dashboard({ setScreen, selectedHolder, setSelectedHolder }: Chil
   }, [status]);
 
   // KLUDGE. possibly only an issue on dev
-  if (data?.length == 0) setSelectedHolder({ type: Msg.Replace, data: blankHolder })
+  if (data?.length == 0) setSelectedPass({ type: Msg.Replace, data: blankPass })
 
   return (
     <div className="wrapper">
@@ -49,12 +49,12 @@ export function Dashboard({ setScreen, selectedHolder, setSelectedHolder }: Chil
         <Toast ref={toast} position="bottom-center" />
         <SearchBar {...{ setSearch: debouncedSetSearch, loading: isFetching, }} />
         <div className="edit-box">
-          <SearchResults {...{ passholders: data, selectedHolder, setSelectedHolder }} />
+          <SearchResults {...{ passes: data, selectedPass: selectedPass, setSelectedPass: setSelectedPass }} />
           <Divider layout="vertical" style={{ margin: 5 }} />
           {addPass ? (
-            <AddPass {...{ selectedHolder, setAddPass }} />
+            <AddPass {...{ selectedPass, setAddPass }} />
           ) : (
-            <PassInteraction {...{ selectedHolder, setScreen, setAddPass }} />
+            <PassInteraction {...{ selectedPass, setScreen, setAddPass }} />
           )}
         </div>
       </div>

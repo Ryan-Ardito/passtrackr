@@ -1,28 +1,28 @@
-import { HolderData, HolderAction, blankHolder, Msg } from "../types";
+import { PassData, PassAction, blankPass, Msg } from "../types";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 // import { useContext } from "react";
 
-const activeBodyTemplate = (rowData: HolderData) => {
+const activeBodyTemplate = (rowData: PassData) => {
   return <i className={rowData.active ? "pi pi-check" : "pi pi-times"} />
 }
 
-const passtypeTemplate = (rowData: HolderData) => rowData.passtype?.name;
+const passtypeTemplate = (rowData: PassData) => rowData.passtype?.name;
 
 interface ChildProps {
-  passholders: HolderData[] | undefined,
-  selectedHolder: HolderData,
-  setSelectedHolder: React.Dispatch<HolderAction>,
+  passes: PassData[] | undefined,
+  selectedPass: PassData,
+  setSelectedPass: React.Dispatch<PassAction>,
 }
 
-export function SearchResults({ passholders, selectedHolder, setSelectedHolder }: ChildProps) {
+export function SearchResults({ passes, selectedPass, setSelectedPass }: ChildProps) {
   return (
     <DataTable className="search-results" size="small"  // showGridlines
       scrollable scrollHeight="87%"
       paginator rows={32}
       // virtualScrollerOptions={{ lazy: true, itemSize: 46, delay: 200, showLoader: true }}
-      value={passholders || []} metaKeySelection={false} selectionMode="single" selection={selectedHolder}
-      onSelectionChange={(e) => setSelectedHolder({ type: Msg.Replace, data: e.value || blankHolder })} dataKey="id"
+      value={passes || []} metaKeySelection={false} selectionMode="single" selection={selectedPass}
+      onSelectionChange={(e) => setSelectedPass({ type: Msg.Replace, data: e.value || blankPass })} dataKey="id"
     >
       <Column field="first_name" header="First Name" style={{ width: "35%" }} />
       <Column field="last_name" header="Last Name" style={{ width: "35%" }} />

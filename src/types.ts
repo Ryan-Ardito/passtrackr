@@ -35,7 +35,7 @@ export const passtypes: PassType[] = [
   { name: "6x Facial", code: "six_facial" },
 ];
 
-export interface HolderData {
+export interface PassData {
   id: number | null,
   first_name: string,
   last_name: string,
@@ -46,7 +46,7 @@ export interface HolderData {
   notes: string,
 }
 
-export const blankHolder: HolderData = {
+export const blankPass: PassData = {
   id: null,
   first_name: "",
   last_name: "",
@@ -57,8 +57,8 @@ export const blankHolder: HolderData = {
   notes: "",
 }
 
-export type HolderAction =
-  | { type: Msg.Replace; data: HolderData }
+export type PassAction =
+  | { type: Msg.Replace; data: PassData }
   | { type: Msg.SetFirstName; data: string }
   | { type: Msg.SetLastName; data: string }
   | { type: Msg.SetTown; data: string }
