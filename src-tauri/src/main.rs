@@ -23,12 +23,10 @@
 
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use std::{sync::Mutex, time::Duration};
+use std::time::Duration;
 
 use serde::Serialize;
-use tauri::{CustomMenuItem, Menu, MenuItem, State, Submenu};
-
-struct Holders(Mutex<Vec<HolderData>>);
+use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
 
 #[derive(Serialize, Debug, Clone)]
 struct PassType {
@@ -64,12 +62,10 @@ fn async_sleep(millis: u64) -> Result<(), String> {
 }
 
 #[tauri::command(async)]
-fn fetch_holders(search: &str, holders: State<Holders>) -> Result<Vec<HolderData>, String> {
-    std::thread::sleep(Duration::from_millis(200));
+fn fetch_holders(search: &str, delay_millis: u64) -> Result<Vec<HolderData>, String> {
+    std::thread::sleep(Duration::from_millis(delay_millis));
 
-    if search.is_empty() { return Ok(vec![]); }
-
-    let mut hldrs = holders.0.lock().unwrap();
+    let mut holders = Vec::new();
     for i in 0..300 {
         let pass_type = PassType {
             name: format!("Annual"),
@@ -77,8 +73,8 @@ fn fetch_holders(search: &str, holders: State<Holders>) -> Result<Vec<HolderData
         };
         let holder_data = HolderData {
             id: i + 64,
-            first_name: format!("{search}{i}"),
-            last_name: format!("smith{i}"),
+            first_name: format!("jean luc{i}"),
+            last_name: format!("{search}{i}"),
             town: format!("Kokomo{i}"),
             remaining: 10,
             passtype: pass_type,
@@ -86,10 +82,11 @@ fn fetch_holders(search: &str, holders: State<Holders>) -> Result<Vec<HolderData
             notes: format!("These are editable notes displayed to the user {i}."),
         };
 
-        hldrs.push(holder_data);
+        holders.push(holder_data);
     }
 
-    Ok(hldrs.to_vec())
+    Ok(holders)
+    // Err("error!!".to_string())
 }
 
 fn main() {
@@ -110,7 +107,6 @@ fn main() {
         .add_submenu(submenu);
 
     tauri::Builder::default()
-        .manage(Holders(Default::default()))
         .menu(menu)
         .on_menu_event(|event| match event.menu_item_id() {
             "dashboard" => event.window().emit("dashboard", "").unwrap(),

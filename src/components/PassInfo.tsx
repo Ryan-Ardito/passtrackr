@@ -3,7 +3,7 @@ import { HolderData, HolderAction, passtypes, Msg } from "../types"
 import { ScrollPanel } from "primereact/scrollpanel";
 import { Dropdown } from "primereact/dropdown";
 
-import { InputField } from "./FormInput";
+import { InputField, LabeledDropdown } from "./FormInput";
 
 interface ChildProps {
   selectedHolder: HolderData,
@@ -22,10 +22,11 @@ export function PassInfo({ selectedHolder, setSelectedHolder }: ChildProps) {
       <InputField label="Town:" value={selectedHolder.town}
         onChange={(value) => setSelectedHolder({ type: Msg.SetTown, data: value })} />
 
-      <div className="form-text">Passtype:</div>
-      <Dropdown style={{ padding: 0 }} scrollHeight="400px"
-        // filter resetFilterOnHide
-        value={selectedHolder.passtype} options={passtypes} optionLabel="code"
+      <LabeledDropdown
+        label="Passtype:"
+        name="passtype"
+        value={selectedHolder.passtype}
+        options={passtypes}
         onChange={(e) => {
           setSelectedHolder({ type: Msg.SetPasstype, data: e.value, })
         }} />

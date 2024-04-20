@@ -7,7 +7,7 @@ const activeBodyTemplate = (rowData: HolderData) => {
   return <i className={rowData.active ? "pi pi-check" : "pi pi-times"} />
 }
 
-const passtypeTemplate = (rowData: HolderData) => rowData.passtype?.code
+const passtypeTemplate = (rowData: HolderData) => rowData.passtype?.name;
 
 interface ChildProps {
   passholders: HolderData[] | undefined,
@@ -18,8 +18,9 @@ interface ChildProps {
 export function SearchResults({ passholders, selectedHolder, setSelectedHolder }: ChildProps) {
   return (
     <DataTable showGridlines className="search-results" size="small"
-      scrollable scrollHeight="87%" paginator rows={32}
-      // virtualScrollerOptions={{ itemSize: 46 }}  // broken
+      scrollable scrollHeight="87%"
+      paginator rows={32}
+      // virtualScrollerOptions={{ lazy: true, itemSize: 46, delay: 200, showLoader: true }}
       value={passholders || []} metaKeySelection={false} selectionMode="single" selection={selectedHolder}
       onSelectionChange={(e) => setSelectedHolder({ type: Msg.Replace, data: e.value || blankHolder })} dataKey="id"
     >
