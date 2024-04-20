@@ -68,7 +68,7 @@ fn fetch_holders(search: &str, holders: State<Holders>) -> Result<Vec<HolderData
     std::thread::sleep(Duration::from_millis(200));
 
     let mut hldrs = holders.0.lock().unwrap();
-    for i in 0..1_000 {
+    for i in 0..300 {
         let pass_type = PassType {
             name: format!("Annual"),
             code: format!("annual"),

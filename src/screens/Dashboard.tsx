@@ -32,12 +32,12 @@ export function Dashboard({ setScreen, selectedHolder, setSelectedHolder }: Chil
   return (
     <div className="wrapper">
       <div className="dashboard">
-        <SearchBar {...{setSearch, handleSubmit, loading,}} />
+        <SearchBar {...{ setSearch, handleSubmit, loading, }} />
         <div className="edit-box">
           <SearchResults {...{ passholders, selectedHolder, setSelectedHolder }} />
           <Divider layout="vertical" style={{ margin: 5 }} />
           {addPass ? (
-            <AddPass {...{ selectedHolder, setSelectedHolder, setAddPass }} />
+            <AddPass {...{ selectedHolder, setAddPass }} />
           ) : (
             <PassInteraction {...{ selectedHolder, setScreen, setAddPass }} />
           )}

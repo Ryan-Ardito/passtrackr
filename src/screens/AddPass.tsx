@@ -5,7 +5,7 @@ import { ScrollPanel } from "primereact/scrollpanel";
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 
-import { HolderData, HolderAction, passtypes, payMethods, Msg, blankHolder } from "../types"
+import { HolderData, passtypes, payMethods } from "../types"
 import { FormikDropdown, FormikField } from '../components/FormInput';
 import { asyncSleep } from '../api/api';
 
@@ -35,11 +35,10 @@ const validationSchema = Yup.object().shape({
 
 interface ChildProps {
   selectedHolder: HolderData,
-  setSelectedHolder: React.Dispatch<HolderAction>,
   setAddPass: React.Dispatch<boolean>,
 }
 
-export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: ChildProps) => {
+export const AddPass = ({ selectedHolder, setAddPass }: ChildProps) => {
   const formik = useFormik({
     initialValues: {
       firstName: selectedHolder.first_name,
@@ -74,7 +73,7 @@ export const AddPass = ({ selectedHolder, setSelectedHolder, setAddPass }: Child
         <FormikField label="Employee Signature:" name="signature" formik={formik} />
         <Divider />
         <Button style={{ marginRight: 5 }} type="submit" label="Create Pass" loading={formik.isSubmitting} />
-        <Button label="Cancel" onClick={() => { setSelectedHolder({ type: Msg.Replace, data: blankHolder }); setAddPass(false); }} />
+        <Button label="Cancel" onClick={() => { setAddPass(false); }} />
       </form>
     </ScrollPanel>
   );
