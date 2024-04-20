@@ -71,8 +71,10 @@ export const AddPass = ({ selectedPass, setAddPass }: ChildProps) => {
         <FormikField label="Amount Paid:" name="amountPaid" {...{ formik }} />
         <FormikField label="Employee Signature:" name="signature" {...{ formik }} />
         <Divider />
-        <Button icon="pi pi-check" style={{ marginRight: 6, width: "170px" }} type="submit" label="Create Pass" loading={formik.isSubmitting} />
-        <Button icon="pi pi-times" severity="danger" label="Cancel" onClick={() => { setAddPass(false); }} />
+        <Button icon="pi pi-check" style={{ marginRight: 6, width: "170px" }}
+          type="submit" label="Create Pass" loading={formik.isSubmitting} />
+        <Button icon="pi pi-times" severity="danger" label="Cancel"
+          onClick={() => { setAddPass(false); }} />
       </form>
     </ScrollPanel>
   );

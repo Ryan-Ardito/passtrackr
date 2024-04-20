@@ -47,7 +47,9 @@ export function Dashboard({ setScreen, selectedPass, setSelectedPass }: ChildPro
         <Toast ref={toast} position="bottom-center" />
         <SearchBar {...{ setSearch: debouncedSetSearch, loading: isFetching, }} />
         <div className="edit-box">
-          <SearchResults {...{ passes: data, selectedPass: selectedPass, setSelectedPass: setSelectedPass }} />
+          <SearchResults {...{
+            passes: data, selectedPass: selectedPass, setSelectedPass
+          }} />
           <Divider layout="vertical" style={{ margin: 5 }} />
           {addPass ? (
             <AddPass {...{ selectedPass, setAddPass, isSuccess }} />
