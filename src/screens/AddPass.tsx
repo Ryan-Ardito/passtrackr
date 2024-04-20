@@ -61,7 +61,7 @@ export const AddPass = ({ selectedPass, setAddPass }: ChildProps) => {
   });
 
   return (
-    <ScrollPanel className="holder-box">
+    <ScrollPanel className="pass-box">
       <form onSubmit={formik.handleSubmit}>
         <FormikField label="First Name:" name="firstName" {...{ formik }} />
         <FormikField label="Last Name:" name="lastName" {...{ formik }} />
