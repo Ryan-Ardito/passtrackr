@@ -17,7 +17,7 @@ interface ChildProps {
 
 export function SearchResults({ passholders, selectedHolder, setSelectedHolder }: ChildProps) {
   return (
-    <DataTable showGridlines className="search-results" size="small"
+    <DataTable className="search-results" size="small"  // showGridlines
       scrollable scrollHeight="87%"
       paginator rows={32}
       // virtualScrollerOptions={{ lazy: true, itemSize: 46, delay: 200, showLoader: true }}

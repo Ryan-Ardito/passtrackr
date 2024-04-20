@@ -62,7 +62,7 @@ fn async_sleep(millis: u64) -> Result<(), String> {
 }
 
 #[tauri::command(async)]
-fn fetch_holders(search: &str, delay_millis: u64) -> Result<Vec<HolderData>, String> {
+fn fetch_holders(search: &str, delay_millis: u64, fail: bool) -> Result<Vec<HolderData>, String> {
     std::thread::sleep(Duration::from_millis(delay_millis));
 
     let mut holders = Vec::new();
@@ -85,8 +85,10 @@ fn fetch_holders(search: &str, delay_millis: u64) -> Result<Vec<HolderData>, Str
         holders.push(holder_data);
     }
 
-    Ok(holders)
-    // Err("error!!".to_string())
+    match fail {
+        false => Ok(holders),
+        true => Err("error!!".to_string()),
+    }
 }
 
 fn main() {

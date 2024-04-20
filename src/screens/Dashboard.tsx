@@ -25,14 +25,14 @@ export function Dashboard({ setScreen, selectedHolder, setSelectedHolder }: Chil
 
   const { data, isFetching, status } = useQuery({
     queryKey: ["search", search],
-    queryFn: () => { if (search) { return searchPasses(search); } else { return []; } },
+    queryFn: () => (search ? searchPasses(search) : []),
     placeholderData: keepPreviousData,
-    staleTime: 60_000,
+    staleTime: 120_000,
   })
 
   const toast = useRef<Toast>(null);
   const showMessage = (summary: string, detail: string, ref: React.RefObject<Toast>, severity: ToastMessage['severity']) => {
-    ref.current?.show({...{ severity, summary, detail, life: 6000 }});
+    ref.current?.show({...{ severity, summary, detail, life: 6500 }});
   };
   useEffect(() => {
     if (status === "error") {

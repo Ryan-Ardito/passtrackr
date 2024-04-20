@@ -3,7 +3,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { HolderData } from "../types";
 
 export const searchPasses = async (search_string: string): Promise<HolderData[]> => {
-  return invoke("fetch_holders", { search: search_string, delayMillis: 350 });
+  return invoke("fetch_holders", { search: search_string, delayMillis: 350, fail: false });
 }
 
 export const logVisit = async (): Promise<void> => {
