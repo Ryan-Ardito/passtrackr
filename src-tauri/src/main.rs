@@ -106,7 +106,7 @@ fn search_passes(
         };
         let pass_data = PassData {
             id: i + 64,
-            first_name: format!("jean luc{i}"),
+            first_name: format!("John{i}"),
             last_name: format!("{search}{i}"),
             town: format!("Kokomo{i}"),
             remaining: 10,

@@ -36,23 +36,23 @@ export const passtypes: PassType[] = [
 ];
 
 export interface PassData {
-  id: number | null;
+  id: number | undefined;
   first_name: string;
   last_name: string;
   town: string;
   remaining: number;
-  passtype: PassType | null;
+  passtype: PassType | undefined;
   active: boolean;
   notes: string;
 }
 
 export const blankPass: PassData = {
-  id: null,
+  id: undefined,
   first_name: "",
   last_name: "",
   town: "",
   remaining: 0,
-  passtype: null,
+  passtype: undefined,
   active: false,
   notes: "",
 };
@@ -62,6 +62,6 @@ export type PassAction =
   | { type: Msg.SetFirstName; data: string }
   | { type: Msg.SetLastName; data: string }
   | { type: Msg.SetTown; data: string }
-  | { type: Msg.SetPasstype; data: PassType | null }
+  | { type: Msg.SetPasstype; data: PassType | undefined }
   | { type: Msg.SetActive; data: boolean }
   | { type: Msg.SetNotes; data: string };

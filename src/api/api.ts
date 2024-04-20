@@ -12,8 +12,8 @@ export const searchPasses = async (
   });
 };
 
-export const logVisit = async (): Promise<void> => {
-  return invoke("log_visit", { delayMillis: 600, willFail: false });
+export const logVisit = async (passId: number | undefined): Promise<void> => {
+  return invoke("log_visit", { passId: passId, delayMillis: 600, willFail: false });
 };
 
 export const createPass = async (pass_data: string): Promise<void> => {

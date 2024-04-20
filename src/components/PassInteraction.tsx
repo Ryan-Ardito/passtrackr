@@ -45,7 +45,7 @@ export const PassInteraction = ({
         disabled={!selectedPass.id}
         label="Log Visit"
         loading={isLogVisitPending}
-        onClick={() => mutateLogVisit()}
+        onClick={() => mutateLogVisit(selectedPass.id)}
       />
     </div>
   );
