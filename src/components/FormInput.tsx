@@ -30,7 +30,7 @@ export const LabelRequired: React.FC<LabelRequiredProps> = ({ label, touched, er
       <div></div>
       <div className="form-text required">{label}</div>
       {touched && error && (
-        <div style={{ color: 'red', display: 'inline-block' }}>{error}</div>
+        <span style={{ color: 'red' }}>{error}</span>
       )}
     </>
   );

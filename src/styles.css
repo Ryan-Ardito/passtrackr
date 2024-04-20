@@ -10,6 +10,7 @@
 }
 
 .form-text {
+  color: #202020;
   margin-top: 2px;
   margin-bottom: 2px;
 }
@@ -70,7 +71,7 @@ button {
   padding: 10;
 }
 
-.holder-box {
+.pass-box {
   flex: 2;
 }
 

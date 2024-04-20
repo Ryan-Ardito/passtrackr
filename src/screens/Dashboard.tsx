@@ -23,7 +23,7 @@ export function Dashboard({ setScreen, selectedPass, setSelectedPass }: ChildPro
   const debouncedSetSearch = debounce(setSearch, 350);
   const [addPass, setAddPass] = useState(false);
 
-  const { data, isFetching, status } = useQuery({
+  const { data, isFetching, status, isSuccess, error } = useQuery({
     queryKey: ["search", search],
     queryFn: () => (search ? searchPasses(search) : []),
     placeholderData: keepPreviousData,
@@ -36,7 +36,7 @@ export function Dashboard({ setScreen, selectedPass, setSelectedPass }: ChildPro
   };
   useEffect(() => {
     if (status === "error") {
-      showMessage("Network problem", "Unable to connect to database", toast, "warn");
+      showMessage(error.name, error.message, toast, "warn");
     }
   }, [status]);
 
@@ -52,7 +52,7 @@ export function Dashboard({ setScreen, selectedPass, setSelectedPass }: ChildPro
           <SearchResults {...{ passes: data, selectedPass: selectedPass, setSelectedPass: setSelectedPass }} />
           <Divider layout="vertical" style={{ margin: 5 }} />
           {addPass ? (
-            <AddPass {...{ selectedPass, setAddPass }} />
+            <AddPass {...{ selectedPass, setAddPass, isSuccess }} />
           ) : (
             <PassInteraction {...{ selectedPass, setScreen, setAddPass }} />
           )}

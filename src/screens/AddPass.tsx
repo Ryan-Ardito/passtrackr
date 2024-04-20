@@ -7,7 +7,7 @@ import { Divider } from "primereact/divider";
 
 import { PassData, passtypes, payMethods } from "../types"
 import { FormikDropdown, FormikField } from '../components/FormInput';
-import { asyncSleep } from '../api/api';
+import { createPass } from '../api/api';
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("required"),
@@ -23,13 +23,12 @@ const validationSchema = Yup.object().shape({
   }),
   lastFour: Yup.number()
     .typeError('must be a number')
-    .positive('must be a positive number')
     .integer('must be a whole number')
     .min(1000, 'must be a 4-digit number')
     .max(9999, 'must be a 4-digit number'),
   amountPaid: Yup.number().required('required')
     .typeError('must be a number')
-    .positive('must be a positive number'),
+    .min(0, 'must be a positive number'),
   signature: Yup.string().required('required'),
 });
 
@@ -53,7 +52,7 @@ export const AddPass = ({ selectedPass, setAddPass }: ChildProps) => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log('Submitting...');
-      await asyncSleep(800);
+      await createPass("foobar");
       console.log('Form submitted:', values);
       formik.setSubmitting(false);
       // setAddPass(false);
@@ -72,8 +71,8 @@ export const AddPass = ({ selectedPass, setAddPass }: ChildProps) => {
         <FormikField label="Amount Paid:" name="amountPaid" {...{ formik }} />
         <FormikField label="Employee Signature:" name="signature" {...{ formik }} />
         <Divider />
-        <Button style={{ marginRight: 5 }} type="submit" label="Create Pass" loading={formik.isSubmitting} />
-        <Button label="Cancel" onClick={() => { setAddPass(false); }} />
+        <Button icon="pi pi-check" style={{ marginRight: 6, width: "170px" }} type="submit" label="Create Pass" loading={formik.isSubmitting} />
+        <Button icon="pi pi-times" severity="danger" label="Cancel" onClick={() => { setAddPass(false); }} />
       </form>
     </ScrollPanel>
   );

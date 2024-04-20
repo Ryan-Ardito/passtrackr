@@ -28,6 +28,12 @@ use std::time::Duration;
 use serde::Serialize;
 use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
 
+#[derive(Debug, Serialize)]
+struct QueryError {
+    name: String,
+    message: String,
+}
+
 #[derive(Serialize, Debug, Clone)]
 struct PassType {
     name: String,
@@ -62,7 +68,28 @@ fn async_sleep(millis: u64) -> Result<(), String> {
 }
 
 #[tauri::command(async)]
-fn search_passes(search: &str, delay_millis: u64, fail: bool) -> Result<Vec<PassData>, String> {
+fn create_pass(
+    pass_data: String,
+    delay_millis: u64,
+    will_fail: bool,
+) -> Result<String, QueryError> {
+    std::thread::sleep(Duration::from_millis(delay_millis));
+
+    match will_fail {
+        false => Ok(pass_data),
+        true => Err(QueryError {
+            name: "Connection problem".to_string(),
+            message: "Unable to connect to database".to_string(),
+        }),
+    }
+}
+
+#[tauri::command(async)]
+fn search_passes(
+    search: &str,
+    delay_millis: u64,
+    will_fail: bool,
+) -> Result<Vec<PassData>, QueryError> {
     std::thread::sleep(Duration::from_millis(delay_millis));
 
     let mut passes = Vec::new();
@@ -85,9 +112,12 @@ fn search_passes(search: &str, delay_millis: u64, fail: bool) -> Result<Vec<Pass
         passes.push(pass_data);
     }
 
-    match fail {
+    match will_fail {
         false => Ok(passes),
-        true => Err("error!!".to_string()),
+        true => Err(QueryError {
+            name: "Connection problem".to_string(),
+            message: "Unable to connect to database".to_string(),
+        }),
     }
 }
 
@@ -117,7 +147,12 @@ fn main() {
             // "quit" => std::process::exit(0),
             _ => (),
         })
-        .invoke_handler(tauri::generate_handler![log_visit, search_passes, async_sleep])
+        .invoke_handler(tauri::generate_handler![
+            create_pass,
+            log_visit,
+            search_passes,
+            async_sleep
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
