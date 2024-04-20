@@ -1,68 +1,96 @@
 import { FormikContextType } from "formik";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
-import { InputText } from "primereact/inputtext"
+import { InputText } from "primereact/inputtext";
 
 interface InputFieldProps {
-  label: string,
-  value: string,
-  onChange: (value: string) => void,
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
 }
 
-export const InputField: React.FC<InputFieldProps> = ({ label, value, onChange }) => {
+export const InputField: React.FC<InputFieldProps> = ({
+  label,
+  value,
+  onChange,
+}) => {
   return (
     <>
       <div className="form-text">{label}</div>
-      <InputText className="form-text-input" value={value} style={{ padding: 8 }}
-        onChange={(e) => onChange(e.target.value)} />
+      <InputText
+        className="form-text-input"
+        value={value}
+        style={{ padding: 8 }}
+        onChange={(e) => onChange(e.target.value)}
+      />
     </>
   );
 };
 
 interface LabelRequiredProps {
-  label: string,
-  touched: any,
-  error: string | undefined,
+  label: string;
+  touched: any;
+  error: string | undefined;
 }
 
-export const LabelRequired: React.FC<LabelRequiredProps> = ({ label, touched, error }) => {
+export const LabelRequired: React.FC<LabelRequiredProps> = ({
+  label,
+  touched,
+  error,
+}) => {
   return (
     <>
       <div></div>
       <div className="form-text required">{label}</div>
-      {touched && error && (
-        <span style={{ color: 'red' }}>{error}</span>
-      )}
+      {touched && error && <span style={{ color: "red" }}>{error}</span>}
     </>
   );
 };
 
 interface FormikFieldProps {
-  label: string,
-  name: string,
-  formik: FormikContextType<any>,
+  label: string;
+  name: string;
+  formik: FormikContextType<any>;
 }
 
-export const FormikField: React.FC<FormikFieldProps> = ({ label, name, formik }) => {
+export const FormikField: React.FC<FormikFieldProps> = ({
+  label,
+  name,
+  formik,
+}) => {
   const { values, touched, errors, isSubmitting, handleChange } = formik;
 
   return (
     <>
-      <LabelRequired label={label} error={errors[name]?.toString()} touched={touched[name]?.valueOf()} />
-      <InputText style={{ padding: 8 }} className="form-text-input" name={name}
-        disabled={isSubmitting} value={values[name]} onChange={handleChange}
+      <LabelRequired
+        label={label}
+        error={errors[name]?.toString()}
+        touched={touched[name]?.valueOf()}
+      />
+      <InputText
+        style={{ padding: 8 }}
+        className="form-text-input"
+        name={name}
+        disabled={isSubmitting}
+        value={values[name]}
+        onChange={handleChange}
       />
     </>
   );
 };
 
 interface FormikDropdownProps {
-  label: string,
-  name: string,
-  options: any[],
-  formik: FormikContextType<any>,
+  label: string;
+  name: string;
+  options: any[];
+  formik: FormikContextType<any>;
 }
 
-export const FormikDropdown: React.FC<FormikDropdownProps> = ({ label, name, options, formik }) => {
+export const FormikDropdown: React.FC<FormikDropdownProps> = ({
+  label,
+  name,
+  options,
+  formik,
+}) => {
   const { values, touched, errors, isSubmitting, handleChange } = formik;
 
   return (
@@ -70,28 +98,41 @@ export const FormikDropdown: React.FC<FormikDropdownProps> = ({ label, name, opt
       <div></div>
       <LabelRequired error={errors[name]?.toString()} {...{ label, touched }} />
       <div></div>
-      <Dropdown optionLabel="name" scrollHeight="400px" {...{options, name}}
-        disabled={isSubmitting} value={values[name]} onChange={handleChange}
+      <Dropdown
+        optionLabel="name"
+        scrollHeight="400px"
+        {...{ options, name }}
+        disabled={isSubmitting}
+        value={values[name]}
+        onChange={handleChange}
       />
     </>
-  )
-}
+  );
+};
 
 interface DropdownProps {
-  label: string,
-  name: string,
-  value: any,
-  options: any[],
-  onChange: (event: DropdownChangeEvent) => void,
+  label: string;
+  name: string;
+  value: any;
+  options: any[];
+  onChange: (event: DropdownChangeEvent) => void;
 }
 
-export const LabeledDropdown: React.FC<DropdownProps> = ({ label, name, value, options, onChange }) => {
+export const LabeledDropdown: React.FC<DropdownProps> = ({
+  label,
+  name,
+  value,
+  options,
+  onChange,
+}) => {
   return (
     <>
       <div className="form-text">{label} </div>
-      <Dropdown optionLabel="name" scrollHeight="400px"
+      <Dropdown
+        optionLabel="name"
+        scrollHeight="400px"
         {...{ name, value, options, onChange }}
       />
     </>
-  )
-}
+  );
+};

@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Button } from "primereact/button"
+import { Button } from "primereact/button";
 
-import { Screen } from "../types"
-import { InputField } from "../components/FormInput"
+import { Screen } from "../types";
+import { InputField } from "../components/FormInput";
 import { asyncSleep } from "../api/api";
 
 interface ChildProps {
-  setScreen: React.Dispatch<React.SetStateAction<Screen>>,
+  setScreen: React.Dispatch<React.SetStateAction<Screen>>;
 }
 
 export function Settings({ setScreen }: ChildProps) {
@@ -17,9 +17,19 @@ export function Settings({ setScreen }: ChildProps) {
   return (
     <div className="wrapper">
       <div className="container center-box">
-        <InputField label="Database server IP:" value={ipAddr} onChange={setIpAddr} />
-        <InputField label="Database password:" value={dbPass} onChange={setDbPass} />
-        <Button label="Save" loading={saving}
+        <InputField
+          label="Database server IP:"
+          value={ipAddr}
+          onChange={setIpAddr}
+        />
+        <InputField
+          label="Database password:"
+          value={dbPass}
+          onChange={setDbPass}
+        />
+        <Button
+          label="Save"
+          loading={saving}
           onClick={async (e) => {
             e.preventDefault();
             setSaving(true);
@@ -28,11 +38,14 @@ export function Settings({ setScreen }: ChildProps) {
             setScreen(Screen.Dashboard);
           }}
         />
-        <Button label="Back" onClick={(e) => {
-          e.preventDefault();
-          setScreen(Screen.Dashboard);
-        }} />
+        <Button
+          label="Back"
+          onClick={(e) => {
+            e.preventDefault();
+            setScreen(Screen.Dashboard);
+          }}
+        />
       </div>
     </div>
-  )
+  );
 }

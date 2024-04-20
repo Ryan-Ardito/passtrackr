@@ -16,14 +16,14 @@ export enum Msg {
 }
 
 export interface PassType {
-  name: string,
-  code: string,
+  name: string;
+  code: string;
 }
 
 export const payMethods = [
   { name: "Credit", code: "credit" },
   { name: "Cash", code: "cash" },
-]
+];
 
 export const passtypes: PassType[] = [
   { name: "10x Punch", code: "ten_punch" },
@@ -36,14 +36,14 @@ export const passtypes: PassType[] = [
 ];
 
 export interface PassData {
-  id: number | null,
-  first_name: string,
-  last_name: string,
-  town: string,
-  remaining: number,
-  passtype: PassType | null,
-  active: boolean,
-  notes: string,
+  id: number | null;
+  first_name: string;
+  last_name: string;
+  town: string;
+  remaining: number;
+  passtype: PassType | null;
+  active: boolean;
+  notes: string;
 }
 
 export const blankPass: PassData = {
@@ -55,7 +55,7 @@ export const blankPass: PassData = {
   passtype: null,
   active: false,
   notes: "",
-}
+};
 
 export type PassAction =
   | { type: Msg.Replace; data: PassData }
@@ -64,4 +64,4 @@ export type PassAction =
   | { type: Msg.SetTown; data: string }
   | { type: Msg.SetPasstype; data: PassType | null }
   | { type: Msg.SetActive; data: boolean }
-  | { type: Msg.SetNotes; data: string }
+  | { type: Msg.SetNotes; data: string };
