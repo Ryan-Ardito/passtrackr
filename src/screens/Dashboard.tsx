@@ -63,7 +63,7 @@ export function Dashboard({
           />
           <Divider layout="vertical" style={{ margin: 5 }} />
           {addPass ? (
-            <AddPass {...{ selectedPass, setAddPass, isSuccess }} />
+            <AddPass {...{ selectedPass, setAddPass, isSuccess, toast }} />
           ) : (
             <PassInteraction
               {...{ selectedPass, setScreen, setAddPass, toast }}

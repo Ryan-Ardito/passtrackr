@@ -35,24 +35,38 @@ export const passtypes: PassType[] = [
   { name: "6x Facial", code: "six_facial" },
 ];
 
+export interface NewPassData {
+  guest_id: number | undefined;
+  first_name: string;
+  last_name: string;
+  town: string;
+  passtype: PassType;
+  pay_method: { name: string; code: string };
+  last_four: string | undefined;
+  amount_paid: string;
+  signature: string;
+}
+
 export interface PassData {
   id: number | undefined;
+  guest_id: number | undefined;
   first_name: string;
   last_name: string;
   town: string;
   remaining: number;
-  passtype: PassType | undefined;
+  passtype: PassType;
   active: boolean;
   notes: string;
 }
 
 export const blankPass: PassData = {
   id: undefined,
+  guest_id: undefined,
   first_name: "",
   last_name: "",
   town: "",
   remaining: 0,
-  passtype: undefined,
+  passtype: passtypes[0],
   active: false,
   notes: "",
 };
@@ -62,6 +76,6 @@ export type PassAction =
   | { type: Msg.SetFirstName; data: string }
   | { type: Msg.SetLastName; data: string }
   | { type: Msg.SetTown; data: string }
-  | { type: Msg.SetPasstype; data: PassType | undefined }
+  | { type: Msg.SetPasstype; data: PassType }
   | { type: Msg.SetActive; data: boolean }
   | { type: Msg.SetNotes; data: string };

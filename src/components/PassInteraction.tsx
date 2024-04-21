@@ -22,6 +22,7 @@ export const PassInteraction = ({
   toast,
 }: ChildProps) => {
   const { mutate: mutateLogVisit, isPending: isLogVisitPending } = useMutation({
+    mutationKey: [logVisit],
     mutationFn: logVisit,
     onError: (error) => showMessage(error.name, error.message, toast, "warn"),
     onSuccess: () => showMessage("Log visit", "success", toast, "success"),

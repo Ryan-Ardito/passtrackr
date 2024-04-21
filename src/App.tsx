@@ -9,22 +9,22 @@ import { About } from "./screens/About";
 import { Dashboard } from "./screens/Dashboard";
 import { PassData, PassAction, Msg, Screen, blankPass } from "./types";
 
-function passReducer(pass_data: PassData, action: PassAction): PassData {
+function passReducer(passData: PassData, action: PassAction): PassData {
   switch (action.type) {
     case Msg.Replace:
       return action.data;
     case Msg.SetFirstName:
-      return { ...pass_data, first_name: action.data };
+      return { ...passData, first_name: action.data };
     case Msg.SetLastName:
-      return { ...pass_data, last_name: action.data };
+      return { ...passData, last_name: action.data };
     case Msg.SetTown:
-      return { ...pass_data, town: action.data };
+      return { ...passData, town: action.data };
     case Msg.SetPasstype:
-      return { ...pass_data, passtype: action.data };
+      return { ...passData, passtype: action.data };
     case Msg.SetActive:
-      return { ...pass_data, active: action.data };
+      return { ...passData, active: action.data };
     case Msg.SetNotes:
-      return { ...pass_data, notes: action.data };
+      return { ...passData, notes: action.data };
   }
 }
 

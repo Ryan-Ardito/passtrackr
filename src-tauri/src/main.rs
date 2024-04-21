@@ -25,7 +25,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use std::time::Duration;
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
 
 #[derive(Debug, Serialize)]
@@ -34,15 +34,22 @@ struct QueryError {
     message: String,
 }
 
-#[derive(Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 struct PassType {
     name: String,
     code: String,
 }
 
-#[derive(Serialize, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
+struct PayMethod {
+    name: String,
+    code: String,
+}
+
+#[derive(Deserialize, Serialize, Clone)]
 struct PassData {
     id: u32,
+    guest_id: u32,
     first_name: String,
     last_name: String,
     town: String,
@@ -50,6 +57,19 @@ struct PassData {
     passtype: PassType,
     active: bool,
     notes: String,
+}
+
+#[derive(Serialize, Deserialize, Clone)]
+struct NewPassData {
+    guest_id: Option<u32>,
+    first_name: String,
+    last_name: String,
+    town: String,
+    passtype: PassType,
+    pay_method: PayMethod,
+    last_four: Option<String>,
+    amount_paid: String,
+    signature: String,
 }
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -75,14 +95,14 @@ fn async_sleep(millis: u64) -> Result<(), String> {
 
 #[tauri::command(async)]
 fn create_pass(
-    pass_data: String,
+    pass_data: NewPassData,
     delay_millis: u64,
     will_fail: bool,
 ) -> Result<String, QueryError> {
     std::thread::sleep(Duration::from_millis(delay_millis));
 
     match will_fail {
-        false => Ok(pass_data),
+        false => Ok("success".to_string()),
         true => Err(QueryError {
             name: "Connection problem".to_string(),
             message: "Unable to connect to database".to_string(),
@@ -106,6 +126,7 @@ fn search_passes(
         };
         let pass_data = PassData {
             id: i + 64,
+            guest_id: i + 64,
             first_name: format!("John{i}"),
             last_name: format!("{search}{i}"),
             town: format!("Kokomo{i}"),
