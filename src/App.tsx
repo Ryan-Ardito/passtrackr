@@ -1,9 +1,27 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AppContent, AppProvider } from "./AppContext";
+import { AppProvider, useAppContext } from "./AppContext";
 import { PrimeReactProvider } from "primereact/api";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Screen } from "./types";
+import { Dashboard } from "./screens/Dashboard";
+import { ViewPass } from "./screens/ViewPass";
+import { Settings } from "./screens/Settings";
+import { About } from "./screens/About";
 
 const queryClient = new QueryClient();
+
+export function AppContent() {
+  const { screen } = useAppContext();
+
+  return (
+    <>
+      {screen === Screen.Dashboard && <Dashboard />}
+      {screen === Screen.ViewPass && <ViewPass />}
+      {screen === Screen.Settings && <Settings />}
+      {screen === Screen.About && <About />}
+    </>
+  );
+}
 
 function App() {
   return (

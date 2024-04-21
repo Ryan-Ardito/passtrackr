@@ -15,10 +15,6 @@ import { DebouncedFunc, debounce } from "lodash";
 import { Toast } from "primereact/toast";
 import "primeicons/primeicons.css";
 
-import { Settings } from "./screens/Settings";
-import { ViewPass } from "./screens/ViewPass";
-import { About } from "./screens/About";
-import { Dashboard } from "./screens/Dashboard";
 import { PassData, PassAction, Msg, Screen, blankPass, Panel } from "./types";
 import { searchPasses } from "./api/api";
 
@@ -118,17 +114,4 @@ export function useAppContext(): AppContextProps {
     throw new Error("useAppContext must be used within an AppProvider");
   }
   return context;
-}
-
-export function AppContent() {
-  const { screen } = useAppContext();
-
-  return (
-    <>
-      {screen === Screen.Dashboard && <Dashboard />}
-      {screen === Screen.ViewPass && <ViewPass />}
-      {screen === Screen.Settings && <Settings />}
-      {screen === Screen.About && <About />}
-    </>
-  );
 }
