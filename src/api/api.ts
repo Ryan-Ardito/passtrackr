@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/tauri";
 
-import { NewPassData, PassData } from "../types";
+import { CreatePassData, PassData } from "../types";
 
 export const searchPasses = async (
   searchString: string
@@ -23,7 +23,7 @@ export const logVisit = async (pass: PassData): Promise<void> => {
   return invoke("log_visit", { pass, delayMillis: 600, willFail: false });
 };
 
-export const createPass = async (passData: NewPassData): Promise<string> => {
+export const createPass = async (passData: CreatePassData): Promise<string> => {
   return invoke("create_pass", {
     passData,
     delayMillis: 800,

@@ -25,7 +25,7 @@ export function Dashboard({
   setSelectedPass,
 }: ChildProps) {
   const [search, setSearch] = useState("");
-  const debouncedSetSearch = debounce(setSearch, 350);
+  const debouncedSetSearch = debounce(setSearch, 400);
   const [addPass, setAddPass] = useState(false);
 
   const { data, isFetching, status, isSuccess, error } = useQuery({

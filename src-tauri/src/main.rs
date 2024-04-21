@@ -1,26 +1,3 @@
-// enum PayMethod {
-//     Cash,
-//     Credit(u32),
-// }
-
-// struct Pass {
-//     holder_id: u32,
-//     passtype: PassType,
-//     remaining: u32,
-//     pay_method: PayMethod,
-//     amount_paid: u32,
-//     signature: String,
-// }
-
-// struct PassHolder {
-//     id: u32,
-//     first_name: String,
-//     last_name: String,
-//     town: String,
-//     active: bool,
-//     notes: String,
-// }
-
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use std::time::Duration;
@@ -47,6 +24,18 @@ struct PayMethod {
 }
 
 #[derive(Deserialize, Serialize, Clone)]
+struct GuestData {
+    guest_id: u64,
+	first_name: String,
+	last_name: String,
+	town: String,
+	email: String,
+	notes: String,
+    creator: String,
+	creation_time: u64,
+}
+
+#[derive(Deserialize, Serialize, Clone)]
 struct PassData {
     id: u32,
     guest_id: u32,
@@ -57,6 +46,8 @@ struct PassData {
     passtype: PassType,
     active: bool,
     notes: String,
+    creator: String,
+	creation_time: u64,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -75,15 +66,8 @@ struct NewPassData {
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command(async)]
 fn log_visit(pass: PassData, delay_millis: u64, will_fail: bool) -> Result<(), QueryError> {
-    if !pass.active {
-        return Err(QueryError {
-            name: "Log visit".to_string(),
-            message: "Pass is inactive".to_string(),
-        });
-    }
+    if !pass.active { panic!(); }
     std::thread::sleep(Duration::from_millis(delay_millis));
-    // std::thread::sleep(Duration::from_millis(200));
-    // Err(format!("{}", pass_id))
     match will_fail {
         false => Ok(()),
         true => Err(QueryError {
@@ -157,6 +141,8 @@ fn search_passes(
             passtype: pass_type,
             active: i % 7 != 0,
             notes: format!("These are editable notes displayed to the user {i}."),
+            creator: format!("dog"),
+            creation_time: 10,
         };
 
         passes.push(pass_data);

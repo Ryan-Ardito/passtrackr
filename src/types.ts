@@ -35,7 +35,7 @@ export const passtypes: PassType[] = [
   { name: "6x Facial", code: "six_facial" },
 ];
 
-export interface NewPassData {
+export interface CreatePassData {
   guest_id: number | undefined;
   first_name: string;
   last_name: string;
@@ -57,6 +57,8 @@ export interface PassData {
   passtype: PassType;
   active: boolean;
   notes: string;
+  creator: string;
+  creation_time: number;
 }
 
 export const blankPass: PassData = {
@@ -69,6 +71,8 @@ export const blankPass: PassData = {
   passtype: passtypes[0],
   active: false,
   notes: "",
+  creator: "",
+  creation_time: 10,
 };
 
 export type PassAction =
