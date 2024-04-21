@@ -1,7 +1,7 @@
 import { PassData, blankPass, Msg } from "../types";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { useAppContext } from "../App";
+import { useAppContext } from "../AppContext";
 
 const activeBodyTemplate = (rowData: PassData) => {
   return <i className={rowData.active ? "pi pi-check" : "pi pi-times"} />;

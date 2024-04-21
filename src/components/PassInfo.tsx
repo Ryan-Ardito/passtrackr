@@ -3,7 +3,7 @@ import { passtypes, Msg } from "../types";
 import { ScrollPanel } from "primereact/scrollpanel";
 
 import { InputField, LabeledDropdown } from "./FormInput";
-import { useAppContext } from "../App";
+import { useAppContext } from "../AppContext";
 
 export function PassInfo() {
   const { selectedPass, setSelectedPass } = useAppContext();

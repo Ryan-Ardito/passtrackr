@@ -4,7 +4,7 @@ import { Button } from "primereact/button";
 import { Screen } from "../types";
 import { InputField } from "../components/FormInput";
 import { asyncSleep } from "../api/api";
-import { useAppContext } from "../App";
+import { useAppContext } from "../AppContext";
 
 export function Settings() {
   const { setScreen } = useAppContext();

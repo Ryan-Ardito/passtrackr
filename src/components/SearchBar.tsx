@@ -1,5 +1,5 @@
 import { InputText } from "primereact/inputtext";
-import { useAppContext } from "../App";
+import { useAppContext } from "../AppContext";
 
 export function SearchBar() {
   const { debouncedSetSearch, isSearchFetching } = useAppContext();

@@ -2,7 +2,7 @@ import { Button } from "primereact/button";
 
 import { Screen } from "../types";
 import { PassInfo } from "../components/PassInfo";
-import { useAppContext } from "../App";
+import { useAppContext } from "../AppContext";
 
 export function ViewPass() {
   const { setScreen } = useAppContext();

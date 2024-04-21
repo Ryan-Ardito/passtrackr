@@ -5,7 +5,7 @@ import { Panel, Screen } from "../types";
 import { logVisit } from "../api/api";
 import { useMutation } from "@tanstack/react-query";
 import { showMessage } from "../utils/toast";
-import { useAppContext } from "../App";
+import { useAppContext } from "../AppContext";
 
 export const PassControl = () => {
   const { selectedPass, setScreen, setPanel, toast } = useAppContext();

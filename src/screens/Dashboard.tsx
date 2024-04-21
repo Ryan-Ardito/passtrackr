@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 
+import { Toast } from "primereact/toast";
 import { Divider } from "primereact/divider";
 
 import { AddPass } from "./AddPass";
@@ -7,9 +8,8 @@ import { SearchBar } from "../components/SearchBar";
 import { SearchResults } from "../components/SearchResults";
 import { Msg, blankPass, Panel } from "../types";
 import { PassControl } from "../components/PassInteraction";
-import { Toast } from "primereact/toast";
 import { showMessage } from "../utils/toast";
-import { useAppContext } from "../App";
+import { useAppContext } from "../AppContext";
 
 export function Dashboard() {
   const {
