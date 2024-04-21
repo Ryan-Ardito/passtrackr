@@ -3,13 +3,12 @@ import { useEffect } from "react";
 import { Toast } from "primereact/toast";
 import { Divider } from "primereact/divider";
 
-import { AddPass } from "./AddPass";
 import { SearchBar } from "../components/SearchBar";
 import { SearchResults } from "../components/SearchResults";
-import { Msg, blankPass, Panel } from "../types";
-import { PassControl } from "../components/PassInteraction";
+import { Msg, blankPass } from "../types";
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
+import { RightPanel } from "../components/SidePanel";
 
 export function Dashboard() {
   const {
@@ -32,15 +31,6 @@ export function Dashboard() {
   if (searchData?.length == 0)
     setSelectedPass({ type: Msg.Replace, data: blankPass });
 
-  const RightPanel = () => {
-    return (
-      <>
-        {panel === Panel.AddPass && <AddPass />}
-        {panel === Panel.PassInteraction && <PassControl />}
-      </>
-    );
-  };
-
   return (
     <div className="wrapper">
       <div className="dashboard">
@@ -49,7 +39,7 @@ export function Dashboard() {
         <div className="edit-box">
           <SearchResults />
           <Divider layout="vertical" style={{ margin: 5 }} />
-          <RightPanel />
+          <RightPanel {...{ panel }} />
         </div>
       </div>
     </div>
