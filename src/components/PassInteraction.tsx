@@ -15,7 +15,7 @@ interface ChildProps {
   toast: RefObject<Toast>;
 }
 
-export const PassInteraction = ({
+export const PassControl = ({
   selectedPass,
   setScreen,
   setPanel: setPanel,

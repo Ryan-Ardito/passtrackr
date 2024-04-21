@@ -8,7 +8,7 @@ import { SearchBar } from "../components/SearchBar";
 import { SearchResults } from "../components/SearchResults";
 import { PassData, PassAction, Screen, Msg, blankPass, Panel } from "../types";
 import { searchPasses } from "../api/api";
-import { PassInteraction } from "../components/PassInteraction";
+import { PassControl } from "../components/PassInteraction";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Toast } from "primereact/toast";
 import { showMessage } from "../utils/toast";
@@ -47,6 +47,19 @@ export function Dashboard({
   if (data?.length == 0)
     setSelectedPass({ type: Msg.Replace, data: blankPass });
 
+  const RightPanel = () => {
+    return (
+      <>
+        {panel === Panel.AddPass && (
+          <AddPass {...{ selectedPass, setPanel, isSuccess, toast }} />
+        )}
+        {panel === Panel.PassInteraction && (
+          <PassControl {...{ selectedPass, setScreen, setPanel, toast }} />
+        )}
+      </>
+    );
+  };
+
   return (
     <div className="wrapper">
       <div className="dashboard">
@@ -63,16 +76,7 @@ export function Dashboard({
             }}
           />
           <Divider layout="vertical" style={{ margin: 5 }} />
-          {panel === Panel.AddPass && (
-            <AddPass
-              {...{ selectedPass, setPanel: setPanel, isSuccess, toast }}
-            />
-          )}
-          {panel === Panel.PassInteraction && (
-            <PassInteraction
-              {...{ selectedPass, setScreen, setPanel: setPanel, toast }}
-            />
-          )}
+          <RightPanel />
         </div>
       </div>
     </div>
