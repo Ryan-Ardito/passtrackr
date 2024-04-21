@@ -6,7 +6,7 @@ import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 
 import { Panel, passtypes, payMethods } from "../types";
-import { FormikDropdown, FormikField } from "../components/FormInput";
+import { FormikDropdown, FormikField } from "./FormInput";
 import { createPass } from "../api/api";
 import { useMutation } from "@tanstack/react-query";
 import { showMessage } from "../utils/toast";

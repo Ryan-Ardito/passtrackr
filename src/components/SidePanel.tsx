@@ -1,4 +1,4 @@
-import { AddPass } from "../screens/AddPass";
+import { AddPass } from "./AddPass";
 import { Panel } from "../types";
 import { PassControl } from "./PassInteraction";
 
