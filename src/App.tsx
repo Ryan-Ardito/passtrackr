@@ -7,14 +7,14 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <AppProvider>
-      <QueryClientProvider client={queryClient}>
-        <PrimeReactProvider>
+    <QueryClientProvider client={queryClient}>
+      <PrimeReactProvider>
+        <AppProvider>
           <AppContent />
           <ReactQueryDevtools />
-        </PrimeReactProvider>
-      </QueryClientProvider>
-    </AppProvider>
+        </AppProvider>
+      </PrimeReactProvider>
+    </QueryClientProvider>
   );
 }
 

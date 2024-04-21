@@ -1,7 +1,7 @@
 import { Button } from "primereact/button";
 
 import { Screen } from "../types";
-import { useAppContext } from "../App";
+import { useAppContext } from "../AppContext";
 
 export function About() {
   const { setScreen } = useAppContext();
