@@ -5,6 +5,11 @@ export enum Screen {
   About,
 }
 
+export enum Panel {
+  PassInteraction,
+  AddPass,
+}
+
 export enum Msg {
   Replace = "REPLACE",
   SetFirstName = "SET_FIRST_NAME",

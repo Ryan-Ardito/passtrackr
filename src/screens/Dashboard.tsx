@@ -6,7 +6,7 @@ import { Divider } from "primereact/divider";
 import { AddPass } from "./AddPass";
 import { SearchBar } from "../components/SearchBar";
 import { SearchResults } from "../components/SearchResults";
-import { PassData, PassAction, Screen, Msg, blankPass } from "../types";
+import { PassData, PassAction, Screen, Msg, blankPass, Panel } from "../types";
 import { searchPasses } from "../api/api";
 import { PassInteraction } from "../components/PassInteraction";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -26,7 +26,7 @@ export function Dashboard({
 }: ChildProps) {
   const [search, setSearch] = useState("");
   const debouncedSetSearch = debounce(setSearch, 400);
-  const [addPass, setAddPass] = useState(false);
+  const [panel, setPanel] = useState(Panel.PassInteraction);
 
   const { data, isFetching, status, isSuccess, error } = useQuery({
     queryKey: ["search", search],
@@ -63,11 +63,14 @@ export function Dashboard({
             }}
           />
           <Divider layout="vertical" style={{ margin: 5 }} />
-          {addPass ? (
-            <AddPass {...{ selectedPass, setAddPass, isSuccess, toast }} />
-          ) : (
+          {panel === Panel.AddPass && (
+            <AddPass
+              {...{ selectedPass, setPanel: setPanel, isSuccess, toast }}
+            />
+          )}
+          {panel === Panel.PassInteraction && (
             <PassInteraction
-              {...{ selectedPass, setScreen, setAddPass, toast }}
+              {...{ selectedPass, setScreen, setPanel: setPanel, toast }}
             />
           )}
         </div>

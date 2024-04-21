@@ -1,7 +1,7 @@
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 
-import { PassData, Screen } from "../types";
+import { Panel, PassData, Screen } from "../types";
 import { logVisit } from "../api/api";
 import { RefObject } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -11,14 +11,14 @@ import { showMessage } from "../utils/toast";
 interface ChildProps {
   selectedPass: PassData;
   setScreen: React.Dispatch<React.SetStateAction<Screen>>;
-  setAddPass: React.Dispatch<React.SetStateAction<boolean>>;
+  setPanel: React.Dispatch<React.SetStateAction<Panel>>;
   toast: RefObject<Toast>;
 }
 
 export const PassInteraction = ({
   selectedPass,
   setScreen,
-  setAddPass,
+  setPanel: setPanel,
   toast,
 }: ChildProps) => {
   const { mutate: mutateLogVisit, isPending: isLogVisitPending } = useMutation({
@@ -40,7 +40,7 @@ export const PassInteraction = ({
         disabled={!selectedPass.id}
         onClick={(e) => e.preventDefault()}
       />
-      <Button label="New Pass" onClick={() => setAddPass(true)} />
+      <Button label="New Pass" onClick={() => setPanel(Panel.AddPass)} />
       <Divider />
       <Button
         disabled={!selectedPass.id}
