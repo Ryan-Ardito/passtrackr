@@ -9,6 +9,11 @@
   -webkit-text-size-adjust: 100%;
 }
 
+.p-toast {
+  /* fixes toast displaying beneath other elements */
+  z-index: 10000;
+}
+
 .form-text {
   color: #202020;
   margin-top: 2px;

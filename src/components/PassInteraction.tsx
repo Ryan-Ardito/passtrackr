@@ -24,7 +24,7 @@ export const PassControl = ({
   const { mutate: mutateLogVisit, isPending: isLogVisitPending } = useMutation({
     mutationKey: [logVisit],
     mutationFn: logVisit,
-    onError: (error) => showMessage(error.name, error.message, toast, "warn"),
+    onError: (error) => showMessage(error.name, error.message, toast, "info"),
     onSuccess: () => showMessage("Log visit", "Success!", toast, "success"),
   });
 

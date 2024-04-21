@@ -37,16 +37,18 @@ function App() {
   listen("settings", () => setScreen(Screen.Settings));
   listen("about", () => setScreen(Screen.About));
 
-  switch (screen) {
-    case Screen.Dashboard:
-      return <Dashboard {...{ setScreen, selectedPass, setSelectedPass }} />;
-    case Screen.ViewPass:
-      return <ViewPass {...{ setScreen, selectedPass, setSelectedPass }} />;
-    case Screen.Settings:
-      return <Settings {...{ setScreen }} />;
-    case Screen.About:
-      return <About {...{ setScreen }} />;
-  }
+  return (
+    <>
+      {screen === Screen.Dashboard && (
+        <Dashboard {...{ setScreen, selectedPass, setSelectedPass }} />
+      )}
+      {screen === Screen.ViewPass && (
+        <ViewPass {...{ setScreen, selectedPass, setSelectedPass }} />
+      )}
+      {screen === Screen.Settings && <Settings {...{ setScreen }} />}
+      {screen === Screen.About && <About {...{ setScreen }} />}
+    </>
+  );
 }
 
 export default App;

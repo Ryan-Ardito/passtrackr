@@ -1,10 +1,10 @@
 import { Toast, ToastMessage } from "primereact/toast";
 
 const toastLifeMap: Record<NonNullable<ToastMessage["severity"]>, number> = {
-  success: 1500,
-  info: 5000,
-  warn: 6500,
-  error: 8000,
+  success: 2000,
+  info: 3000,
+  warn: 5000,
+  error: 7000,
 };
 
 export const showMessage = (
