@@ -5,13 +5,12 @@ import { ScrollPanel } from "primereact/scrollpanel";
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 
-import { Panel, PassData, passtypes, payMethods } from "../types";
+import { Panel, passtypes, payMethods } from "../types";
 import { FormikDropdown, FormikField } from "../components/FormInput";
 import { createPass } from "../api/api";
 import { useMutation } from "@tanstack/react-query";
 import { showMessage } from "../utils/toast";
-import { RefObject, SetStateAction } from "react";
-import { Toast } from "primereact/toast";
+import { useAppContext } from "../App";
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required("required"),
@@ -36,13 +35,9 @@ const validationSchema = Yup.object().shape({
   signature: Yup.string().required("required"),
 });
 
-interface ChildProps {
-  selectedPass: PassData;
-  setPanel: React.Dispatch<SetStateAction<Panel>>;
-  toast: RefObject<Toast>;
-}
+export const AddPass = () => {
+  const { selectedPass, setPanel, toast } = useAppContext();
 
-export const AddPass = ({ selectedPass, setPanel, toast }: ChildProps) => {
   const { mutate: mutateCreatePass } = useMutation({
     mutationKey: ["createPass"],
     mutationFn: createPass,

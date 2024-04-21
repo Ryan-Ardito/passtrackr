@@ -1,4 +1,13 @@
-import { useState, useReducer, createContext, useContext } from "react";
+import {
+  useState,
+  useReducer,
+  createContext,
+  useContext,
+  useRef,
+  Dispatch,
+  SetStateAction,
+  RefObject,
+} from "react";
 import { listen } from "@tauri-apps/api/event";
 
 import "primeicons/primeicons.css";
@@ -7,16 +16,11 @@ import { Settings } from "./screens/Settings";
 import { ViewPass } from "./screens/ViewPass";
 import { About } from "./screens/About";
 import { Dashboard } from "./screens/Dashboard";
-import { PassData, PassAction, Msg, Screen, blankPass } from "./types";
-
-interface AppContextProps {
-  screen: Screen;
-  setScreen: React.Dispatch<React.SetStateAction<Screen>>;
-  selectedPass: PassData;
-  setSelectedPass: React.Dispatch<PassAction>;
-}
-
-export const AppContext = createContext<Partial<AppContextProps>>({});
+import { PassData, PassAction, Msg, Screen, blankPass, Panel } from "./types";
+import { DebouncedFunc, debounce } from "lodash";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { searchPasses } from "./api/api";
+import { Toast } from "primereact/toast";
 
 function passReducer(passData: PassData, action: PassAction): PassData {
   switch (action.type) {
@@ -37,21 +41,74 @@ function passReducer(passData: PassData, action: PassAction): PassData {
   }
 }
 
+interface AppContextProps {
+  screen: Screen;
+  setScreen: Dispatch<SetStateAction<Screen>>;
+  selectedPass: PassData;
+  setSelectedPass: Dispatch<PassAction>;
+  search: string;
+  setSearch: Dispatch<SetStateAction<string>>;
+  debouncedSetSearch: DebouncedFunc<Dispatch<SetStateAction<string>>>;
+  panel: Panel;
+  setPanel: Dispatch<SetStateAction<Panel>>;
+  searchData: PassData[];
+  isSearchFetching: boolean;
+  searchStatus: "error" | "success" | "pending";
+  isSearchSuccess: boolean;
+  searchError: Error | null;
+  toast: RefObject<Toast>;
+}
+
+export const AppContext = createContext<Partial<AppContextProps>>({});
+
 function AppProvider({ children }: { children: React.ReactNode }) {
   const [screen, setScreen] = useState(Screen.Dashboard);
   const [selectedPass, setSelectedPass] = useReducer(passReducer, blankPass);
+
+  const [search, setSearch] = useState("");
+  const debouncedSetSearch = debounce(setSearch, 400);
+  const [panel, setPanel] = useState(Panel.PassInteraction);
+
+  const {
+    data: searchData,
+    isFetching: isSearchFetching,
+    status: searchStatus,
+    isSuccess: isSearchSuccess,
+    error: searchError,
+  } = useQuery({
+    queryKey: ["search", search],
+    queryFn: () => (search ? searchPasses(search) : []),
+    placeholderData: keepPreviousData,
+    staleTime: 120_000,
+  });
+
+  const toast = useRef<Toast>(null);
 
   // Window menu emissions from Tauri
   listen("dashboard", () => setScreen(Screen.Dashboard));
   listen("settings", () => setScreen(Screen.Settings));
   listen("about", () => setScreen(Screen.About));
 
+  const contextValues = {
+    screen,
+    setScreen,
+    selectedPass,
+    setSelectedPass,
+    search,
+    setSearch,
+    debouncedSetSearch,
+    panel,
+    setPanel,
+    searchData,
+    isSearchFetching,
+    searchStatus,
+    isSearchSuccess,
+    searchError,
+    toast,
+  };
+
   return (
-    <AppContext.Provider
-      value={{ screen, setScreen, selectedPass, setSelectedPass }}
-    >
-      {children}
-    </AppContext.Provider>
+    <AppContext.Provider value={contextValues}>{children}</AppContext.Provider>
   );
 }
 

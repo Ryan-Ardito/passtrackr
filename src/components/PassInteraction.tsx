@@ -1,26 +1,15 @@
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 
-import { Panel, PassData, Screen } from "../types";
+import { Panel, Screen } from "../types";
 import { logVisit } from "../api/api";
-import { RefObject } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { Toast } from "primereact/toast";
 import { showMessage } from "../utils/toast";
+import { useAppContext } from "../App";
 
-interface ChildProps {
-  selectedPass: PassData;
-  setScreen: React.Dispatch<React.SetStateAction<Screen>>;
-  setPanel: React.Dispatch<React.SetStateAction<Panel>>;
-  toast: RefObject<Toast>;
-}
+export const PassControl = () => {
+  const { selectedPass, setScreen, setPanel, toast } = useAppContext();
 
-export const PassControl = ({
-  selectedPass,
-  setScreen,
-  setPanel: setPanel,
-  toast,
-}: ChildProps) => {
   const { mutate: mutateLogVisit, isPending: isLogVisitPending } = useMutation({
     mutationKey: [logVisit],
     mutationFn: logVisit,

@@ -1,15 +1,13 @@
-import { PassData, PassAction, passtypes, Msg } from "../types";
+import { passtypes, Msg } from "../types";
 
 import { ScrollPanel } from "primereact/scrollpanel";
 
 import { InputField, LabeledDropdown } from "./FormInput";
+import { useAppContext } from "../App";
 
-interface ChildProps {
-  selectedPass: PassData;
-  setSelectedPass: React.Dispatch<PassAction>;
-}
+export function PassInfo() {
+  const { selectedPass, setSelectedPass } = useAppContext();
 
-export function PassInfo({ selectedPass, setSelectedPass }: ChildProps) {
   return (
     <ScrollPanel className="pass-info">
       <InputField

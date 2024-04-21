@@ -1,7 +1,7 @@
-import { PassData, PassAction, blankPass, Msg } from "../types";
+import { PassData, blankPass, Msg } from "../types";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-// import { useContext } from "react";
+import { useAppContext } from "../App";
 
 const activeBodyTemplate = (rowData: PassData) => {
   return <i className={rowData.active ? "pi pi-check" : "pi pi-times"} />;
@@ -9,17 +9,8 @@ const activeBodyTemplate = (rowData: PassData) => {
 
 const passtypeTemplate = (rowData: PassData) => rowData.passtype?.name;
 
-interface ChildProps {
-  passes: PassData[] | undefined;
-  selectedPass: PassData;
-  setSelectedPass: React.Dispatch<PassAction>;
-}
-
-export function SearchResults({
-  passes,
-  selectedPass,
-  setSelectedPass,
-}: ChildProps) {
+export function SearchResults() {
+  const { searchData, selectedPass, setSelectedPass } = useAppContext();
   return (
     <DataTable
       className="search-results"
@@ -29,7 +20,7 @@ export function SearchResults({
       paginator
       rows={32}
       // virtualScrollerOptions={{ lazy: true, itemSize: 46, delay: 200, showLoader: true }}
-      value={passes || []}
+      value={searchData || []}
       metaKeySelection={false}
       selectionMode="single"
       selection={selectedPass}

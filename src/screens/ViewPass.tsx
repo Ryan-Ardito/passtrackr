@@ -5,12 +5,12 @@ import { PassInfo } from "../components/PassInfo";
 import { useAppContext } from "../App";
 
 export function ViewPass() {
-  const { setScreen, selectedPass, setSelectedPass } = useAppContext();
+  const { setScreen } = useAppContext();
 
   return (
     <div className="wrapper">
       <div className="center-box">
-        <PassInfo {...{ selectedPass, setSelectedPass }} />
+        <PassInfo />
         <Button
           label="Back"
           onClick={(e) => {
