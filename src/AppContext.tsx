@@ -18,6 +18,26 @@ import "primeicons/primeicons.css";
 import { PassData, PassAction, Msg, Screen, blankPass, Panel } from "./types";
 import { searchPasses } from "./api/api";
 
+interface AppContextProps {
+  screen: Screen;
+  setScreen: Dispatch<SetStateAction<Screen>>;
+  selectedPass: PassData;
+  setSelectedPass: Dispatch<PassAction>;
+  search: string;
+  setSearch: Dispatch<SetStateAction<string>>;
+  debouncedSetSearch: DebouncedFunc<Dispatch<SetStateAction<string>>>;
+  panel: Panel;
+  setPanel: Dispatch<SetStateAction<Panel>>;
+  searchData: PassData[];
+  isSearchFetching: boolean;
+  searchStatus: "error" | "success" | "pending";
+  isSearchSuccess: boolean;
+  searchError: Error | null;
+  toast: RefObject<Toast>;
+}
+
+const AppContext = createContext<Partial<AppContextProps>>({});
+
 function passReducer(passData: PassData, action: PassAction): PassData {
   switch (action.type) {
     case Msg.Replace:
@@ -37,25 +57,13 @@ function passReducer(passData: PassData, action: PassAction): PassData {
   }
 }
 
-interface AppContextProps {
-  screen: Screen;
-  setScreen: Dispatch<SetStateAction<Screen>>;
-  selectedPass: PassData;
-  setSelectedPass: Dispatch<PassAction>;
-  search: string;
-  setSearch: Dispatch<SetStateAction<string>>;
-  debouncedSetSearch: DebouncedFunc<Dispatch<SetStateAction<string>>>;
-  panel: Panel;
-  setPanel: Dispatch<SetStateAction<Panel>>;
-  searchData: PassData[];
-  isSearchFetching: boolean;
-  searchStatus: "error" | "success" | "pending";
-  isSearchSuccess: boolean;
-  searchError: Error | null;
-  toast: RefObject<Toast>;
+export function useAppContext(): AppContextProps {
+  const context = useContext(AppContext) as AppContextProps;
+  if (!context) {
+    throw new Error("useAppContext must be used within an AppProvider");
+  }
+  return context;
 }
-
-export const AppContext = createContext<Partial<AppContextProps>>({});
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [screen, setScreen] = useState(Screen.Dashboard);
@@ -106,12 +114,4 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   return (
     <AppContext.Provider value={contextValues}>{children}</AppContext.Provider>
   );
-}
-
-export function useAppContext(): AppContextProps {
-  const context = useContext(AppContext) as AppContextProps;
-  if (!context) {
-    throw new Error("useAppContext must be used within an AppProvider");
-  }
-  return context;
 }

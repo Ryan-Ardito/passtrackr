@@ -1,9 +1,10 @@
+import { useMutation } from "@tanstack/react-query";
+
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 
 import { Panel, Screen } from "../types";
 import { logVisit } from "../api/api";
-import { useMutation } from "@tanstack/react-query";
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
 
@@ -32,6 +33,10 @@ export const PassControl = () => {
       <Button label="New Pass" onClick={() => setPanel(Panel.AddPass)} />
       <Divider />
       <Button
+        icon="pi pi-check"
+        badge={`${selectedPass.remaining}`}
+        severity="info"
+        style={{height: "80px"}}
         disabled={!selectedPass.id}
         label="Log Visit"
         loading={isLogVisitPending}
