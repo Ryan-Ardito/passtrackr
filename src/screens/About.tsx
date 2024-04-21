@@ -1,12 +1,11 @@
 import { Button } from "primereact/button";
 
 import { Screen } from "../types";
+import { useAppContext } from "../App";
 
-interface ChildProps {
-  setScreen: React.Dispatch<React.SetStateAction<Screen>>;
-}
+export function About() {
+  const { setScreen } = useAppContext();
 
-export function About({ setScreen }: ChildProps) {
   return (
     <div className="wrapper">
       <div className="container center-box">

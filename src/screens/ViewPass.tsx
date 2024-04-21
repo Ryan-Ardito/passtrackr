@@ -1,19 +1,12 @@
 import { Button } from "primereact/button";
 
-import { Screen, PassData, PassAction } from "../types";
+import { Screen } from "../types";
 import { PassInfo } from "../components/PassInfo";
+import { useAppContext } from "../App";
 
-interface ChildProps {
-  setScreen: React.Dispatch<React.SetStateAction<Screen>>;
-  selectedPass: PassData;
-  setSelectedPass: React.Dispatch<PassAction>;
-}
+export function ViewPass() {
+  const { setScreen, selectedPass, setSelectedPass } = useAppContext();
 
-export function ViewPass({
-  setScreen,
-  selectedPass,
-  setSelectedPass,
-}: ChildProps) {
   return (
     <div className="wrapper">
       <div className="center-box">

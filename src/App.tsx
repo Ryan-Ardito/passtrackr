@@ -1,4 +1,4 @@
-import { useState, useReducer } from "react";
+import { useState, useReducer, createContext, useContext } from "react";
 import { listen } from "@tauri-apps/api/event";
 
 import "primeicons/primeicons.css";
@@ -8,6 +8,15 @@ import { ViewPass } from "./screens/ViewPass";
 import { About } from "./screens/About";
 import { Dashboard } from "./screens/Dashboard";
 import { PassData, PassAction, Msg, Screen, blankPass } from "./types";
+
+interface AppContextProps {
+  screen: Screen;
+  setScreen: React.Dispatch<React.SetStateAction<Screen>>;
+  selectedPass: PassData;
+  setSelectedPass: React.Dispatch<PassAction>;
+}
+
+export const AppContext = createContext<Partial<AppContextProps>>({});
 
 function passReducer(passData: PassData, action: PassAction): PassData {
   switch (action.type) {
@@ -28,7 +37,7 @@ function passReducer(passData: PassData, action: PassAction): PassData {
   }
 }
 
-function App() {
+function AppProvider({ children }: { children: React.ReactNode }) {
   const [screen, setScreen] = useState(Screen.Dashboard);
   const [selectedPass, setSelectedPass] = useReducer(passReducer, blankPass);
 
@@ -38,16 +47,40 @@ function App() {
   listen("about", () => setScreen(Screen.About));
 
   return (
+    <AppContext.Provider
+      value={{ screen, setScreen, selectedPass, setSelectedPass }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
+}
+
+export function useAppContext(): AppContextProps {
+  const context = useContext(AppContext) as AppContextProps;
+  if (!context) {
+    throw new Error("useAppContext must be used within an AppProvider");
+  }
+  return context;
+}
+
+function AppContent() {
+  const { screen } = useAppContext();
+
+  return (
     <>
-      {screen === Screen.Dashboard && (
-        <Dashboard {...{ setScreen, selectedPass, setSelectedPass }} />
-      )}
-      {screen === Screen.ViewPass && (
-        <ViewPass {...{ setScreen, selectedPass, setSelectedPass }} />
-      )}
-      {screen === Screen.Settings && <Settings {...{ setScreen }} />}
-      {screen === Screen.About && <About {...{ setScreen }} />}
+      {screen === Screen.Dashboard && <Dashboard />}
+      {screen === Screen.ViewPass && <ViewPass />}
+      {screen === Screen.Settings && <Settings />}
+      {screen === Screen.About && <About />}
     </>
+  );
+}
+
+function App() {
+  return (
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
   );
 }
 

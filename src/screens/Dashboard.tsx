@@ -6,24 +6,17 @@ import { Divider } from "primereact/divider";
 import { AddPass } from "./AddPass";
 import { SearchBar } from "../components/SearchBar";
 import { SearchResults } from "../components/SearchResults";
-import { PassData, PassAction, Screen, Msg, blankPass, Panel } from "../types";
+import { Msg, blankPass, Panel } from "../types";
 import { searchPasses } from "../api/api";
 import { PassControl } from "../components/PassInteraction";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Toast } from "primereact/toast";
 import { showMessage } from "../utils/toast";
+import { useAppContext } from "../App";
 
-interface ChildProps {
-  setScreen: React.Dispatch<React.SetStateAction<Screen>>;
-  selectedPass: PassData;
-  setSelectedPass: React.Dispatch<PassAction>;
-}
+export function Dashboard() {
+  const { setScreen, selectedPass, setSelectedPass } = useAppContext();
 
-export function Dashboard({
-  setScreen,
-  selectedPass,
-  setSelectedPass,
-}: ChildProps) {
   const [search, setSearch] = useState("");
   const debouncedSetSearch = debounce(setSearch, 400);
   const [panel, setPanel] = useState(Panel.PassInteraction);

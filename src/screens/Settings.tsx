@@ -4,12 +4,11 @@ import { Button } from "primereact/button";
 import { Screen } from "../types";
 import { InputField } from "../components/FormInput";
 import { asyncSleep } from "../api/api";
+import { useAppContext } from "../App";
 
-interface ChildProps {
-  setScreen: React.Dispatch<React.SetStateAction<Screen>>;
-}
+export function Settings() {
+  const { setScreen } = useAppContext();
 
-export function Settings({ setScreen }: ChildProps) {
   const [ipAddr, setIpAddr] = useState("");
   const [dbPass, setDbPass] = useState("");
   const [saving, setSaving] = useState(false);
