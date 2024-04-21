@@ -32,11 +32,11 @@ export function Dashboard() {
     setSelectedPass({ type: Msg.Replace, data: blankPass });
 
   return (
-    <div className="wrapper">
-      <div className="dashboard">
+    <div className="viewport-wrapper">
+      <div id="dashboard" className="flex-box flex-col flex-2 ">
         <Toast ref={toast} position="top-center" />
         <SearchBar />
-        <div className="edit-box">
+        <div className="flex-box flex-row">
           <SearchResults />
           <Divider layout="vertical" style={{ margin: 5 }} />
           <RightPanel {...{ panel }} />

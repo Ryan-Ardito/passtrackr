@@ -14,8 +14,8 @@ export function Settings() {
   const [saving, setSaving] = useState(false);
 
   return (
-    <div className="wrapper">
-      <div className="container center-box">
+    <div className="viewport-wrapper">
+      <div id="settings" className="flex-2 flex-box flex-col center-box">
         <InputField
           label="Database server IP:"
           value={ipAddr}

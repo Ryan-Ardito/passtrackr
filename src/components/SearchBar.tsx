@@ -5,7 +5,7 @@ export function SearchBar() {
   const { debouncedSetSearch, isSearchFetching } = useAppContext();
 
   return (
-    <span className="searchbar p-input-icon-right">
+    <span id="searchbar" className="p-input-icon-right">
       {isSearchFetching && <i className="pi pi-spin pi-spinner" />}
       <InputText
         id="search-input"

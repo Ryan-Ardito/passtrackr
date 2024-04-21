@@ -19,7 +19,7 @@ export const PassControl = () => {
   });
 
   return (
-    <div className="pass-interaction">
+    <div className="flex-box flex-col flex-1">
       <Button
         label="View Pass"
         disabled={!selectedPass.id}

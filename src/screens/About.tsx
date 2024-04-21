@@ -7,8 +7,8 @@ export function About() {
   const { setScreen } = useAppContext();
 
   return (
-    <div className="wrapper">
-      <div className="container center-box">
+    <div className="viewport-wrapper">
+      <div id="about" className="flex-box flex-col flex-2 center-box">
         <div>Passtracker is a tracker for passes.</div>
         <Button
           label="Back"

@@ -13,7 +13,8 @@ export function SearchResults() {
   const { searchData, selectedPass, setSelectedPass } = useAppContext();
   return (
     <DataTable
-      className="search-results"
+      id="search-results"
+      className="flex-box flex-col flex-2"
       size="small" // showGridlines
       scrollable
       scrollHeight="87%"

@@ -8,7 +8,7 @@ export function ViewPass() {
   const { setScreen } = useAppContext();
 
   return (
-    <div className="wrapper">
+    <div className="viewport-wrapper">
       <div className="center-box">
         <PassInfo />
         <Button

@@ -9,12 +9,16 @@
   -webkit-text-size-adjust: 100%;
 }
 
+.viewport-wrapper {
+  height: 90vh;
+}
+
 .p-toast {
   /* fixes toast displaying beneath other elements */
   z-index: 10000;
 }
 
-.form-text {
+.form-input-label {
   color: #202020;
   margin-top: 2px;
   margin-bottom: 2px;
@@ -25,54 +29,31 @@
   margin-right: 16px;
 }
 
-.wrapper {
-  height: 90vh;
+.flex-box {
+  height: 100%;
+  display: flex;
+  justify-content: top;
+  gap: 6px;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
 }
 
 .center-box {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
   width: 400px;
   margin: 0 auto;
 }
 
-.container {
-  height: 100%;
-  display: flex;
-  flex: 2;
-  gap: 10px;
-  flex-direction: column;
-  justify-content: top;
-}
-
-.dashboard {
-  height: 100%;
-  display: flex;
-  flex: 2;
-  gap: 10px;
-  flex-direction: column;
-  justify-content: top;
-}
-
-.search-results {
-  height: 100%;
-  display: flex;
-  flex: 2;
-  gap: 10px;
-  flex-direction: column;
-  justify-content: top;
-}
-
-.pass-interaction {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+.flex-1 {
   flex: 1;
 }
 
-.pass-box {
+.flex-2 {
   flex: 2;
 }
 
@@ -81,21 +62,11 @@
   width: 100%
 }
 
-.edit-box {
+#searchbar {
   display: flex;
-  gap: 5px;
-  height: 100%;
-  flex-direction: row;
-  justify-content: center;
 }
 
-.searchbar {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-
-.search-results {
+#search-results {
   flex: 3;
 }
 

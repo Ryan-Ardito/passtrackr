@@ -15,7 +15,7 @@ export const InputField: React.FC<InputFieldProps> = ({
 }) => {
   return (
     <>
-      <div className="form-text">{label}</div>
+      <div className="form-input-label">{label}</div>
       <InputText
         className="form-text-input"
         value={value}
@@ -40,7 +40,7 @@ export const LabelRequired: React.FC<LabelRequiredProps> = ({
   return (
     <>
       <div></div>
-      <div className="form-text required">{label}</div>
+      <div className="form-input-label required">{label}</div>
       {touched && error && <span style={{ color: "red" }}>{error}</span>}
     </>
   );
@@ -127,7 +127,7 @@ export const LabeledDropdown: React.FC<DropdownProps> = ({
 }) => {
   return (
     <>
-      <div className="form-text">{label} </div>
+      <div className="form-input-label">{label}</div>
       <Dropdown
         optionLabel="name"
         scrollHeight="400px"

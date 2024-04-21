@@ -68,7 +68,7 @@ export const AddPass = () => {
   });
 
   return (
-    <ScrollPanel className="pass-box">
+    <ScrollPanel className="flex-2">
       <form onSubmit={formik.handleSubmit}>
         <FormikField label="First Name:" name="first_name" {...{ formik }} />
         <FormikField label="Last Name:" name="last_name" {...{ formik }} />
