@@ -12,14 +12,21 @@ export const searchPasses = async (
   });
 };
 
-export const logVisit = async (passId: number | undefined): Promise<void> => {
-  return invoke("log_visit", { passId, delayMillis: 600, willFail: false });
+export const getGuest = async (guestId: number): Promise<void> => {
+  return invoke("get_guest", { guestId, delayMillis: 600, willFail: false });
+};
+
+export const logVisit = async (pass: PassData): Promise<void> => {
+  if (!pass.active) {
+    throw { name: "Log visit", message: "Pass is inactive" };
+  }
+  return invoke("log_visit", { pass, delayMillis: 600, willFail: false });
 };
 
 export const createPass = async (passData: NewPassData): Promise<string> => {
   return invoke("create_pass", {
     passData,
-    delayMillis: 350,
+    delayMillis: 800,
     willFail: false,
   });
 };

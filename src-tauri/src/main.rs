@@ -74,7 +74,13 @@ struct NewPassData {
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command(async)]
-fn log_visit(delay_millis: u64, will_fail: bool) -> Result<(), QueryError> {
+fn log_visit(pass: PassData, delay_millis: u64, will_fail: bool) -> Result<(), QueryError> {
+    if !pass.active {
+        return Err(QueryError {
+            name: "Log visit".to_string(),
+            message: "Pass is inactive".to_string(),
+        });
+    }
     std::thread::sleep(Duration::from_millis(delay_millis));
     // std::thread::sleep(Duration::from_millis(200));
     // Err(format!("{}", pass_id))
@@ -102,10 +108,27 @@ fn create_pass(
     std::thread::sleep(Duration::from_millis(delay_millis));
 
     match will_fail {
-        false => Ok("success".to_string()),
+        false => Ok(pass_data.last_name),
         true => Err(QueryError {
-            name: "Connection problem".to_string(),
-            message: "Unable to connect to database".to_string(),
+            name: "Create pass".to_string(),
+            message: "failed".to_string(),
+        }),
+    }
+}
+
+#[tauri::command(async)]
+fn get_guest(
+    guest_id: u64,
+    delay_millis: u64,
+    will_fail: bool,
+) -> Result<String, QueryError> {
+    std::thread::sleep(Duration::from_millis(delay_millis));
+
+    match will_fail {
+        false => Ok(format!("{guest_id}")),
+        true => Err(QueryError {
+            name: "Create pass".to_string(),
+            message: "failed".to_string(),
         }),
     }
 }
@@ -176,6 +199,7 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             create_pass,
+            get_guest,
             log_visit,
             search_passes,
             async_sleep

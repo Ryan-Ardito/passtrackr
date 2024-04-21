@@ -42,14 +42,15 @@ export function Dashboard({
     }
   }, [status]);
 
-  // KLUDGE. possibly only an issue on dev
+  // KLUDGE. possibly only an issue on dev.
+  // without it, a pass can remain selected with empty search results.
   if (data?.length == 0)
     setSelectedPass({ type: Msg.Replace, data: blankPass });
 
   return (
     <div className="wrapper">
       <div className="dashboard">
-        <Toast ref={toast} position="bottom-center" />
+        <Toast ref={toast} position="top-center" />
         <SearchBar
           {...{ setSearch: debouncedSetSearch, loading: isFetching }}
         />

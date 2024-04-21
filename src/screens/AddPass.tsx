@@ -22,8 +22,8 @@ const validationSchema = Yup.object().shape({
     code: Yup.string().required("required"),
   }),
   pay_method: Yup.object().shape({
-    name: Yup.string().required("required"),
-    code: Yup.string().required("required"),
+    name: Yup.string(),
+    code: Yup.string(),
   }),
   last_four: Yup.number()
     .typeError("must be a number")
@@ -51,9 +51,8 @@ export const AddPass = ({ selectedPass, setAddPass, toast }: ChildProps) => {
       formik.setSubmitting(false);
     },
     onSuccess: () => {
-      showMessage("Create pass", "success", toast, "success");
+      showMessage("Create pass", "Success!", toast, "success");
       setAddPass(false);
-      formik.setSubmitting(false);
     },
   });
 
@@ -70,12 +69,7 @@ export const AddPass = ({ selectedPass, setAddPass, toast }: ChildProps) => {
       signature: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      // console.log("Submitting...");
-      mutateCreatePass(values);
-      // console.log("Form submitted:", values);
-      // setAddPass(false);
-    },
+    onSubmit: (values) => mutateCreatePass(values),
   });
 
   return (
@@ -96,7 +90,7 @@ export const AddPass = ({ selectedPass, setAddPass, toast }: ChildProps) => {
           options={payMethods}
           {...{ formik }}
         />
-        <FormikField label="Last Four:" name="lastFour" {...{ formik }} />
+        <FormikField label="Last Four:" name="last_four" {...{ formik }} />
         <FormikField label="Amount Paid:" name="amount_paid" {...{ formik }} />
         <FormikField
           label="Employee Signature:"
