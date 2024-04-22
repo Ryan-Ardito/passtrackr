@@ -64,29 +64,27 @@ export interface CreatePassData {
 }
 
 export interface PassData {
-  id: number | undefined;
+  pass_id: number | undefined;
   guest_id: number | undefined;
   first_name: string;
   last_name: string;
   town: string;
-  remaining: number;
+  remaining_uses: number;
   passtype: PassType;
   active: boolean;
-  notes: string;
   creator: string;
   creation_time: number;
 }
 
 export const blankPass: PassData = {
-  id: undefined,
+  pass_id: undefined,
   guest_id: undefined,
   first_name: "",
   last_name: "",
   town: "",
-  remaining: 0,
+  remaining_uses: 0,
   passtype: passtypes[0],
   active: false,
-  notes: "",
   creator: "",
   creation_time: 10,
 };

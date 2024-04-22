@@ -33,10 +33,10 @@ export function Dashboard() {
 
   return (
     <div className="viewport-wrapper">
-      <div id="dashboard" className="flex-box flex-col flex-2 ">
+      <div id="dashboard" className="flex-box flex-col">
         <Toast ref={toast} position="top-center" />
         <SearchBar />
-        <div className="flex-box flex-row">
+        <div className="flex-box">
           <SearchResults />
           <Divider layout="vertical" style={{ margin: 6 }} />
           <RightPanel {...{ panel }} />

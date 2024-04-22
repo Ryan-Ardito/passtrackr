@@ -19,7 +19,7 @@ export const PassControl = () => {
   });
 
   return (
-    <div className="flex-box flex-col flex-1">
+    <div className="flex-box flex-col flex-1" style={{gap: "12px"}}>
       <Divider style={{ marginTop: "6px" }} />
       <Button
         label="Log Visit"
@@ -27,7 +27,7 @@ export const PassControl = () => {
         severity="info"
         // size="large"
         style={{ height: "80px" }}
-        disabled={!selectedPass.id}
+        disabled={!selectedPass.pass_id}
         loading={isLogVisitPending}
         onClick={() => mutateLogVisit(selectedPass)}
       />
@@ -35,19 +35,19 @@ export const PassControl = () => {
       <Button
         label="Add Visits"
         icon="pi pi-plus"
-        disabled={!selectedPass.id}
+        disabled={!selectedPass.pass_id}
         onClick={() => null}
       />
       <Button
         label="View Pass"
         icon="pi pi-bars"
-        disabled={!selectedPass.id}
+        disabled={!selectedPass.pass_id}
         onClick={() => setScreen(Screen.ViewPass)}
       />
       <Button
         label="View Guest"
         icon="pi pi-user"
-        disabled={!selectedPass.id}
+        disabled={!selectedPass.pass_id}
         onClick={() => setScreen(Screen.ViewPass)}
       />
       <Button
@@ -56,9 +56,9 @@ export const PassControl = () => {
         onClick={() => setPanel(Panel.AddPass)}
       />
       <Divider />
-      {selectedPass.id && (
+      {selectedPass.pass_id && (
         <>
-          <div>{selectedPass.remaining} punches left</div>
+          <div>{selectedPass.remaining_uses} punches left</div>
           <div>
             Guest: {selectedPass.first_name} {selectedPass.last_name}
           </div>

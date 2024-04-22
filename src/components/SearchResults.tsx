@@ -7,6 +7,18 @@ const activeBodyTemplate = (rowData: PassData) => {
   return <i className={rowData.active ? "pi pi-check" : "pi pi-times"} />;
 };
 
+const remainingBodyTemplate = (rowData: PassData) => {
+  return (
+    <>
+      {rowData.passtype.code === "lifetime" ? (
+        <img src="src/assets/infinity.png" height={"14px"} />
+      ) : (
+      rowData.remaining_uses
+      )}
+    </>
+  );
+};
+
 const passtypeTemplate = (rowData: PassData) => rowData.passtype?.name;
 
 export function SearchResults() {
@@ -30,7 +42,7 @@ export function SearchResults() {
       onSelectionChange={(e) =>
         setSelectedPass({ type: Msg.Replace, data: e.value || blankPass })
       }
-      dataKey="id"
+      dataKey="pass_id"
     >
       <Column field="first_name" header="First Name" style={{ width: "35%" }} />
       <Column field="last_name" header="Last Name" style={{ width: "35%" }} />
@@ -40,7 +52,12 @@ export function SearchResults() {
         header="Type"
         style={{ width: "20%" }}
       />
-      <Column field="remaining" header="Remaining" style={{ width: "10%" }} />
+      <Column
+        field="remaining_uses"
+        header="Remaining"
+        body={remainingBodyTemplate}
+        style={{ width: "10%" }}
+      />
       <Column
         field="active"
         header="Active"
