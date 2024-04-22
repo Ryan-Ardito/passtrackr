@@ -1,4 +1,4 @@
-import { passtypes, Msg } from "../types";
+import { passtypes } from "../types";
 
 import { ScrollPanel } from "primereact/scrollpanel";
 
@@ -14,7 +14,7 @@ export function PassInfo() {
         label="First Name:"
         value={selectedPass.first_name}
         onChange={(value) =>
-          setSelectedPass({ type: Msg.SetFirstName, data: value })
+          setSelectedPass({ ...selectedPass, first_name: value })
         }
       />
 
@@ -22,16 +22,14 @@ export function PassInfo() {
         label="Last Name:"
         value={selectedPass.last_name}
         onChange={(value) =>
-          setSelectedPass({ type: Msg.SetLastName, data: value })
+          setSelectedPass({ ...selectedPass, last_name: value })
         }
       />
 
       <InputField
         label="Town:"
         value={selectedPass.town}
-        onChange={(value) =>
-          setSelectedPass({ type: Msg.SetTown, data: value })
-        }
+        onChange={(value) => setSelectedPass({ ...selectedPass, town: value })}
       />
 
       <LabeledDropdown
@@ -40,7 +38,7 @@ export function PassInfo() {
         value={selectedPass.passtype}
         options={passtypes}
         onChange={(e) => {
-          setSelectedPass({ type: Msg.SetPasstype, data: e.value });
+          setSelectedPass({...selectedPass, passtype: e.value });
         }}
       />
     </ScrollPanel>

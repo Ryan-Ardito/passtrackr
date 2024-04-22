@@ -1,7 +1,6 @@
 import { listen } from "@tauri-apps/api/event";
 import {
   useState,
-  useReducer,
   createContext,
   useContext,
   useRef,
@@ -15,14 +14,14 @@ import { DebouncedFunc, debounce } from "lodash";
 import { Toast } from "primereact/toast";
 import "primeicons/primeicons.css";
 
-import { PassData, PassAction, Msg, Screen, blankPass, Panel } from "./types";
+import { PassData, Screen, blankPass, Panel } from "./types";
 import { searchPasses } from "./api/api";
 
 interface AppContextProps {
   screen: Screen;
   setScreen: Dispatch<SetStateAction<Screen>>;
   selectedPass: PassData;
-  setSelectedPass: Dispatch<PassAction>;
+  setSelectedPass: Dispatch<SetStateAction<PassData>>;
   search: string;
   setSearch: Dispatch<SetStateAction<string>>;
   debouncedSetSearch: DebouncedFunc<Dispatch<SetStateAction<string>>>;
@@ -38,23 +37,6 @@ interface AppContextProps {
 
 const AppContext = createContext<Partial<AppContextProps>>({});
 
-function passReducer(passData: PassData, action: PassAction): PassData {
-  switch (action.type) {
-    case Msg.Replace:
-      return action.data;
-    case Msg.SetFirstName:
-      return { ...passData, first_name: action.data };
-    case Msg.SetLastName:
-      return { ...passData, last_name: action.data };
-    case Msg.SetTown:
-      return { ...passData, town: action.data };
-    case Msg.SetPasstype:
-      return { ...passData, passtype: action.data };
-    case Msg.SetActive:
-      return { ...passData, active: action.data };
-  }
-}
-
 export function useAppContext(): AppContextProps {
   const context = useContext(AppContext) as AppContextProps;
   if (!context) {
@@ -65,7 +47,7 @@ export function useAppContext(): AppContextProps {
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [screen, setScreen] = useState(Screen.Dashboard);
-  const [selectedPass, setSelectedPass] = useReducer(passReducer, blankPass);
+  const [selectedPass, setSelectedPass] = useState(blankPass);
 
   const [search, setSearch] = useState("");
   const debouncedSetSearch = debounce(setSearch, 400);

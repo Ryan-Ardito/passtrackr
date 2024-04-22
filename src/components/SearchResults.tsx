@@ -1,4 +1,4 @@
-import { PassData, blankPass, Msg } from "../types";
+import { PassData, blankPass } from "../types";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useAppContext } from "../AppContext";
@@ -13,7 +13,7 @@ const remainingBodyTemplate = (rowData: PassData) => {
       {rowData.passtype.code === "lifetime" ? (
         <img src="src/assets/infinity.png" height={"14px"} />
       ) : (
-      rowData.remaining_uses
+        rowData.remaining_uses
       )}
     </>
   );
@@ -39,9 +39,7 @@ export function SearchResults() {
       metaKeySelection={false}
       selectionMode="single"
       selection={selectedPass}
-      onSelectionChange={(e) =>
-        setSelectedPass({ type: Msg.Replace, data: e.value || blankPass })
-      }
+      onSelectionChange={(e) => setSelectedPass(e.value || blankPass)}
       dataKey="pass_id"
     >
       <Column field="first_name" header="First Name" style={{ width: "35%" }} />

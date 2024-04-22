@@ -10,24 +10,6 @@ export enum Panel {
   AddPass,
 }
 
-export enum Msg {
-  Replace = "REPLACE",
-  SetFirstName = "SET_FIRST_NAME",
-  SetLastName = "SET_LAST_NAME",
-  SetTown = "SET_TOWN",
-  SetPasstype = "SET_PASSTYPE",
-  SetActive = "SET_ACTIVE",
-  UsePass = "SET_ACTIVE",
-}
-
-export type PassAction =
-  | { type: Msg.Replace; data: PassData }
-  | { type: Msg.SetFirstName; data: string }
-  | { type: Msg.SetLastName; data: string }
-  | { type: Msg.SetTown; data: string }
-  | { type: Msg.SetPasstype; data: PassType }
-  | { type: Msg.SetActive; data: boolean }
-
 export interface PassType {
   name: string;
   code: string;

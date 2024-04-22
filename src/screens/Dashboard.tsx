@@ -5,7 +5,7 @@ import { Divider } from "primereact/divider";
 
 import { SearchBar } from "../components/SearchBar";
 import { SearchResults } from "../components/SearchResults";
-import { Msg, blankPass } from "../types";
+import { blankPass } from "../types";
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
 import { RightPanel } from "../components/SidePanel";
@@ -29,7 +29,7 @@ export function Dashboard() {
   // KLUDGE. possibly only an issue on dev.
   // without it, a pass can remain selected with empty search results.
   if (searchData?.length == 0)
-    setSelectedPass({ type: Msg.Replace, data: blankPass });
+    setSelectedPass(blankPass );
 
   return (
     <div className="viewport-wrapper">

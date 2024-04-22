@@ -7,7 +7,7 @@ import {
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 
-import { Msg, Panel, Screen } from "../types";
+import { Panel, Screen } from "../types";
 import { logVisit } from "../api/api";
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
@@ -27,11 +27,8 @@ export const PassControl = () => {
         search,
       ] as InvalidateQueryFilters);
       setSelectedPass({
-        type: Msg.Replace,
-        data: {
-          ...selectedPass,
-          remaining_uses: selectedPass.remaining_uses - 1,
-        },
+        ...selectedPass,
+        remaining_uses: selectedPass.remaining_uses - 1,
       });
       showMessage("Log visit", "Success!", toast, "success");
     },
