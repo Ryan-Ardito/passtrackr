@@ -17,6 +17,7 @@ export enum Msg {
   SetTown = "SET_TOWN",
   SetPasstype = "SET_PASSTYPE",
   SetActive = "SET_ACTIVE",
+  UsePass = "SET_ACTIVE",
 }
 
 export type PassAction =

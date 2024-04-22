@@ -2,7 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use std::{collections::HashMap, time::Duration};
 
-use database::search_all_passes;
+use database::{log_visit_query, search_all_passes};
 use serde::{Deserialize, Serialize};
 use sqlx::{prelude::FromRow, PgPool};
 use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
@@ -94,22 +94,50 @@ struct NewPassData {
     amount_paid: String,
     signature: String,
 }
+#[tauri::command(async)]
+async fn log_visit(
+    pass: SearchPassData,
+    delay_millis: u64,
+    will_fail: bool,
+) -> Result<(), QueryError> {
+    if pass.remaining_uses < 1 {
+        return Err(QueryError {
+            name: "Log visit".to_string(),
+            message: "No punches left".to_string(),
+        });
+    }
+    let pass_id = pass.pass_id as i32;
+    let pool = PgPool::connect(PG_CONNECT_STRING)
+        .await
+        .map_err(|err| QueryError {
+            name: "Database error".to_string(),
+            message: err.to_string(),
+        })?;
+    let res = log_visit_query(&pool, pass_id)
+        .await
+        .map_err(|err| QueryError {
+            name: "Database error".to_string(),
+            message: err.to_string(),
+        });
+
+    res
+}
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command(async)]
-fn log_visit(pass: SearchPassData, delay_millis: u64, will_fail: bool) -> Result<(), QueryError> {
-    if !pass.active {
-        panic!();
-    }
-    std::thread::sleep(Duration::from_millis(delay_millis));
-    match will_fail {
-        false => Ok(()),
-        true => Err(QueryError {
-            name: "Log visit".to_string(),
-            message: "failed".to_string(),
-        }),
-    }
-}
+// #[tauri::command(async)]
+// async fn log_visit(pass: SearchPassData, delay_millis: u64, will_fail: bool) -> Result<(), QueryError> {
+//     if !pass.active {
+//         panic!();
+//     }
+//     std::thread::sleep(Duration::from_millis(delay_millis));
+//     match will_fail {
+//         false => Ok(()),
+//         true => Err(QueryError {
+//             name: "Log visit".to_string(),
+//             message: "failed".to_string(),
+//         }),
+//     }
+// }
 
 #[tauri::command(async)]
 fn async_sleep(millis: u64) -> Result<(), String> {
@@ -153,10 +181,6 @@ async fn search_passes(
     delay_millis: u64,
     will_fail: bool,
 ) -> Result<Vec<SearchPassData>, QueryError> {
-    let connection_error = QueryError {
-        name: "Database error".to_string(),
-        message: "connection error".to_string(),
-    };
     let mut passtype_map = HashMap::new();
     passtype_map.insert("punch".to_string(), "10x Punch".to_string());
     passtype_map.insert("annual".to_string(), "Annual".to_string());
@@ -166,11 +190,15 @@ async fn search_passes(
 
     let pool = PgPool::connect(PG_CONNECT_STRING)
         .await
-        .map_err(|err| connection_error.clone())?;
+        .map_err(|err| QueryError {
+            name: "Database error".to_string(),
+            message: err.to_string(),
+        })?;
     let res = search_all_passes(&pool, search)
         .await
-        .map_err(|err| {
-            QueryError { name: err.to_string(), message: "".to_string() }
+        .map_err(|err| QueryError {
+            name: "Database error".to_string(),
+            message: err.to_string(),
         });
     res.map(|passes| {
         passes

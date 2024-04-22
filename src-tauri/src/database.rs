@@ -2,6 +2,22 @@ use sqlx::{PgPool, Result};
 
 use crate::SearchPassRes;
 
+pub async fn log_visit_query(pool: &PgPool, pass_id: i32) -> Result<()> {
+    let use_pass_query = format!(
+        "
+        UPDATE passes
+        SET remaining_uses = CASE
+                WHEN remaining_uses > 0 THEN remaining_uses - 1
+                ELSE 0
+            END
+        WHERE pass_id = {pass_id};
+
+        "
+    );
+    sqlx::query(&use_pass_query).execute(pool).await?;
+    Ok(())
+}
+
 pub async fn search_all_passes(pool: &PgPool, search_term: &str) -> Result<Vec<SearchPassRes>> {
     let search_query = format!(
         "
@@ -23,7 +39,7 @@ pub async fn search_all_passes(pool: &PgPool, search_term: &str) -> Result<Vec<S
         WHERE 
             LOWER(CONCAT(g.first_name, ' ', g.last_name)) LIKE LOWER('%{search_term}%')
         ORDER BY 
-            g.last_name ASC, g.first_name ASC;
+            g.last_name, g.first_name, g.guest_id, p.pass_id;
         "
     );
 

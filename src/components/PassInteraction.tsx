@@ -1,25 +1,44 @@
-import { useMutation } from "@tanstack/react-query";
+import {
+  InvalidateQueryFilters,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 
-import { Panel, Screen } from "../types";
+import { Msg, Panel, Screen } from "../types";
 import { logVisit } from "../api/api";
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
 
 export const PassControl = () => {
-  const { selectedPass, setScreen, setPanel, toast } = useAppContext();
+  const { selectedPass, setSelectedPass, setScreen, setPanel, toast, search } =
+    useAppContext();
+  const queryClient = useQueryClient();
 
   const { mutate: mutateLogVisit, isPending: isLogVisitPending } = useMutation({
     mutationKey: [logVisit],
     mutationFn: logVisit,
     onError: (error) => showMessage(error.name, error.message, toast, "info"),
-    onSuccess: () => showMessage("Log visit", "Success!", toast, "success"),
+    onSuccess: () => {
+      queryClient.invalidateQueries([
+        "search",
+        search,
+      ] as InvalidateQueryFilters);
+      setSelectedPass({
+        type: Msg.Replace,
+        data: {
+          ...selectedPass,
+          remaining_uses: selectedPass.remaining_uses - 1,
+        },
+      });
+      showMessage("Log visit", "Success!", toast, "success");
+    },
   });
 
   return (
-    <div className="flex-box flex-col flex-1" style={{gap: "12px"}}>
+    <div className="flex-box flex-col flex-1" style={{ gap: "12px" }}>
       <Divider style={{ marginTop: "6px" }} />
       <Button
         label="Log Visit"
