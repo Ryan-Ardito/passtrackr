@@ -126,7 +126,7 @@ fn search_passes(
     std::thread::sleep(Duration::from_millis(delay_millis));
 
     let mut passes = Vec::new();
-    for i in 0..300 {
+    for i in 0..3_000 {
         let pass_type = PassType {
             name: format!("Annual"),
             code: format!("annual"),

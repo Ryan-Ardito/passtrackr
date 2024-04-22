@@ -20,27 +20,40 @@ export const PassControl = () => {
 
   return (
     <div className="flex-box flex-col flex-1">
+      <Divider style={{ marginTop: "6px" }} />
+      <Button
+        label="Log Visit"
+        icon="pi pi-check-square"
+        severity="info"
+        // size="large"
+        style={{ height: "80px" }}
+        disabled={!selectedPass.id}
+        loading={isLogVisitPending}
+        onClick={() => mutateLogVisit(selectedPass)}
+      />
+      <Divider />
+      <Button
+        label="Add Visits"
+        icon="pi pi-plus"
+        disabled={!selectedPass.id}
+        onClick={() => null}
+      />
       <Button
         label="View Pass"
+        icon="pi pi-bars"
         disabled={!selectedPass.id}
         onClick={() => setScreen(Screen.ViewPass)}
       />
       <Button
-        label="Add Visits"
+        label="View Guest"
+        icon="pi pi-user"
         disabled={!selectedPass.id}
-        onClick={(e) => e.preventDefault()}
+        onClick={() => setScreen(Screen.ViewPass)}
       />
-      <Button label="New Pass" onClick={() => setPanel(Panel.AddPass)} />
-      <Divider />
       <Button
-        icon="pi pi-check"
-        badge={`${selectedPass.remaining}`}
-        severity="info"
-        style={{height: "80px"}}
-        disabled={!selectedPass.id}
-        label="Log Visit"
-        loading={isLogVisitPending}
-        onClick={() => mutateLogVisit(selectedPass)}
+        label="New Pass"
+        icon="pi pi-id-card"
+        onClick={() => setPanel(Panel.AddPass)}
       />
       <Divider />
       {selectedPass.id && (

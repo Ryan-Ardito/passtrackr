@@ -14,13 +14,15 @@ export function SearchResults() {
   return (
     <DataTable
       id="search-results"
-      className="flex-box flex-col flex-2"
-      size="small" // showGridlines
+      className="flex-box flex-col"
+      size="small"
+      showGridlines
       scrollable
-      scrollHeight="87%"
+      scrollHeight="100%"
       paginator
       rows={32}
-      // virtualScrollerOptions={{ lazy: true, itemSize: 46, delay: 200, showLoader: true }}
+      // virtualScrollerOptions={{ lazy: true, itemSize: 46, delay: 500, showLoader: true }}
+      // virtualScrollerOptions={{ itemSize: 46 }}
       value={searchData || []}
       metaKeySelection={false}
       selectionMode="single"

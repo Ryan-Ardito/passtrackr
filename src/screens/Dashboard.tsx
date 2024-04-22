@@ -38,7 +38,7 @@ export function Dashboard() {
         <SearchBar />
         <div className="flex-box flex-row">
           <SearchResults />
-          <Divider layout="vertical" style={{ margin: 5 }} />
+          <Divider layout="vertical" style={{ margin: 6 }} />
           <RightPanel {...{ panel }} />
         </div>
       </div>

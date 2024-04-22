@@ -13,26 +13,24 @@ import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
 
 const validationSchema = Yup.object().shape({
-  first_name: Yup.string().required("required"),
-  last_name: Yup.string().required("required"),
-  town: Yup.string().required("required"),
+  first_name: Yup.string().required("Required"),
+  last_name: Yup.string().required("Required"),
+  town: Yup.string().required("Required"),
   passtype: Yup.object().shape({
-    name: Yup.string().required("required"),
-    code: Yup.string().required("required"),
+    name: Yup.string().required("Required"),
+    code: Yup.string().required("Required"),
   }),
   pay_method: Yup.object().shape({
     name: Yup.string(),
     code: Yup.string(),
   }),
   last_four: Yup.number()
-    .typeError("must be a number")
-    .integer("must be a whole number")
-    .min(1000, "must be a 4-digit number")
-    .max(9999, "must be a 4-digit number"),
-  amount_paid: Yup.number()
-    .typeError("must be a number")
-    .min(0, "must be a positive number"),
-  signature: Yup.string().required("required"),
+    .typeError("Invalid")
+    .integer("Invalid")
+    .min(1000, "Invalid")
+    .max(9999, "Invalid"),
+  amount_paid: Yup.number().typeError("Invalid").min(0, "Invalid"),
+  signature: Yup.string().required("Required"),
 });
 
 export const AddPass = () => {
@@ -93,19 +91,20 @@ export const AddPass = () => {
           {...{ formik }}
         />
         <Divider />
-        <Button
-          icon="pi pi-check"
-          style={{ marginRight: 6, width: "170px" }}
-          type="submit"
-          label="Create Pass"
-          loading={formik.isSubmitting}
-        />
-        <Button
-          icon="pi pi-times"
-          severity="danger"
-          label="Cancel"
-          onClick={() => setPanel(Panel.PassInteraction)}
-        />
+        <div style={{ display: "flex", gap: "6px" }}>
+          <Button
+            icon="pi pi-check"
+            type="submit"
+            label="Create Pass"
+            loading={formik.isSubmitting}
+          />
+          <Button
+            icon="pi pi-times"
+            severity="danger"
+            label="Cancel"
+            onClick={() => setPanel(Panel.PassInteraction)}
+          />
+        </div>
       </form>
     </ScrollPanel>
   );

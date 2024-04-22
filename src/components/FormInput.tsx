@@ -1,6 +1,9 @@
 import { FormikContextType } from "formik";
+import { Button } from "primereact/button";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
+import { Message } from "primereact/message";
+import { useState } from "react";
 
 interface InputFieldProps {
   label: string;
@@ -26,22 +29,21 @@ export const InputField: React.FC<InputFieldProps> = ({
   );
 };
 
-interface LabelRequiredProps {
+interface MessageRequiredProps {
   label: string;
   touched: any;
   error: string | undefined;
 }
 
-export const LabelRequired: React.FC<LabelRequiredProps> = ({
-  label,
+export const MessageRequired: React.FC<MessageRequiredProps> = ({
   touched,
   error,
 }) => {
   return (
     <>
-      <div></div>
-      <div className="form-input-label required">{label}</div>
-      {touched && error && <span style={{ color: "red" }}>{error}</span>}
+      {touched && error && (
+        <Message text={error} style={{ height: "38px" }} severity="warn" />
+      )}
     </>
   );
 };
@@ -61,19 +63,22 @@ export const FormikField: React.FC<FormikFieldProps> = ({
 
   return (
     <>
-      <LabelRequired
-        label={label}
-        error={errors[name]?.toString()}
-        touched={touched[name]?.valueOf()}
-      />
-      <InputText
-        style={{ padding: 8 }}
-        className="form-text-input"
-        name={name}
-        disabled={isSubmitting}
-        value={values[name]}
-        onChange={handleChange}
-      />
+      <div className="form-input-label">{label}</div>
+      <div style={{ display: "flex", gap: "6px" }}>
+        <InputText
+          style={{ padding: 8 }}
+          className="form-text-input"
+          name={name}
+          disabled={isSubmitting}
+          value={values[name]}
+          onChange={handleChange}
+        />
+        <MessageRequired
+          label={label}
+          error={errors[name]?.toString()}
+          touched={touched[name]?.valueOf()}
+        />
+      </div>
     </>
   );
 };
@@ -95,17 +100,22 @@ export const FormikDropdown: React.FC<FormikDropdownProps> = ({
 
   return (
     <>
-      <div></div>
-      <LabelRequired error={errors[name]?.toString()} {...{ label, touched }} />
-      <div></div>
-      <Dropdown
-        optionLabel="name"
-        scrollHeight="400px"
-        {...{ options, name }}
-        disabled={isSubmitting}
-        value={values[name]}
-        onChange={handleChange}
-      />
+      <div className="form-input-label">{label}</div>
+      <div style={{ display: "flex", gap: "6px" }}>
+        <Dropdown
+          optionLabel="name"
+          scrollHeight="400px"
+          {...{ options, name }}
+          disabled={isSubmitting}
+          value={values[name]}
+          onChange={handleChange}
+        />
+        <MessageRequired
+          label={label}
+          error={errors[name]?.toString()}
+          touched={touched[name]?.valueOf()}
+        />
+      </div>
     </>
   );
 };
@@ -133,6 +143,53 @@ export const LabeledDropdown: React.FC<DropdownProps> = ({
         scrollHeight="400px"
         {...{ name, value, options, onChange }}
       />
+    </>
+  );
+};
+
+interface TextInputButtonProps {
+  label: string;
+  disabled: boolean;
+}
+
+export const TextInputButton: React.FC<TextInputButtonProps> = ({
+  label,
+  disabled,
+}) => {
+  const [addVisits, setAddVisits] = useState(false);
+
+  return (
+    <>
+      {!addVisits ? (
+        <Button
+          label={label}
+          icon="pi pi-plus"
+          iconPos="right"
+          disabled={disabled}
+          onClick={() => setAddVisits(true)}
+        />
+      ) : (
+        <form
+          style={{
+            display: "flex",
+            gap: "6px",
+            width: "100%",
+            height: "41.5px",
+          }}
+        >
+          <InputText
+            autoFocus
+            style={{ width: "100%" }}
+            name="addVisit"
+            onChange={() => null}
+          />
+          <Button
+            style={{ width: "48px" }}
+            icon="pi pi-plus"
+            onClick={() => setAddVisits(false)}
+          />
+        </form>
+      )}
     </>
   );
 };

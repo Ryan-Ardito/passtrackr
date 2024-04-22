@@ -20,6 +20,15 @@ export enum Msg {
   SetNotes = "SET_NOTES",
 }
 
+export type PassAction =
+  | { type: Msg.Replace; data: PassData }
+  | { type: Msg.SetFirstName; data: string }
+  | { type: Msg.SetLastName; data: string }
+  | { type: Msg.SetTown; data: string }
+  | { type: Msg.SetPasstype; data: PassType }
+  | { type: Msg.SetActive; data: boolean }
+  | { type: Msg.SetNotes; data: string };
+
 export interface PassType {
   name: string;
   code: string;
@@ -28,6 +37,8 @@ export interface PassType {
 export const payMethods = [
   { name: "Credit", code: "credit" },
   { name: "Cash", code: "cash" },
+  { name: "Check", code: "check" },
+  { name: "Complimentary", code: "comp" },
 ];
 
 export const passtypes: PassType[] = [
@@ -79,12 +90,3 @@ export const blankPass: PassData = {
   creator: "",
   creation_time: 10,
 };
-
-export type PassAction =
-  | { type: Msg.Replace; data: PassData }
-  | { type: Msg.SetFirstName; data: string }
-  | { type: Msg.SetLastName; data: string }
-  | { type: Msg.SetTown; data: string }
-  | { type: Msg.SetPasstype; data: PassType }
-  | { type: Msg.SetActive; data: boolean }
-  | { type: Msg.SetNotes; data: string };
