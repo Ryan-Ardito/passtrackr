@@ -19,7 +19,7 @@ const remainingBodyTemplate = (rowData: PassData) => {
   );
 };
 
-const passtypeTemplate = (rowData: PassData) => rowData.passtype?.name;
+const passtypeTemplate = (rowData: PassData) => rowData?.passtype?.name;
 
 export function SearchResults() {
   const { searchData, selectedPass, setSelectedPass } = useAppContext();
@@ -35,7 +35,7 @@ export function SearchResults() {
       rows={32}
       // virtualScrollerOptions={{ lazy: true, itemSize: 46, delay: 500, showLoader: true }}
       // virtualScrollerOptions={{ itemSize: 46 }}
-      value={searchData || []}
+      value={searchData}
       metaKeySelection={false}
       selectionMode="single"
       selection={selectedPass}

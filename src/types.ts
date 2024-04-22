@@ -17,7 +17,6 @@ export enum Msg {
   SetTown = "SET_TOWN",
   SetPasstype = "SET_PASSTYPE",
   SetActive = "SET_ACTIVE",
-  SetNotes = "SET_NOTES",
 }
 
 export type PassAction =
@@ -27,7 +26,6 @@ export type PassAction =
   | { type: Msg.SetTown; data: string }
   | { type: Msg.SetPasstype; data: PassType }
   | { type: Msg.SetActive; data: boolean }
-  | { type: Msg.SetNotes; data: string };
 
 export interface PassType {
   name: string;

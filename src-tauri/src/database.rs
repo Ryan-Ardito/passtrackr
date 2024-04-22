@@ -21,7 +21,9 @@ pub async fn search_all_passes(pool: &PgPool, search_term: &str) -> Result<Vec<S
         JOIN 
             guests AS g ON p.guest_id = g.guest_id
         WHERE 
-            LOWER(CONCAT(g.first_name, ' ', g.last_name)) LIKE LOWER('%{search_term}%');
+            LOWER(CONCAT(g.first_name, ' ', g.last_name)) LIKE LOWER('%{search_term}%')
+        ORDER BY 
+            g.last_name ASC, g.first_name ASC;
         "
     );
 

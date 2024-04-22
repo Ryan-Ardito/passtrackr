@@ -52,8 +52,6 @@ function passReducer(passData: PassData, action: PassAction): PassData {
       return { ...passData, passtype: action.data };
     case Msg.SetActive:
       return { ...passData, active: action.data };
-    case Msg.SetNotes:
-      return { ...passData, notes: action.data };
   }
 }
 
