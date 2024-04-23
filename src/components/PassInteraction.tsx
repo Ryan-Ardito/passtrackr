@@ -4,7 +4,6 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 
 import { Panel, Screen } from "../types";
@@ -12,7 +11,6 @@ import { logVisit } from "../api/api";
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
 import { CrudButton } from "./Buttons";
-import { ScrollPanel } from "primereact/scrollpanel";
 
 export const PassControl = () => {
   const { selectedPass, setSelectedPass, setScreen, setPanel, toast, search } =
