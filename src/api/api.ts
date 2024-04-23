@@ -24,11 +24,7 @@ export const logVisit = async (pass: PassData): Promise<void> => {
 };
 
 export const createPass = async (passData: CreatePassData): Promise<string> => {
-  return invoke("create_pass", {
-    passData,
-    delayMillis: 800,
-    willFail: false,
-  });
+  return invoke("create_pass", { passData });
 };
 
 export const asyncSleep = async (millis: number): Promise<void> => {

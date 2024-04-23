@@ -129,8 +129,6 @@ fn async_sleep(millis: u64) -> Result<(), String> {
 #[tauri::command(async)]
 async fn create_pass(
     pass_data: NewPassData,
-    delay_millis: u64,
-    will_fail: bool,
 ) -> Result<i32, QueryError> {
     let pool = PgPool::connect(PG_CONNECT_STRING)
     .await

@@ -1,6 +1,6 @@
-use sqlx::{postgres::PgRow, PgPool, Result, Row};
+use sqlx::{PgPool, Result, Row};
 
-use crate::{GuestData, NewPassData, Pass, SearchPassRes};
+use crate::{NewPassData, Pass, SearchPassRes};
 
 pub async fn insert_pass_query(pool: &PgPool, pass_data: NewPassData) -> Result<i32> {
     let guest_id = pass_data
