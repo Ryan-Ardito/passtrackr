@@ -11,6 +11,8 @@ import { Panel, Screen } from "../types";
 import { logVisit } from "../api/api";
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
+import { CrudButton } from "./Buttons";
+import { ScrollPanel } from "primereact/scrollpanel";
 
 export const PassControl = () => {
   const { selectedPass, setSelectedPass, setScreen, setPanel, toast, search } =
@@ -35,38 +37,38 @@ export const PassControl = () => {
   });
 
   return (
-    <div className="flex-box flex-col flex-1" style={{ gap: "12px" }}>
+    <div className="h-full flex-box flex-col flex-1">
       <Divider style={{ marginTop: "6px" }} />
-      <Button
+      <CrudButton
         label="Log Visit"
         icon="pi pi-check-square"
         severity="info"
-        // size="large"
+        size="large"
         style={{ height: "80px" }}
         disabled={!selectedPass.pass_id}
         loading={isLogVisitPending}
         onClick={() => mutateLogVisit(selectedPass)}
       />
       <Divider />
-      <Button
+      <CrudButton
         label="Add Visits"
         icon="pi pi-plus"
         disabled={!selectedPass.pass_id}
         onClick={() => null}
       />
-      <Button
+      <CrudButton
         label="View Pass"
         icon="pi pi-bars"
         disabled={!selectedPass.pass_id}
         onClick={() => setScreen(Screen.ViewPass)}
       />
-      <Button
+      <CrudButton
         label="View Guest"
         icon="pi pi-user"
         disabled={!selectedPass.pass_id}
         onClick={() => setScreen(Screen.ViewPass)}
       />
-      <Button
+      <CrudButton
         label="New Pass"
         icon="pi pi-id-card"
         onClick={() => setPanel(Panel.AddPass)}
@@ -74,12 +76,16 @@ export const PassControl = () => {
       <Divider />
       {selectedPass.pass_id && (
         <>
-          <div>{selectedPass.remaining_uses} punches left</div>
-          <div>
-            Guest: {selectedPass.first_name} {selectedPass.last_name}
-          </div>
-          <div>Town: {selectedPass.town}</div>
-          <div>Guest ID: {selectedPass.guest_id}</div>
+          <div>pass_id: {selectedPass.pass_id}</div>
+          <div>guest_id: {selectedPass.guest_id}</div>
+          <div>first_name: {selectedPass.first_name}</div>
+          <div>last_name: {selectedPass.last_name}</div>
+          <div>town: {selectedPass.town}</div>
+          <div>remaining_uses: {selectedPass.remaining_uses}</div>
+          <div>passtype: {selectedPass.passtype.name}</div>
+          <div>active: {selectedPass.active ? "yes" : "no"}</div>
+          <div>creator: {selectedPass.creator}</div>
+          <div>creation_time: {selectedPass.creation_time}</div>
         </>
       )}
     </div>

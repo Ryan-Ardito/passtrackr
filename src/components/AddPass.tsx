@@ -91,14 +91,16 @@ export const AddPass = () => {
           {...{ formik }}
         />
         <Divider />
-        <div style={{ display: "flex", gap: "6px" }}>
+        <div style={{ display: "flex", gap: "8px" }}>
           <Button
+            rounded
             icon="pi pi-check"
             type="submit"
             label="Create Pass"
             loading={formik.isSubmitting}
           />
           <Button
+            rounded
             icon="pi pi-times"
             severity="danger"
             label="Cancel"

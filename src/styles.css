@@ -28,8 +28,11 @@
   margin-right: 16px;
 }
 
-.flex-box {
+.h-full {
   height: 100%;
+}
+
+.flex-box {
   display: flex;
   justify-content: top;
   gap: 6px;
