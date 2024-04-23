@@ -3,7 +3,7 @@ import { Button } from "primereact/button";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { Message } from "primereact/message";
-import { useState } from "react";
+import { ChangeEventHandler, useState } from "react";
 
 interface InputFieldProps {
   label: string;
@@ -52,14 +52,16 @@ interface FormikFieldProps {
   label: string;
   name: string;
   formik: FormikContextType<any>;
+  onChange?: ChangeEventHandler<HTMLElement>
 }
 
 export const FormikField: React.FC<FormikFieldProps> = ({
   label,
   name,
   formik,
+  onChange = formik.handleChange
 }) => {
-  const { values, touched, errors, isSubmitting, handleChange } = formik;
+  const { values, touched, errors, isSubmitting } = formik;
 
   return (
     <>
@@ -71,7 +73,7 @@ export const FormikField: React.FC<FormikFieldProps> = ({
           name={name}
           disabled={isSubmitting}
           value={values[name]}
-          onChange={handleChange}
+          onChange={onChange}
         />
         <MessageRequired
           label={label}

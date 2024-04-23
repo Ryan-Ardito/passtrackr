@@ -15,7 +15,7 @@ import {
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
 import { CrudButton } from "./Buttons";
-import { useEffect } from "react";
+import { ChangeEvent, useEffect } from "react";
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required("Required"),
@@ -75,17 +75,22 @@ export const AddPass = () => {
     onSubmit: (values) => mutateCreatePass(values),
   });
 
-  useEffect(() => {
-    // reset guest_id when first_name, last_name, or town fields change
-    formik.setFieldValue("guest_id", undefined);
-  }, [formik.values.first_name, formik.values.last_name, formik.values.town]);
+  // invalidate guest_id if guest fields have changed
+  const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const fieldName = e.target.name;
+    if (["first_name", "last_name", "town"].includes(fieldName)) {
+      formik.setFieldValue("guest_id", undefined);
+    }
+    formik.handleChange(e);
+  };
+
 
   return (
     <ScrollPanel className="flex-2">
       <form onSubmit={formik.handleSubmit}>
-        <FormikField label="First Name:" name="first_name" {...{ formik }} />
-        <FormikField label="Last Name:" name="last_name" {...{ formik }} />
-        <FormikField label="Town:" name="town" {...{ formik }} />
+        <FormikField label="First Name:" name="first_name" onChange={handleFieldChange} {...{ formik }} />
+        <FormikField label="Last Name:" name="last_name" onChange={handleFieldChange} {...{ formik }} />
+        <FormikField label="Town:" name="town" onChange={handleFieldChange} {...{ formik }} />
         <FormikDropdown
           label="Passtype:"
           name="passtype"
