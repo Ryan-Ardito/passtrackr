@@ -15,7 +15,7 @@ import {
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
 import { CrudButton } from "./Buttons";
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent } from "react";
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required("Required"),
