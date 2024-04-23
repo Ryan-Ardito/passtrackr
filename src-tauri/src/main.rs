@@ -9,7 +9,7 @@ use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
 
 pub mod database;
 
-const PG_CONNECT_STRING: &str = "postgres://postgres:joyful@172.20.0.2/passtracker-dev";
+const PG_CONNECT_STRING: &str = "postgres://postgres:joyful@172.22.0.22/passtracker-dev";
 
 #[derive(Debug, Serialize, Clone)]
 struct QueryError {

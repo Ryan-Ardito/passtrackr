@@ -3,8 +3,7 @@ import uuid
 from dataclasses import dataclass
 from typing import Any
 
-INIT_DB_SQL_STRING: str = r"""
-CREATE TABLE IF NOT EXISTS guests (
+INIT_DB_SQL_STRING: str = r""" CREATE TABLE IF NOT EXISTS guests (
     guest_id SERIAL PRIMARY KEY,
     first_name VARCHAR(50),
     last_name VARCHAR(50),
@@ -72,7 +71,7 @@ class Guest:
 
 
 @dataclass
-class Pass:
+class PunchPass:
     pass_id: int
     guest_id: int
     passtype: str
@@ -106,7 +105,7 @@ def generate_guests(
 
 def generate_passes(
     guests: list[Guest], first_names: list[str], last_names: list[str]
-) -> list[Pass]:
+) -> list[PunchPass]:
     passes = []
     for i in range(len(guests) * 2):
         passholder = random.choice(guests)
@@ -120,7 +119,7 @@ def generate_passes(
         amount_paid = 350
         creator = f"{random.choice(first_names[:24])}"
         creation_time = random.randrange(1613755541, 1713755541)
-        punch_pass = Pass(
+        punch_pass = PunchPass(
             pass_id,
             guest_id,
             passtype,
@@ -148,9 +147,9 @@ VALUES"""
     print(footer)
 
 
-def output_sql_insert_pass(passes: list[Pass]):
+def output_sql_insert_pass(passes: list[PunchPass]):
     header = """INSERT INTO passes (pass_id, guest_id, passtype, remaining_uses, active, payment_method, amount_paid_cents, creator, creation_time)
-VALUES""" 
+VALUES"""
     print(header)
     for p in passes[:-1]:
         values = f"""({p.pass_id}, {p.guest_id}, '{p.passtype}', {p.remaining_uses}, {p.active}, '{p.payment_method}', {p.amount_paid_cents}, '{p.creator}', {p.creation_time}),"""
@@ -160,25 +159,29 @@ VALUES"""
     print(footer)
 
 
+def output_db_init_sql(guests: list[Guest], passes: list[PunchPass]):
+    print(INIT_DB_SQL_STRING)
+    output_sql_insert_guest(guests)
+    print()
+    output_sql_insert_pass(passes)
+
+
 def main():
     with open("old_first_names.txt", "r") as file:
         old_first_names = [name.strip() for name in file.readlines()]
 
     with open("new_first_names.txt", "r") as file:
-        new_first_names = [name.strip() for name in file.readlines()][:250]
+        new_first_names = [name.strip() for name in file.readlines()]
 
     with open("last_names.txt", "r") as file:
-        last_names = [name.strip() for name in file.readlines()]
+        last_names = [name.strip() for name in file.readlines()][:200]
 
     first_names = old_first_names + new_first_names
 
     guests = generate_guests(10_000, first_names, last_names)
     passes = generate_passes(guests, first_names, last_names)
 
-    print(INIT_DB_SQL_STRING)
-    output_sql_insert_guest(guests)
-    print()
-    output_sql_insert_pass(passes)
+    output_db_init_sql(guests, passes)
 
 
 if __name__ == "__main__":

@@ -11,8 +11,6 @@ COPY last_names.txt /app/
 
 WORKDIR /app
 
-RUN apt-get update && \
-    apt-get install -y python3 && \
-    python3 dummy_data.py > /docker-entrypoint-initdb.d/init.sql
-
-EXPOSE 5432
+RUN apt-get update
+RUN apt-get install -y python3
+RUN python3 dummy_data.py > /docker-entrypoint-initdb.d/init.sql

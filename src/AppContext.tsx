@@ -63,7 +63,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     queryKey: ["search", search],
     queryFn: () => ((search.length > 2) ? searchPasses(search) : []),
     placeholderData: keepPreviousData,
-    staleTime: 120_000,
   });
 
   const toast = useRef<Toast>(null);
