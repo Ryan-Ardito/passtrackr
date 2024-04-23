@@ -23,8 +23,7 @@ pub async fn log_visit_query(pool: &PgPool, pass_id: i32) -> Result<()> {
 }
 
 pub async fn search_all_passes(pool: &PgPool, search_term: &str) -> Result<Vec<SearchPassRes>> {
-    let search_query = format!(
-        "
+    let search_query = "
         SELECT 
             p.pass_id,
             p.guest_id,
@@ -41,14 +40,17 @@ pub async fn search_all_passes(pool: &PgPool, search_term: &str) -> Result<Vec<S
         JOIN 
             guests AS g ON p.guest_id = g.guest_id
         WHERE 
-            LOWER(CONCAT(g.first_name, ' ', g.last_name)) LIKE LOWER('{search_term}%')
+            LOWER(CONCAT(g.first_name, ' ', g.last_name)) LIKE LOWER($1)
             OR
-            LOWER(g.last_name) LIKE LOWER('{search_term}%')
+            LOWER(g.last_name) LIKE LOWER($1)
         ORDER BY 
             g.last_name, g.first_name, g.guest_id, p.pass_id;
-        "
-    );
+    ";
 
-    let passes = sqlx::query_as(&search_query).fetch_all(pool).await?;
+    let passes = sqlx::query_as(search_query)
+        .bind(format!("{}%", search_term.to_lowercase())) // Bind parameters to avoid SQL injection
+        .fetch_all(pool)
+        .await?;
+
     Ok(passes)
 }
