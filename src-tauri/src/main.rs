@@ -95,11 +95,7 @@ struct NewPassData {
     signature: String,
 }
 #[tauri::command(async)]
-async fn log_visit(
-    pass: SearchPassData,
-    delay_millis: u64,
-    will_fail: bool,
-) -> Result<(), QueryError> {
+async fn log_visit(pass: SearchPassData) -> Result<(), QueryError> {
     if pass.remaining_uses < 1 {
         return Err(QueryError {
             name: "Log visit".to_string(),
@@ -122,22 +118,6 @@ async fn log_visit(
 
     res
 }
-
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-// #[tauri::command(async)]
-// async fn log_visit(pass: SearchPassData, delay_millis: u64, will_fail: bool) -> Result<(), QueryError> {
-//     if !pass.active {
-//         panic!();
-//     }
-//     std::thread::sleep(Duration::from_millis(delay_millis));
-//     match will_fail {
-//         false => Ok(()),
-//         true => Err(QueryError {
-//             name: "Log visit".to_string(),
-//             message: "failed".to_string(),
-//         }),
-//     }
-// }
 
 #[tauri::command(async)]
 fn async_sleep(millis: u64) -> Result<(), String> {
@@ -176,11 +156,7 @@ fn get_guest(guest_id: u64, delay_millis: u64, will_fail: bool) -> Result<String
 }
 
 #[tauri::command(async)]
-async fn search_passes(
-    search: &str,
-    delay_millis: u64,
-    will_fail: bool,
-) -> Result<Vec<SearchPassData>, QueryError> {
+async fn search_passes(search: &str) -> Result<Vec<SearchPassData>, QueryError> {
     let mut passtype_map = HashMap::new();
     passtype_map.insert("punch".to_string(), "Punch".to_string());
     passtype_map.insert("annual".to_string(), "Annual".to_string());
@@ -224,45 +200,6 @@ async fn search_passes(
             .collect()
     })
 }
-
-// #[tauri::command(async)]
-// fn search_passes(
-//     search: &str,
-//     delay_millis: u64,
-//     will_fail: bool,
-// ) -> Result<Vec<SearchPassData>, QueryError> {
-//     std::thread::sleep(Duration::from_millis(delay_millis));
-
-//     let mut passes = Vec::new();
-//     for i in 0..1_000 {
-//         let pass_type = PassType {
-//             name: format!("Annual"),
-//             code: format!("annual"),
-//         };
-//         let pass_data = SearchPassData {
-//             id: i + 64,
-//             guest_id: i + 64,
-//             first_name: format!("John{i}"),
-//             last_name: format!("{search}{i}"),
-//             town: format!("Kokomo{i}"),
-//             remaining: 10 - i % 7,
-//             passtype: pass_type,
-//             active: i % 7 != 0,
-//             creator: format!("dog"),
-//             creation_time: 10,
-//         };
-
-//         passes.push(pass_data);
-//     }
-
-//     match will_fail {
-//         false => Ok(passes),
-//         true => Err(QueryError {
-//             name: "Connection problem".to_string(),
-//             message: "Unable to connect to database".to_string(),
-//         }),
-//     }
-// }
 
 fn main() {
     let dashboard = CustomMenuItem::new("dashboard".to_string(), "Dashboard");
