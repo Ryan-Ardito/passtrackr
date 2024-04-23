@@ -27,10 +27,10 @@ export function SearchResults() {
     <DataTable
       id="search-results"
       className="flex-box flex-col"
-      size="small"
-      showGridlines
+      size="large"
+      // showGridlines
       scrollable
-      scrollHeight="100%"
+      // scrollHeight="90%"
       paginator
       rows={32}
       // virtualScrollerOptions={{ lazy: true, itemSize: 46, delay: 500, showLoader: true }}

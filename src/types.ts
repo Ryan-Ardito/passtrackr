@@ -23,13 +23,13 @@ export const payMethods = [
 ];
 
 export const passtypes: PassType[] = [
-  { name: "10x Punch", code: "ten_punch" },
-  { name: "6x Punch", code: "six_punch" },
+  { name: "10x Punch", code: "punch" },
+  { name: "6x Punch", code: "punch" },
   { name: "Annual", code: "annual" },
   { name: "6 Month", code: "six_month" },
   { name: "Free Pass", code: "free_pass" },
-  { name: "3x Facial", code: "three_facial" },
-  { name: "6x Facial", code: "six_facial" },
+  { name: "3x Facial", code: "facial" },
+  { name: "6x Facial", code: "facial" },
 ];
 
 export interface CreatePassData {

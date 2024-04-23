@@ -32,7 +32,7 @@ export const CrudButton: React.FC<CrudButtonProps> = ({
 }) => {
     return (
         <Button id="crud-button"
-            // rounded
+            rounded
             raised={!disabled}
             label={label}
             icon={icon}

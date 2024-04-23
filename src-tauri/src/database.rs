@@ -1,6 +1,10 @@
 use sqlx::{PgPool, Result};
 
-use crate::SearchPassRes;
+use crate::{NewPassData, SearchPassRes};
+
+pub async fn creat_pass_query(pool: &PgPool, pass_data: NewPassData) -> Result<()> {
+    Ok(())
+}
 
 pub async fn log_visit_query(pool: &PgPool, pass_id: i32) -> Result<()> {
     let use_pass_query = format!(

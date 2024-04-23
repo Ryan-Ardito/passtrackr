@@ -9,8 +9,12 @@
   -webkit-text-size-adjust: 100%;
 }
 
+.p-datatable-tbody {
+  font-size: 20px;
+}
+
 .viewport-wrapper {
-  height: 90vh;
+  height: 88vh;
 }
 
 .p-toast {
@@ -66,6 +70,7 @@
 
 #search-results {
   flex: 3;
+  height: 101%
 }
 
 #search-input {

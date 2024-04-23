@@ -61,7 +61,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     error: searchError,
   } = useQuery({
     queryKey: ["search", search],
-    queryFn: () => ((search.length > 1) ? searchPasses(search) : []),
+    queryFn: () => ((search.length > 2) ? searchPasses(search) : []),
     placeholderData: keepPreviousData,
     staleTime: 120_000,
   });

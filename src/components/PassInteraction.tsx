@@ -18,7 +18,7 @@ export const PassControl = () => {
   const queryClient = useQueryClient();
 
   const { mutate: mutateLogVisit, isPending: isLogVisitPending } = useMutation({
-    mutationKey: [logVisit],
+    mutationKey: ["logVisit"],
     mutationFn: logVisit,
     onError: (error) => showMessage(error.name, error.message, toast, "info"),
     onSuccess: () => {
@@ -43,7 +43,7 @@ export const PassControl = () => {
         severity="info"
         size="large"
         style={{ height: "80px" }}
-        disabled={!selectedPass.pass_id}
+        disabled={!selectedPass.pass_id || !selectedPass.active || selectedPass.remaining_uses === 0}
         loading={isLogVisitPending}
         onClick={() => mutateLogVisit(selectedPass)}
       />
@@ -79,7 +79,7 @@ export const PassControl = () => {
           <div>first_name: {selectedPass.first_name}</div>
           <div>last_name: {selectedPass.last_name}</div>
           <div>town: {selectedPass.town}</div>
-          <div>remaining_uses: {selectedPass.remaining_uses}</div>
+          <div>remaining: {selectedPass.remaining_uses}</div>
           <div>passtype: {selectedPass.passtype.name}</div>
           <div>active: {selectedPass.active ? "yes" : "no"}</div>
           <div>creator: {selectedPass.creator}</div>

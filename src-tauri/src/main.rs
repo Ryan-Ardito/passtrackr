@@ -91,7 +91,7 @@ struct NewPassData {
     passtype: PassType,
     pay_method: PayMethod,
     last_four: Option<String>,
-    amount_paid: String,
+    amount_paid: Option<String>,
     signature: String,
 }
 #[tauri::command(async)]
@@ -182,11 +182,11 @@ async fn search_passes(
     will_fail: bool,
 ) -> Result<Vec<SearchPassData>, QueryError> {
     let mut passtype_map = HashMap::new();
-    passtype_map.insert("punch".to_string(), "10x Punch".to_string());
+    passtype_map.insert("punch".to_string(), "Punch".to_string());
     passtype_map.insert("annual".to_string(), "Annual".to_string());
     passtype_map.insert("six_month".to_string(), "6 Month".to_string());
     passtype_map.insert("free_pass".to_string(), "Free Pass".to_string());
-    passtype_map.insert("facial".to_string(), "6x Facial".to_string());
+    passtype_map.insert("facial".to_string(), "Facial".to_string());
 
     let pool = PgPool::connect(PG_CONNECT_STRING)
         .await
