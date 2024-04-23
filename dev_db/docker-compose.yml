@@ -1,0 +1,17 @@
+version: '3.8'
+
+networks:
+  api:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
+services:
+  postgres-dummy-data:
+    build: .
+    image: passtracker-dev
+    networks:
+      api:
+        ipv4_address: 172.20.0.2
+    ports:
+      - "5432:5432"

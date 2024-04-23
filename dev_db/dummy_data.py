@@ -1,17 +1,41 @@
-import json
 import random
 import uuid
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from typing import Any
 
-payment_methods: list[str] = [
+INIT_DB_SQL_STRING: str = r"""
+CREATE TABLE IF NOT EXISTS guests (
+    guest_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(100),
+    town VARCHAR(100),
+    notes TEXT,
+    creator VARCHAR(100),
+    creation_time INT
+);
+
+CREATE TABLE IF NOT EXISTS passes (
+    pass_id SERIAL PRIMARY KEY,
+    guest_id INT REFERENCES guests(guest_id),
+    passtype VARCHAR(50),
+    remaining_uses INT,
+    active BOOLEAN,
+    payment_method VARCHAR(50),
+    amount_paid_cents INT,
+    creator VARCHAR(100),
+    creation_time INT
+);
+"""
+
+PAYMENT_METHODS: list[str] = [
     "credit",
     "cash",
     "check",
     "comp",
 ]
 
-passtypes: list[str] = [
+PASSTYPES: list[str] = [
     "punch",
     "annual",
     "six_month",
@@ -19,7 +43,7 @@ passtypes: list[str] = [
     "facial",
 ]
 
-town_suffixes = [
+TOWN_SUFFIXES = [
     "town",
     "ville",
     "boro",
@@ -68,7 +92,7 @@ def generate_guests(
         first_name = random.choice(first_names)
         last_name = random.choice(last_names)
         email = f"{first_name.lower()}.{last_name.lower()}@email.com"
-        town = f"{random.choice(last_names[:150])}{random.choice(town_suffixes)}"
+        town = f"{random.choice(last_names[:150])}{random.choice(TOWN_SUFFIXES)}"
         notes = ""
         creator = f"{random.choice(first_names[:24])}"
         creation_time = random.randrange(1613755541, 1713755541)
@@ -89,10 +113,10 @@ def generate_passes(
 
         pass_id = i
         guest_id = passholder.guest_id
-        passtype = random.choice(passtypes)
+        passtype = random.choice(PASSTYPES)
         remaining_uses = random.randrange(1, 11)
         active = random.randint(0, 10) > 0
-        payment_method = random.choice(payment_methods)
+        payment_method = random.choice(PAYMENT_METHODS)
         amount_paid = 350
         creator = f"{random.choice(first_names[:24])}"
         creation_time = random.randrange(1613755541, 1713755541)
@@ -112,9 +136,28 @@ def generate_passes(
     return passes
 
 
-def save_json(filename: str, data: list[dict[Any, Any]]):
-    with open(filename, "w") as file:
-        json.dump(data, file, indent=4)
+def output_sql_insert_guest(guests: list[Guest]):
+    header = """INSERT INTO guests (guest_id, first_name, last_name, email, town, notes, creator, creation_time)
+VALUES"""
+    print(header)
+    for guest in guests[:-1]:
+        values = f"""({guest.guest_id}, '{guest.first_name}', '{guest.last_name}', '{guest.email}', '{guest.town}', '{guest.notes}', '{guest.creator}', {guest.creation_time}),"""
+        print(values)
+    guest = guests[-1]
+    footer = f"""({guest.guest_id}, '{guest.first_name}', '{guest.last_name}', '{guest.email}', '{guest.town}', '{guest.notes}', '{guest.creator}', {guest.creation_time});"""
+    print(footer)
+
+
+def output_sql_insert_pass(passes: list[Pass]):
+    header = """INSERT INTO passes (pass_id, guest_id, passtype, remaining_uses, active, payment_method, amount_paid_cents, creator, creation_time)
+VALUES""" 
+    print(header)
+    for p in passes[:-1]:
+        values = f"""({p.pass_id}, {p.guest_id}, '{p.passtype}', {p.remaining_uses}, {p.active}, '{p.payment_method}', {p.amount_paid_cents}, '{p.creator}', {p.creation_time}),"""
+        print(values)
+    p = passes[-1]
+    footer = f"""({p.pass_id}, {p.guest_id}, '{p.passtype}', {p.remaining_uses}, {p.active}, '{p.payment_method}', {p.amount_paid_cents}, '{p.creator}', {p.creation_time});"""
+    print(footer)
 
 
 def main():
@@ -122,7 +165,7 @@ def main():
         old_first_names = [name.strip() for name in file.readlines()]
 
     with open("new_first_names.txt", "r") as file:
-        new_first_names = [name.strip() for name in file.readlines()][:100]
+        new_first_names = [name.strip() for name in file.readlines()][:250]
 
     with open("last_names.txt", "r") as file:
         last_names = [name.strip() for name in file.readlines()]
@@ -132,8 +175,10 @@ def main():
     guests = generate_guests(10_000, first_names, last_names)
     passes = generate_passes(guests, first_names, last_names)
 
-    save_json("guests.json", [asdict(d) for d in guests])
-    save_json("passes.json", [asdict(d) for d in passes])
+    print(INIT_DB_SQL_STRING)
+    output_sql_insert_guest(guests)
+    print()
+    output_sql_insert_pass(passes)
 
 
 if __name__ == "__main__":
