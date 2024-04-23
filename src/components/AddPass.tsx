@@ -15,6 +15,7 @@ import {
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
 import { CrudButton } from "./Buttons";
+import { useEffect } from "react";
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required("Required"),
@@ -73,6 +74,11 @@ export const AddPass = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => mutateCreatePass(values),
   });
+
+  useEffect(() => {
+    // reset guest_id when first_name, last_name, or town fields change
+    formik.setFieldValue("guest_id", undefined);
+  }, [formik.values.first_name, formik.values.last_name, formik.values.town]);
 
   return (
     <ScrollPanel className="flex-2">
