@@ -118,7 +118,7 @@ def insert_data(conn, data):
 # Main function
 def main():
     # Database connection parameters
-    dbname = "passtracker"
+    dbname = "passtracker-dev"
     user = "postgres"
     password = "joyful"
     host = "172.17.0.2"

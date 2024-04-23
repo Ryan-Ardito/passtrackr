@@ -60,13 +60,9 @@ class Pass:
     creation_time: int
 
 
-def generate_guests(num: int) -> list[Guest]:
-    with open("first_names.txt", "r") as file:
-        first_names = [name.strip() for name in file.readlines()]
-
-    with open("last_names.txt", "r") as file:
-        last_names = [name.strip() for name in file.readlines()]
-
+def generate_guests(
+    num: int, first_names: list[str], last_names: list[str]
+) -> list[Guest]:
     guests = []
     for i in range(10_000):
         first_name = random.choice(first_names)
@@ -84,10 +80,9 @@ def generate_guests(num: int) -> list[Guest]:
     return guests
 
 
-def generate_passes(guests: list[Guest]) -> list[Pass]:
-    with open("first_names.txt", "r") as file:
-        first_names = [name.strip() for name in file.readlines()]
-
+def generate_passes(
+    guests: list[Guest], first_names: list[str], last_names: list[str]
+) -> list[Pass]:
     passes = []
     for i in range(len(guests) * 2):
         passholder = random.choice(guests)
@@ -123,8 +118,19 @@ def save_json(filename: str, data: list[dict[Any, Any]]):
 
 
 def main():
-    guests = generate_guests(10_000)
-    passes = generate_passes(guests)
+    with open("old_first_names.txt", "r") as file:
+        old_first_names = [name.strip() for name in file.readlines()]
+
+    with open("new_first_names.txt", "r") as file:
+        new_first_names = [name.strip() for name in file.readlines()][:100]
+
+    with open("last_names.txt", "r") as file:
+        last_names = [name.strip() for name in file.readlines()]
+
+    first_names = old_first_names + new_first_names
+
+    guests = generate_guests(10_000, first_names, last_names)
+    passes = generate_passes(guests, first_names, last_names)
 
     save_json("guests.json", [asdict(d) for d in guests])
     save_json("passes.json", [asdict(d) for d in passes])
