@@ -96,7 +96,14 @@ def generate_guests(
         creator = f"{random.choice(first_names[:24])}"
         creation_time = random.randrange(1613755541, 1713755541)
         guest = Guest(
-            i, first_name, last_name, email, town, notes, creator, creation_time
+            i + 100_000,
+            first_name,
+            last_name,
+            email,
+            town,
+            notes,
+            creator,
+            creation_time,
         )
         guests.append(guest)
 
@@ -110,7 +117,7 @@ def generate_passes(
     for i in range(len(guests) * 2):
         passholder = random.choice(guests)
 
-        pass_id = i
+        pass_id = i + 100_000
         guest_id = passholder.guest_id
         passtype = random.choice(PASSTYPES)
         remaining_uses = random.randrange(1, 11)

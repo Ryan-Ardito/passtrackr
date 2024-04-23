@@ -43,7 +43,11 @@ export const PassControl = () => {
         severity="info"
         size="large"
         style={{ height: "80px" }}
-        disabled={!selectedPass.pass_id || !selectedPass.active || selectedPass.remaining_uses === 0}
+        disabled={
+          !selectedPass.pass_id ||
+          !selectedPass.active ||
+          selectedPass.remaining_uses === 0
+        }
         loading={isLogVisitPending}
         onClick={() => mutateLogVisit(selectedPass)}
       />

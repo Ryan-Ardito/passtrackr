@@ -2,7 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use std::{collections::HashMap, time::Duration};
 
-use database::{log_visit_query, search_all_passes};
+use database::{insert_pass_query, log_visit_query, search_all_passes};
 use serde::{Deserialize, Serialize};
 use sqlx::{prelude::FromRow, PgPool};
 use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
@@ -31,28 +31,29 @@ struct PayMethod {
 
 #[derive(Deserialize, Serialize, Clone)]
 pub struct GuestData {
-    guest_id: u64,
+    guest_id: i32,
     first_name: String,
     last_name: String,
     town: String,
     email: String,
     notes: String,
     creator: String,
-    creation_time: u64,
+    creation_time: i32,
 }
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
 pub struct Pass {
-    pass_id: u64,
-    guest_id: u64,
+    pass_id: Option<i32>,
+    guest_id: i32,
     passtype: String,
-    remaining_uses: u64,
+    remaining_uses: i32,
     active: bool,
     payment_method: String,
-    amount_paid_cents: u64,
+    amount_paid_cents: i32,
     creator: String,
     creation_time: i64,
 }
+
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
 pub struct SearchPassRes {
@@ -83,7 +84,7 @@ pub struct SearchPassData {
 }
 
 #[derive(Serialize, Deserialize, Clone)]
-struct NewPassData {
+pub struct NewPassData {
     guest_id: Option<u64>,
     first_name: String,
     last_name: String,
@@ -126,20 +127,25 @@ fn async_sleep(millis: u64) -> Result<(), String> {
 }
 
 #[tauri::command(async)]
-fn create_pass(
+async fn create_pass(
     pass_data: NewPassData,
     delay_millis: u64,
     will_fail: bool,
-) -> Result<String, QueryError> {
-    std::thread::sleep(Duration::from_millis(delay_millis));
+) -> Result<i32, QueryError> {
+    let pool = PgPool::connect(PG_CONNECT_STRING)
+    .await
+    .map_err(|err| QueryError {
+        name: "Database error".to_string(),
+        message: err.to_string(),
+    })?;
+let res = insert_pass_query(&pool, pass_data)
+    .await
+    .map_err(|err| QueryError {
+        name: "Database error".to_string(),
+        message: err.to_string(),
+    });
 
-    match will_fail {
-        false => Ok(pass_data.last_name),
-        true => Err(QueryError {
-            name: "Create pass".to_string(),
-            message: "failed".to_string(),
-        }),
-    }
+res
 }
 
 #[tauri::command(async)]
