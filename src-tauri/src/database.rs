@@ -48,7 +48,7 @@ pub async fn search_all_passes(pool: &PgPool, search_term: &str) -> Result<Vec<S
     ";
 
     let passes = sqlx::query_as(search_query)
-        .bind(format!("{}%", search_term.to_lowercase())) // Bind parameters to avoid SQL injection
+        .bind(format!("{search_term}%"))
         .fetch_all(pool)
         .await?;
 
