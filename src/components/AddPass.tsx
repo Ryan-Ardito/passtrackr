@@ -11,6 +11,7 @@ import { createPass } from "../api/api";
 import { useMutation } from "@tanstack/react-query";
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
+import { CrudButton } from "./Buttons";
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required("Required"),
@@ -92,15 +93,13 @@ export const AddPass = () => {
         />
         <Divider />
         <div style={{ display: "flex", gap: "8px" }}>
-          <Button
-            rounded
+          <CrudButton
             icon="pi pi-check"
             type="submit"
             label="Create Pass"
             loading={formik.isSubmitting}
           />
-          <Button
-            rounded
+          <CrudButton
             icon="pi pi-times"
             severity="danger"
             label="Cancel"

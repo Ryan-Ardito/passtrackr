@@ -76,3 +76,7 @@
 #search-input {
   flex: 1;
 }
+
+#crud-button {
+  flex-shrink: 0;
+}
