@@ -1,7 +1,15 @@
-# Tauri + React + Typescript
+# Passtracker
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
-
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+## Running the dev environment
+Start the dev database server:
+```bash
+docker-compose -f ./dev_db/docker-compose.yml up -d
+```
+Start the app in dev mode:
+```bash
+yarn taruri dev
+```
+## Stopping the dev database server
+```bash
+docker-compose -f ./dev_db/docker-compose.yml down
+```
