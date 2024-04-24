@@ -9,6 +9,7 @@ export function SearchBar() {
       {isSearchFetching && <i className="pi pi-spin pi-spinner" />}
       <InputText
         id="search-input"
+        className="p-inputtext-lg"
         placeholder="Search passes..."
         autoFocus
         onChange={(e) => debouncedSetSearch(e.currentTarget.value)}

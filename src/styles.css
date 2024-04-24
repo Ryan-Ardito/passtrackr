@@ -39,7 +39,7 @@
 .flex-box {
   display: flex;
   justify-content: top;
-  gap: 6px;
+  gap: 12px;
 }
 
 .flex-col {

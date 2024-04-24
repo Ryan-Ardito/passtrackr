@@ -65,11 +65,12 @@ export const FormikField: React.FC<FormikFieldProps> = ({
 
   return (
     <>
-      <div className="form-input-label">{label}</div>
+      {/* <div className="form-input-label">{label}</div> */}
       <div style={{ display: "flex", gap: "6px" }}>
         <InputText
+          placeholder={label}
           style={{ padding: 8 }}
-          className="form-text-input"
+          className="form-text-input p-inputtext-lg"
           name={name}
           disabled={isSubmitting}
           value={values[name]}
@@ -102,7 +103,7 @@ export const FormikDropdown: React.FC<FormikDropdownProps> = ({
 
   return (
     <>
-      <div className="form-input-label">{label}</div>
+      {/* <div className="form-input-label">{label}</div> */}
       <div style={{ display: "flex", gap: "6px" }}>
         <Dropdown
           optionLabel="name"

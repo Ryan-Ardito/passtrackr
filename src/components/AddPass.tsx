@@ -18,9 +18,9 @@ import { CrudButton } from "./Buttons";
 import { ChangeEvent } from "react";
 
 const validationSchema = Yup.object().shape({
-  first_name: Yup.string().required("Required"),
-  last_name: Yup.string().required("Required"),
-  town: Yup.string().required("Required"),
+  first_name: Yup.string().required("Required").max(50, "Invalid"),
+  last_name: Yup.string().required("Required").max(50, "Invalid"),
+  town: Yup.string().required("Required").max(50, "Invalid"),
   passtype: Yup.object().shape({
     name: Yup.string().required("Required"),
     code: Yup.string().required("Required"),
@@ -35,7 +35,7 @@ const validationSchema = Yup.object().shape({
     .min(1000, "Invalid")
     .max(9999, "Invalid"),
   amount_paid: Yup.number().typeError("Invalid").min(0, "Invalid"),
-  signature: Yup.string().required("Required"),
+  signature: Yup.string().required("Required").max(50, "Invalid"),
 });
 
 export const AddPass = () => {
@@ -87,26 +87,26 @@ export const AddPass = () => {
 
   return (
     <ScrollPanel className="flex-2">
-      <form onSubmit={formik.handleSubmit}>
-        <FormikField label="First Name:" name="first_name" onChange={handleFieldChange} {...{ formik }} />
-        <FormikField label="Last Name:" name="last_name" onChange={handleFieldChange} {...{ formik }} />
-        <FormikField label="Town:" name="town" onChange={handleFieldChange} {...{ formik }} />
+      <form onSubmit={formik.handleSubmit} className="flex-box flex-col" style={{paddingTop: "6px"}}>
+        <FormikField label="First name" name="first_name" onChange={handleFieldChange} {...{ formik }} />
+        <FormikField label="Last name" name="last_name" onChange={handleFieldChange} {...{ formik }} />
+        <FormikField label="Town" name="town" onChange={handleFieldChange} {...{ formik }} />
         <FormikDropdown
-          label="Passtype:"
+          label="Passtype"
           name="passtype"
           options={passtypes}
           {...{ formik }}
         />
         <FormikDropdown
-          label="Payment Method:"
+          label="Payment method"
           name="pay_method"
           options={payMethods}
           {...{ formik }}
         />
-        <FormikField label="Last Four:" name="last_four" {...{ formik }} />
-        <FormikField label="Amount Paid:" name="amount_paid" {...{ formik }} />
+        <FormikField label="Last four" name="last_four" {...{ formik }} />
+        <FormikField label="Amount paid" name="amount_paid" {...{ formik }} />
         <FormikField
-          label="Employee Signature:"
+          label="Employee signature"
           name="signature"
           {...{ formik }}
         />
