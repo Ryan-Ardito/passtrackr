@@ -14,10 +14,10 @@ services:
 
   dev-db:
     build: .
+    image: passtracker-dev
     depends_on:
       dummy-data:
         condition: service_completed_successfully
-    image: passtracker-dev
     networks:
       net:
         ipv4_address: 172.22.0.22

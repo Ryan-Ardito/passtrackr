@@ -1,32 +1,7 @@
 import os
 import random
-import uuid
 from dataclasses import dataclass, asdict
-from typing import Any
 
-INIT_DB_SQL_STRING: str = r""" CREATE TABLE IF NOT EXISTS guests (
-    guest_id SERIAL PRIMARY KEY,
-    first_name VARCHAR(50),
-    last_name VARCHAR(50),
-    email VARCHAR(100),
-    town VARCHAR(100),
-    notes TEXT,
-    creator VARCHAR(100),
-    creation_time INT
-);
-
-CREATE TABLE IF NOT EXISTS passes (
-    pass_id SERIAL PRIMARY KEY,
-    guest_id INT REFERENCES guests(guest_id),
-    passtype VARCHAR(50),
-    remaining_uses INT,
-    active BOOLEAN,
-    payment_method VARCHAR(50),
-    amount_paid_cents INT,
-    creator VARCHAR(100),
-    creation_time INT
-);
-"""
 
 PAYMENT_METHODS: list[str] = [
     "credit",
@@ -70,9 +45,6 @@ class Guest:
     creator: str
     creation_time: int
 
-    def header_string(self, delimiter: str) -> str:
-        return delimiter.join(str(k) for k in asdict(self).keys())
-
     def values_string(self, delimiter: str) -> str:
         return delimiter.join(str(v) for v in asdict(self).values())
 
@@ -89,14 +61,11 @@ class PunchPass:
     creator: str
     creation_time: int
 
-    def header_string(self, delimiter: str) -> str:
-        return delimiter.join(str(k) for k in asdict(self).keys())
-
     def values_string(self, delimiter: str) -> str:
         return delimiter.join(str(v) for v in asdict(self).values())
 
 
-def write_csv(data: list[Any], filename):
+def write_csv(data: list[Guest | PunchPass], filename):
     with open(filename, "w") as file:
         for item in data:
             file.write(item.values_string(","))
@@ -161,28 +130,6 @@ def generate_passes(guests: list[Guest], first_names: list[str]) -> list[PunchPa
     return passes
 
 
-def print_sql_insert(
-    data: list[Any],
-    table: str,
-):
-    header = f"""INSERT INTO {table} ({data[0].sql_header_string()})
-VALUES"""
-    print(header)
-    for p in data[:-1]:
-        values = f"""({p.values_string(", ")}),"""
-        print(values)
-    p = data[-1]
-    footer = f"""({p.values_string(", ")});"""
-    print(footer)
-
-
-def print_db_init_sql(guests: list[Guest], passes: list[PunchPass]):
-    print(INIT_DB_SQL_STRING)
-    print_sql_insert(guests, "guests")
-    print()
-    print_sql_insert(passes, "passes")
-
-
 def read_names(filename: str) -> list[str]:
     with open(filename, "r") as file:
         return [name.strip() for name in file.readlines()]
@@ -211,8 +158,6 @@ def main():
 
         passes = generate_passes(guests, first_names)
         write_csv(passes, passes_file)
-
-    # print_db_init_sql(guests, passes)
 
 
 if __name__ == "__main__":
