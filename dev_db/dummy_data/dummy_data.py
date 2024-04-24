@@ -205,11 +205,10 @@ def main():
 
     first_names = old_first_names + new_first_names
 
-    if not os.path.exists(guests_file):
+    if not os.path.exists(guests_file) or not os.path.exists(passes_file):
         guests = generate_guests(20_000, first_names, last_names)
         write_csv(guests, guests_file)
 
-    if not os.path.exists(passes_file):
         passes = generate_passes(guests, first_names)
         write_csv(passes, passes_file)
 
