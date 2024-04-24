@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS passes (
     pass_id SERIAL PRIMARY KEY,
     guest_id INT REFERENCES guests(guest_id),
     passtype VARCHAR(50),
-    remaining_uses INT,
+    remaining_uses INT CHECK (remaining_uses >= 0),
     active BOOLEAN,
     payment_method VARCHAR(50),
     amount_paid_cents INT,

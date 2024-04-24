@@ -28,8 +28,9 @@ export function Dashboard() {
 
   // KLUDGE. possibly only an issue on dev.
   // without it, a pass can remain selected with empty search results.
-  if (searchData?.length == 0)
-    setSelectedPass(blankPass );
+  useEffect(() => {
+    if (!searchData || !searchData.length) setSelectedPass(blankPass);
+  }, [searchData]);
 
   return (
     <div className="viewport-wrapper">

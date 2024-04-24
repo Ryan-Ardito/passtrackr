@@ -38,12 +38,14 @@
 
 .flex-box {
   display: flex;
+  padding-top: 6px;
   justify-content: top;
-  gap: 12px;
+  gap: 6px;
 }
 
 .flex-col {
   flex-direction: column;
+  gap: 10px;
 }
 
 .center-box {
