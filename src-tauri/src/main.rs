@@ -4,7 +4,7 @@ use std::{collections::HashMap, time::Duration};
 
 use database::{insert_pass_query, log_visit_query, search_all_passes};
 use serde::{Deserialize, Serialize};
-use sqlx::{prelude::FromRow, PgPool};
+use sqlx::{prelude::FromRow, types::time::OffsetDateTime, PgPool};
 use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
 
 pub mod database;
@@ -51,7 +51,6 @@ pub struct Pass {
     payment_method: String,
     amount_paid_cents: i32,
     creator: String,
-    creation_time: i64,
 }
 
 
@@ -66,7 +65,7 @@ pub struct SearchPassRes {
     passtype: String,
     active: bool,
     creator: String,
-    creation_time: i32,
+    creation_time: OffsetDateTime,
 }
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
@@ -161,6 +160,7 @@ fn get_guest(guest_id: u64, delay_millis: u64, will_fail: bool) -> Result<String
 
 #[tauri::command(async)]
 async fn search_passes(search: &str) -> Result<Vec<SearchPassData>, QueryError> {
+    // do this on the front end?
     let mut passtype_map = HashMap::new();
     passtype_map.insert("punch".to_string(), "Punch".to_string());
     passtype_map.insert("annual".to_string(), "Annual".to_string());
@@ -198,7 +198,7 @@ async fn search_passes(search: &str) -> Result<Vec<SearchPassData>, QueryError> 
                     },
                     active: pass_data.active,
                     creator: pass_data.creator,
-                    creation_time: pass_data.creation_time as u64,
+                    creation_time: pass_data.creation_time.unix_timestamp() as u64,
                 }
             })
             .collect()

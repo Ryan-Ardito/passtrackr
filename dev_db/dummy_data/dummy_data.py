@@ -46,7 +46,6 @@ class Guest:
     town: str
     notes: str
     creator: str
-    creation_time: int
 
     def values_string(self, delimiter: str) -> str:
         return delimiter.join(str(v) for v in asdict(self).values())
@@ -54,7 +53,6 @@ class Guest:
 
 @dataclass
 class PunchPass:
-    pass_id: int
     guest_id: int
     passtype: str
     remaining_uses: int
@@ -62,7 +60,6 @@ class PunchPass:
     payment_method: str
     amount_paid_cents: int
     creator: str
-    creation_time: int
 
     def values_string(self, delimiter: str) -> str:
         return delimiter.join(str(v) for v in asdict(self).values())
@@ -87,7 +84,6 @@ def generate_guests(
         town = f"{random.choice(last_names[:150])}{random.choice(TOWN_SUFFIXES)}"
         notes = NOTES
         creator = f"{random.choice(first_names[:24])}"
-        creation_time = random.randrange(1613755541, 1713755541)
         guest = Guest(
             guest_id,
             first_name,
@@ -96,7 +92,6 @@ def generate_guests(
             town,
             notes,
             creator,
-            creation_time,
         )
         guests.append(guest)
 
@@ -108,7 +103,6 @@ def generate_passes(guests: list[Guest], first_names: list[str]) -> list[PunchPa
     for i in range(len(guests) * 2):
         passholder = random.choice(guests)
 
-        pass_id = i + 100_000
         guest_id = passholder.guest_id
         passtype = random.choice(PASSTYPES)
         remaining_uses = random.randrange(1, 11)
@@ -116,9 +110,7 @@ def generate_passes(guests: list[Guest], first_names: list[str]) -> list[PunchPa
         payment_method = random.choice(PAYMENT_METHODS)
         amount_paid = 350
         creator = f"{random.choice(first_names[:24])}"
-        creation_time = random.randrange(1613755541, 1713755541)
         punch_pass = PunchPass(
-            pass_id,
             guest_id,
             passtype,
             remaining_uses,
@@ -126,7 +118,6 @@ def generate_passes(guests: list[Guest], first_names: list[str]) -> list[PunchPa
             payment_method,
             amount_paid,
             creator,
-            creation_time,
         )
         passes.append(punch_pass)
 

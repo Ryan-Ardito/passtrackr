@@ -15,7 +15,6 @@ pub async fn insert_pass_query(pool: &PgPool, pass_data: NewPassData) -> Result<
         payment_method: pass_data.pay_method.code,
         amount_paid_cents: 350,
         creator: pass_data.signature,
-        creation_time: 69,
     };
 
     Ok(insert_pass(pool, &data).await.unwrap())
@@ -23,8 +22,8 @@ pub async fn insert_pass_query(pool: &PgPool, pass_data: NewPassData) -> Result<
 
 pub async fn insert_guest(pool: &PgPool, data: &NewPassData) -> Result<i32> {
     let query = r#"
-        INSERT INTO guests (first_name, last_name, town, email, notes, creator, creation_time)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        INSERT INTO guests (first_name, last_name, town, email, notes, creator)
+        VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING guest_id
     "#;
 
@@ -35,7 +34,6 @@ pub async fn insert_guest(pool: &PgPool, data: &NewPassData) -> Result<i32> {
         .bind(&"")
         .bind(&"")
         .bind(&data.signature)
-        .bind(&69)
         .fetch_one(pool)
         .await?;
 
@@ -44,8 +42,8 @@ pub async fn insert_guest(pool: &PgPool, data: &NewPassData) -> Result<i32> {
 
 pub async fn insert_pass(pool: &PgPool, data: &Pass) -> Result<i32> {
     let query = r#"
-        INSERT INTO passes (guest_id, passtype, remaining_uses, active, payment_method, amount_paid_cents, creator, creation_time)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        INSERT INTO passes (guest_id, passtype, remaining_uses, active, payment_method, amount_paid_cents, creator)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING pass_id
     "#;
 
@@ -57,7 +55,6 @@ pub async fn insert_pass(pool: &PgPool, data: &Pass) -> Result<i32> {
         .bind(&data.payment_method)
         .bind(&data.amount_paid_cents)
         .bind(&data.creator)
-        .bind(&data.creation_time)
         .fetch_one(pool)
         .await?;
 

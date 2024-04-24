@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS guests (
     town VARCHAR(100),
     notes TEXT,
     creator VARCHAR(100),
-    creation_time INT
+    creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS passes (
@@ -18,8 +18,11 @@ CREATE TABLE IF NOT EXISTS passes (
     payment_method VARCHAR(50),
     amount_paid_cents INT,
     creator VARCHAR(100),
-    creation_time INT
+    creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-COPY guests FROM '/app/dummy_guests.csv' DELIMITER ',' CSV;
-COPY passes FROM '/app/dummy_passes.csv' DELIMITER ',' CSV;
+COPY guests (guest_id, first_name, last_name, email, town, notes, creator)
+FROM '/app/dummy_guests.csv' DELIMITER ',' CSV;
+
+COPY passes (guest_id, passtype, remaining_uses, active, payment_method, amount_paid_cents, creator)
+FROM '/app/dummy_passes.csv' DELIMITER ',' CSV;
