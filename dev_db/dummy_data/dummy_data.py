@@ -1,3 +1,4 @@
+import os
 import random
 import uuid
 from dataclasses import dataclass, asdict
@@ -95,23 +96,7 @@ class PunchPass:
         return delimiter.join(str(v) for v in asdict(self).values())
 
 
-def main():
-    old_first_names = read_names("old_first_names.txt")
-    new_first_names = read_names("new_first_names.txt")
-    last_names = read_names("last_names.txt")[:200]
-
-    first_names = old_first_names + new_first_names
-
-    guests = generate_guests(20_000, first_names, last_names)
-    passes = generate_passes(guests, first_names)
-
-    write_csv(guests, "dummy_guests.csv")
-    write_csv(passes, "dummy_passes.csv")
-
-    # print_db_init_sql(guests, passes)
-
-
-def write_csv(data: list[Guest | PunchPass], filename):
+def write_csv(data: list[Any], filename):
     with open(filename, "w") as file:
         for item in data:
             file.write(item.values_string(","))
@@ -177,7 +162,7 @@ def generate_passes(guests: list[Guest], first_names: list[str]) -> list[PunchPa
 
 
 def print_sql_insert(
-    data: list[PunchPass | Guest],
+    data: list[Any],
     table: str,
 ):
     header = f"""INSERT INTO {table} ({data[0].sql_header_string()})
@@ -201,6 +186,34 @@ def print_db_init_sql(guests: list[Guest], passes: list[PunchPass]):
 def read_names(filename: str) -> list[str]:
     with open(filename, "r") as file:
         return [name.strip() for name in file.readlines()]
+
+
+def main():
+    workdir = os.path.dirname(os.path.abspath(__file__))
+
+    guests_file = os.path.join(workdir, "dummy_guests.csv")
+    passes_file = os.path.join(workdir, "dummy_passes.csv")
+    if os.path.exists(guests_file) and os.path.exists(passes_file):
+        return
+
+    first_names_one = os.path.join(workdir, "old_first_names.txt")
+    first_names_two = os.path.join(workdir, "new_first_names.txt")
+    last_names_file = os.path.join(workdir, "last_names.txt")
+    old_first_names = read_names(first_names_one)
+    new_first_names = read_names(first_names_two)
+    last_names = read_names(last_names_file)[:200]
+
+    first_names = old_first_names + new_first_names
+
+    if not os.path.exists(guests_file):
+        guests = generate_guests(20_000, first_names, last_names)
+        write_csv(guests, guests_file)
+
+    if not os.path.exists(passes_file):
+        passes = generate_passes(guests, first_names)
+        write_csv(passes, passes_file)
+
+    # print_db_init_sql(guests, passes)
 
 
 if __name__ == "__main__":

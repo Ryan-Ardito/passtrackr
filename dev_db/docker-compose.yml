@@ -1,17 +1,25 @@
 version: '3.8'
 
 networks:
-  api:
+  net:
     ipam:
       config:
         - subnet: 172.22.0.0/24
 
 services:
+  dummy-data:
+    build: ./dummy_data
+    volumes:
+      - ./dummy_data:/app
+
   dev-db:
     build: .
+    depends_on:
+      dummy-data:
+        condition: service_completed_successfully
     image: passtracker-dev
     networks:
-      api:
+      net:
         ipv4_address: 172.22.0.22
     ports:
       - "5432:5432"
