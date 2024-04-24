@@ -34,6 +34,11 @@ TOWN_SUFFIXES = [
 ]
 
 
+NOTES = [
+    """Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."""
+]
+
+
 @dataclass
 class Guest:
     guest_id: int
@@ -82,7 +87,7 @@ def generate_guests(
         last_name = random.choice(last_names)
         email = f"{first_name.lower()}.{last_name.lower()}@email.com"
         town = f"{random.choice(last_names[:150])}{random.choice(TOWN_SUFFIXES)}"
-        notes = ""
+        notes = NOTES
         creator = f"{random.choice(first_names[:24])}"
         creation_time = random.randrange(1613755541, 1713755541)
         guest = Guest(

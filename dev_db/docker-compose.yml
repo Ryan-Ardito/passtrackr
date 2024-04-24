@@ -23,3 +23,5 @@ services:
         ipv4_address: 172.22.0.22
     ports:
       - "5432:5432"
+    volumes:
+      - ./dummy_data:/app
