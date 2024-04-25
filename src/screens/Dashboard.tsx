@@ -1,34 +1,13 @@
-import { useEffect } from "react";
-
 import { Toast } from "primereact/toast";
 import { Divider } from "primereact/divider";
 
 import { SearchBar } from "../components/SearchBar";
 import { SearchResults } from "../components/SearchResults";
-import { blankPass } from "../types";
-import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
 import { RightPanel } from "../components/side_panel/SidePanel";
 
 export function Dashboard() {
-  const {
-    setSelectedPass,
-    panel,
-    searchData,
-    searchStatus,
-    searchError,
-    toast,
-  } = useAppContext();
-
-  useEffect(() => {
-    if (searchError && searchStatus === "error") {
-      showMessage(searchError.name, searchError.message, toast, "warn");
-    }
-  }, [searchStatus]);
-
-  useEffect(() => {
-    setSelectedPass(blankPass);
-  }, [searchData]);
+  const { panel, toast } = useAppContext();
 
   return (
     <div className="viewport-wrapper">

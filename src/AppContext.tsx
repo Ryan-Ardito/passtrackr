@@ -7,6 +7,7 @@ import {
   Dispatch,
   SetStateAction,
   RefObject,
+  useEffect,
 } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { DebouncedFunc, debounce } from "lodash";
@@ -16,6 +17,7 @@ import "primeicons/primeicons.css";
 
 import { PassData, Screen, blankPass, SidePanel } from "./types";
 import { searchPasses } from "./api/api";
+import { showMessage } from "./utils/toast";
 
 interface AppContextProps {
   screen: Screen;
@@ -61,11 +63,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     error: searchError,
   } = useQuery({
     queryKey: ["search", search],
-    queryFn: () => ((search.length > 0) ? searchPasses(search) : []),
+    queryFn: () => (search.length > 0 ? searchPasses(search) : []),
     placeholderData: keepPreviousData,
   });
 
   const toast = useRef<Toast>(null);
+
+  useEffect(() => {
+    if (searchError && searchStatus === "error") {
+      showMessage(searchError.name, searchError.message, toast, "warn");
+    }
+  }, [searchStatus]);
+
+  useEffect(() => {
+    setSelectedPass(blankPass);
+  }, [searchData]);
 
   // Window menu emissions from Tauri
   listen("dashboard", () => setScreen(Screen.Dashboard));
