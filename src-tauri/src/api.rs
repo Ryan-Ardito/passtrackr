@@ -1,15 +1,13 @@
 use std::{collections::HashMap, time::Duration};
 
 use serde::{Deserialize, Serialize};
-use sqlx::{prelude::FromRow, PgPool};
+use sqlx::prelude::FromRow;
 use tauri::State;
 
 use crate::{
     database::{insert_new_pass, log_visit_query, search_all_passes, QueryError},
     AppState,
 };
-
-const PG_CONNECT_STRING: &str = "postgres://postgres:joyful@172.22.0.22/passtracker-dev";
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct PassType {
@@ -76,7 +74,10 @@ pub fn async_sleep(millis: u64) -> Result<(), String> {
 }
 
 #[tauri::command(async)]
-pub async fn create_pass(state: State<'_, AppState>, pass_data: PassFormData) -> Result<i32, QueryError> {
+pub async fn create_pass(
+    state: State<'_, AppState>,
+    pass_data: PassFormData,
+) -> Result<i32, QueryError> {
     let res = insert_new_pass(&state, pass_data)
         .await
         .map_err(|err| QueryError {

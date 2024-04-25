@@ -1,7 +1,7 @@
 use std::{fmt::Display, ops::Deref};
 
 use serde::{Deserialize, Serialize};
-use sqlx::{prelude::FromRow, PgPool, Result, Row};
+use sqlx::{prelude::FromRow, Result, Row};
 use tauri::State;
 use time::OffsetDateTime;
 

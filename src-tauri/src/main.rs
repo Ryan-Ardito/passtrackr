@@ -13,7 +13,6 @@ pub mod database;
 use api::{async_sleep, create_pass, get_guest, log_visit, search_passes};
 
 const PG_CONNECT_STRING: &str = "postgres://postgres:joyful@172.22.0.22/passtracker-dev";
-
 pub struct AppState {
     pg_pool: Arc<Mutex<PgPool>>,
 }
