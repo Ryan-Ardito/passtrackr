@@ -6,7 +6,7 @@ import {
 
 import { Divider } from "primereact/divider";
 
-import { Panel, Screen } from "../types";
+import { SidePanel, Screen } from "../types";
 import { logVisit } from "../api/api";
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
@@ -73,7 +73,7 @@ export const PassControl = () => {
       <CrudButton
         label="New Pass"
         icon="pi pi-id-card"
-        onClick={() => setPanel(Panel.AddPass)}
+        onClick={() => setPanel(SidePanel.AddPass)}
       />
       <Divider style={{margin: 6}}/>
       {selectedPass.pass_id && (

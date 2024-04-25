@@ -5,7 +5,7 @@ export enum Screen {
   About,
 }
 
-export enum Panel {
+export enum SidePanel {
   PassInteraction,
   AddPass,
 }

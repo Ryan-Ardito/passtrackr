@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { ScrollPanel } from "primereact/scrollpanel";
 import { Divider } from "primereact/divider";
 
-import { Panel, passtypes, payMethods } from "../types";
+import { SidePanel, passtypes, payMethods } from "../types";
 import { FormikDropdown, FormikField } from "./FormInput";
 import { createPass } from "../api/api";
 import {
@@ -55,7 +55,7 @@ export const AddPass = () => {
         search,
       ] as InvalidateQueryFilters);
       showMessage("Create pass", "Success!", toast, "success");
-      setPanel(Panel.PassInteraction);
+      setPanel(SidePanel.PassInteraction);
     },
   });
 
@@ -122,7 +122,7 @@ export const AddPass = () => {
             icon="pi pi-times"
             severity="danger"
             label="Cancel"
-            onClick={() => setPanel(Panel.PassInteraction)}
+            onClick={() => setPanel(SidePanel.PassInteraction)}
           />
         </div>
       </form>

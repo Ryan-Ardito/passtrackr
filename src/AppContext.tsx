@@ -14,7 +14,7 @@ import { DebouncedFunc, debounce } from "lodash";
 import { Toast } from "primereact/toast";
 import "primeicons/primeicons.css";
 
-import { PassData, Screen, blankPass, Panel } from "./types";
+import { PassData, Screen, blankPass, SidePanel } from "./types";
 import { searchPasses } from "./api/api";
 
 interface AppContextProps {
@@ -25,8 +25,8 @@ interface AppContextProps {
   search: string;
   setSearch: Dispatch<SetStateAction<string>>;
   debouncedSetSearch: DebouncedFunc<Dispatch<SetStateAction<string>>>;
-  panel: Panel;
-  setPanel: Dispatch<SetStateAction<Panel>>;
+  panel: SidePanel;
+  setPanel: Dispatch<SetStateAction<SidePanel>>;
   searchData: PassData[];
   isSearchFetching: boolean;
   searchStatus: "error" | "success" | "pending";
@@ -51,7 +51,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const [search, setSearch] = useState("");
   const debouncedSetSearch = debounce(setSearch, 400);
-  const [panel, setPanel] = useState(Panel.PassInteraction);
+  const [panel, setPanel] = useState(SidePanel.PassInteraction);
 
   const {
     data: searchData,
