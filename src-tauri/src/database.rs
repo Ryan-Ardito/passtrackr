@@ -1,7 +1,7 @@
-use std::{fmt::Display, future::Future, ops::Deref};
+use std::{fmt::Display, ops::Deref};
 
 use serde::{Deserialize, Serialize};
-use sqlx::{prelude::FromRow, Error, PgPool, Result, Row};
+use sqlx::{prelude::FromRow, PgPool, Result, Row};
 use tauri::State;
 use time::OffsetDateTime;
 
@@ -162,8 +162,8 @@ pub async fn search_all_passes(
     let pool = mutex.deref();
     let passes = sqlx::query_as(search_query)
         .bind(format!("{search_term}%"))
-        .fetch_all(pool);
-    // .await?;
+        .fetch_all(pool)
+        .await;
 
-    passes.await
+    passes
 }

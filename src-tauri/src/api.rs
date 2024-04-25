@@ -1,4 +1,4 @@
-use std::{collections::HashMap, ops::Deref, time::Duration};
+use std::{collections::HashMap, time::Duration};
 
 use serde::{Deserialize, Serialize};
 use sqlx::{prelude::FromRow, PgPool};
@@ -59,13 +59,6 @@ pub async fn log_visit(state: State<'_, AppState>, pass: SearchPassData) -> Resu
         });
     }
     let pass_id = pass.pass_id as i32;
-    // let pool = state.pg_pool;
-    // let pool = PgPool::connect(PG_CONNECT_STRING)
-    //     .await
-    //     .map_err(|err| QueryError {
-    //         name: "Database error".to_string(),
-    //         message: err.to_string(),
-    //     })?;
     let res = log_visit_query(&state, pass_id)
         .await
         .map_err(|err| QueryError {
@@ -126,14 +119,6 @@ pub async fn search_passes(
     passtype_map.insert("free_pass".to_string(), "Free Pass".to_string());
     passtype_map.insert("facial".to_string(), "Facial".to_string());
 
-    // let mutex = state.inner().pg_pool.lock().expect("TODO BUG");
-    // let pool = mutex.deref();
-    // let pool = PgPool::connect(PG_CONNECT_STRING)
-    //     .await
-    //     .map_err(|err| QueryError {
-    //         name: "Database error".to_string(),
-    //         message: err.to_string(),
-    //     })?;
     let res = search_all_passes(&state, search)
         .await
         .map_err(|err| QueryError {
