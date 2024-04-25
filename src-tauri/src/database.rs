@@ -2,9 +2,16 @@ use serde::{Deserialize, Serialize};
 use sqlx::{prelude::FromRow, PgPool, Result, Row};
 use time::OffsetDateTime;
 
+use crate::api::PassFormData;
+
+#[derive(Debug, Serialize, Clone)]
+pub struct QueryError {
+    pub name: String,
+    pub message: String,
+}
+
 #[derive(Deserialize, Serialize, Clone, FromRow)]
-pub struct Pass {
-    pass_id: Option<i32>,
+pub struct NewPassData {
     guest_id: i32,
     passtype: String,
     remaining_uses: i32,
@@ -14,35 +21,18 @@ pub struct Pass {
     creator: String,
 }
 
-#[derive(Serialize, Deserialize, Clone)]
-pub struct NewPassData {
-    guest_id: Option<u64>,
+#[derive(Deserialize, Serialize, Clone)]
+pub struct NewGuestData {
     first_name: String,
     last_name: String,
     town: String,
-    passtype: PassType,
-    pay_method: PayMethod,
-    last_four: Option<String>,
-    amount_paid: Option<String>,
-    signature: String,
+    email: String,
+    notes: String,
+    creator: String,
 }
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
-pub struct SearchPassData {
-    pub pass_id: u64,
-    pub guest_id: u64,
-    pub first_name: String,
-    pub last_name: String,
-    pub town: String,
-    pub remaining_uses: u64,
-    pub passtype: PassType,
-    pub active: bool,
-    pub creator: String,
-    pub creation_time: u64,
-}
-
-#[derive(Deserialize, Serialize, Clone, FromRow)]
-pub struct SearchPassRes {
+pub struct PassSearchResponse {
     pub pass_id: i32,
     pub guest_id: i32,
     pub first_name: String,
@@ -55,42 +45,11 @@ pub struct SearchPassRes {
     pub creation_time: OffsetDateTime,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct PassType {
-    pub name: String,
-    pub code: String,
-}
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct PayMethod {
-    pub name: String,
-    pub code: String,
-}
-
-#[derive(Deserialize, Serialize, Clone)]
-pub struct GuestData {
-    guest_id: i32,
-    first_name: String,
-    last_name: String,
-    town: String,
-    email: String,
-    notes: String,
-    creator: String,
-    creation_time: i32,
-}
-
-#[derive(Debug, Serialize, Clone)]
-pub struct QueryError {
-    pub name: String,
-    pub message: String,
-}
-
-pub async fn insert_new_pass(pool: &PgPool, pass_data: NewPassData) -> Result<i32> {
+pub async fn insert_new_pass(pool: &PgPool, pass_data: PassFormData) -> Result<i32> {
     let guest_id = pass_data
         .guest_id
         .unwrap_or(insert_guest(pool, &pass_data).await.unwrap() as u64);
-    let data = Pass {
-        pass_id: None,
+    let data = NewPassData {
         guest_id: guest_id as i32,
         passtype: pass_data.passtype.code,
         remaining_uses: 10,
@@ -103,7 +62,7 @@ pub async fn insert_new_pass(pool: &PgPool, pass_data: NewPassData) -> Result<i3
     Ok(insert_pass(pool, &data).await.unwrap())
 }
 
-pub async fn insert_guest(pool: &PgPool, data: &NewPassData) -> Result<i32> {
+pub async fn insert_guest(pool: &PgPool, data: &PassFormData) -> Result<i32> {
     let query = r#"
         INSERT INTO guests (first_name, last_name, town, email, notes, creator)
         VALUES ($1, $2, $3, $4, $5, $6)
@@ -123,7 +82,7 @@ pub async fn insert_guest(pool: &PgPool, data: &NewPassData) -> Result<i32> {
     Ok(result.get(0))
 }
 
-pub async fn insert_pass(pool: &PgPool, data: &Pass) -> Result<i32> {
+pub async fn insert_pass(pool: &PgPool, data: &NewPassData) -> Result<i32> {
     let query = r#"
         INSERT INTO passes (guest_id, passtype, remaining_uses, active, payment_method, amount_paid_cents, creator)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -160,7 +119,10 @@ pub async fn log_visit_query(pool: &PgPool, pass_id: i32) -> Result<()> {
     Ok(())
 }
 
-pub async fn search_all_passes(pool: &PgPool, search_term: &str) -> Result<Vec<SearchPassRes>> {
+pub async fn search_all_passes(
+    pool: &PgPool,
+    search_term: &str,
+) -> Result<Vec<PassSearchResponse>> {
     let search_query = "
         SELECT 
             p.pass_id,

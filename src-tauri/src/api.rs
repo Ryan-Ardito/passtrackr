@@ -1,13 +1,50 @@
 use std::{collections::HashMap, time::Duration};
 
-use sqlx::PgPool;
+use serde::{Deserialize, Serialize};
+use sqlx::{prelude::FromRow, PgPool};
 
-use crate::database::{
-    insert_new_pass, log_visit_query, search_all_passes, NewPassData, PassType, QueryError,
-    SearchPassData,
-};
+use crate::database::{insert_new_pass, log_visit_query, search_all_passes, QueryError};
 
 const PG_CONNECT_STRING: &str = "postgres://postgres:joyful@172.22.0.22/passtracker-dev";
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct PassType {
+    pub name: String,
+    pub code: String,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct PayMethod {
+    pub name: String,
+    pub code: String,
+}
+
+#[derive(Deserialize, Serialize, Clone, FromRow)]
+pub struct SearchPassData {
+    pub pass_id: u64,
+    pub guest_id: u64,
+    pub first_name: String,
+    pub last_name: String,
+    pub town: String,
+    pub remaining_uses: u64,
+    pub passtype: PassType,
+    pub active: bool,
+    pub creator: String,
+    pub creation_time: u64,
+}
+
+#[derive(Serialize, Deserialize, Clone)]
+pub struct PassFormData {
+    pub guest_id: Option<u64>,
+    pub first_name: String,
+    pub last_name: String,
+    pub town: String,
+    pub passtype: PassType,
+    pub pay_method: PayMethod,
+    pub last_four: Option<String>,
+    pub amount_paid: Option<String>,
+    pub signature: String,
+}
 
 #[tauri::command(async)]
 pub async fn log_visit(pass: SearchPassData) -> Result<(), QueryError> {
@@ -41,7 +78,7 @@ pub fn async_sleep(millis: u64) -> Result<(), String> {
 }
 
 #[tauri::command(async)]
-pub async fn create_pass(pass_data: NewPassData) -> Result<i32, QueryError> {
+pub async fn create_pass(pass_data: PassFormData) -> Result<i32, QueryError> {
     let pool = PgPool::connect(PG_CONNECT_STRING)
         .await
         .map_err(|err| QueryError {
