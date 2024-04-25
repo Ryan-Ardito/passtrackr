@@ -57,7 +57,7 @@ pub struct PassSearchResponse {
 pub async fn insert_new_pass(state: &State<'_, AppState>, pass_data: PassFormData) -> Result<i32> {
     let guest_id = pass_data
         .guest_id
-        .unwrap_or(insert_guest(&state, &pass_data).await.unwrap() as u64);
+        .unwrap_or(insert_guest(&state, &pass_data).await? as u64);
     let data = NewPassData {
         guest_id: guest_id as i32,
         passtype: pass_data.passtype.code,
@@ -68,7 +68,7 @@ pub async fn insert_new_pass(state: &State<'_, AppState>, pass_data: PassFormDat
         creator: pass_data.signature,
     };
 
-    Ok(insert_pass(&state, &data).await.unwrap())
+    insert_pass(&state, &data).await
 }
 
 pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> Result<i32> {
@@ -90,7 +90,7 @@ pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> R
         .fetch_one(pool)
         .await?;
 
-    Ok(result.get(0))
+    result.try_get(0)
 }
 
 pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Result<i32> {
@@ -113,7 +113,7 @@ pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Res
         .fetch_one(pool)
         .await?;
 
-    Ok(result.get(0))
+    result.try_get(0)
 }
 
 pub async fn log_visit_query(state: &State<'_, AppState>, pass_id: i32) -> Result<()> {

@@ -13,6 +13,7 @@ pub mod database;
 use api::{async_sleep, create_pass, get_guest, log_visit, search_passes};
 
 const PG_CONNECT_STRING: &str = "postgres://postgres:joyful@172.22.0.22/passtracker-dev";
+
 pub struct AppState {
     pg_pool: Arc<Mutex<PgPool>>,
 }
@@ -26,7 +27,7 @@ fn connect_pool() -> Result<PgPool, QueryError> {
 
 #[tokio::main]
 async fn main() {
-    let pg_pool = connect_pool().unwrap();
+    let pg_pool = connect_pool().expect("Fatal error!");
     let state = AppState {
         pg_pool: Arc::new(Mutex::new(pg_pool)),
     };
