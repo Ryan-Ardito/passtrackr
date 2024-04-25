@@ -9,13 +9,13 @@
   -webkit-text-size-adjust: 100%;
 }
 
-/* fix phantom scrollbar */
 .p-scrollpanel-content {
+  /* fix phantom scrollbar */
   overflow-x: hidden;
 }
 
-/* fix phantom scrollbar */
 .p-scrollpanel-bar-x {
+  /* fix phantom scrollbar */
   visibility: hidden;
 }
 
