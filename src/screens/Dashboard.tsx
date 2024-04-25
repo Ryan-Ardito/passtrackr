@@ -35,7 +35,7 @@ export function Dashboard() {
   return (
     <div className="viewport-wrapper">
       <div id="dashboard" className="h-full flex-box flex-col">
-        <Toast ref={toast} position="bottom-right" />
+        <Toast ref={toast} position="bottom-left" />
         <SearchBar />
         <div className="h-full flex-box">
           <SearchResults />
