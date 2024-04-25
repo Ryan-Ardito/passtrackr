@@ -1,211 +1,37 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use std::{collections::HashMap, time::Duration};
 
-use database::{insert_pass_query, log_visit_query, search_all_passes};
-use serde::{Deserialize, Serialize};
-use sqlx::{prelude::FromRow, PgPool};
-use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
+use std::sync::Arc;
 
+use database::QueryError;
+use sqlx::PgPool;
+use tauri::{async_runtime::Mutex, CustomMenuItem, Menu, MenuItem, Submenu};
+
+pub mod api;
 pub mod database;
+
+use api::{async_sleep, create_pass, get_guest, log_visit, search_passes};
 
 const PG_CONNECT_STRING: &str = "postgres://postgres:joyful@172.22.0.22/passtracker-dev";
 
-#[derive(Debug, Serialize, Clone)]
-struct QueryError {
-    name: String,
-    message: String,
+pub struct AppState {
+    pg_pool: Arc<Mutex<PgPool>>,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
-struct PassType {
-    name: String,
-    code: String,
-}
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-struct PayMethod {
-    name: String,
-    code: String,
-}
-
-#[derive(Deserialize, Serialize, Clone)]
-pub struct GuestData {
-    guest_id: i32,
-    first_name: String,
-    last_name: String,
-    town: String,
-    email: String,
-    notes: String,
-    creator: String,
-    creation_time: i32,
-}
-
-#[derive(Deserialize, Serialize, Clone, FromRow)]
-pub struct Pass {
-    pass_id: Option<i32>,
-    guest_id: i32,
-    passtype: String,
-    remaining_uses: i32,
-    active: bool,
-    payment_method: String,
-    amount_paid_cents: i32,
-    creator: String,
-    creation_time: i64,
-}
-
-
-#[derive(Deserialize, Serialize, Clone, FromRow)]
-pub struct SearchPassRes {
-    pass_id: i32,
-    guest_id: i32,
-    first_name: String,
-    last_name: String,
-    town: String,
-    remaining_uses: i32,
-    passtype: String,
-    active: bool,
-    creator: String,
-    creation_time: i32,
-}
-
-#[derive(Deserialize, Serialize, Clone, FromRow)]
-pub struct SearchPassData {
-    pass_id: u64,
-    guest_id: u64,
-    first_name: String,
-    last_name: String,
-    town: String,
-    remaining_uses: u64,
-    passtype: PassType,
-    active: bool,
-    creator: String,
-    creation_time: u64,
-}
-
-#[derive(Serialize, Deserialize, Clone)]
-pub struct NewPassData {
-    guest_id: Option<u64>,
-    first_name: String,
-    last_name: String,
-    town: String,
-    passtype: PassType,
-    pay_method: PayMethod,
-    last_four: Option<String>,
-    amount_paid: Option<String>,
-    signature: String,
-}
-#[tauri::command(async)]
-async fn log_visit(pass: SearchPassData) -> Result<(), QueryError> {
-    if pass.remaining_uses < 1 {
-        return Err(QueryError {
-            name: "Log visit".to_string(),
-            message: "No punches left".to_string(),
-        });
-    }
-    let pass_id = pass.pass_id as i32;
-    let pool = PgPool::connect(PG_CONNECT_STRING)
-        .await
-        .map_err(|err| QueryError {
-            name: "Database error".to_string(),
-            message: err.to_string(),
-        })?;
-    let res = log_visit_query(&pool, pass_id)
-        .await
-        .map_err(|err| QueryError {
-            name: "Database error".to_string(),
-            message: err.to_string(),
-        });
-
-    res
-}
-
-#[tauri::command(async)]
-fn async_sleep(millis: u64) -> Result<(), String> {
-    std::thread::sleep(Duration::from_millis(millis));
-    Ok(())
-}
-
-#[tauri::command(async)]
-async fn create_pass(
-    pass_data: NewPassData,
-) -> Result<i32, QueryError> {
-    let pool = PgPool::connect(PG_CONNECT_STRING)
-    .await
-    .map_err(|err| QueryError {
+fn connect_pool() -> Result<PgPool, QueryError> {
+    PgPool::connect_lazy(PG_CONNECT_STRING).map_err(|err| QueryError {
         name: "Database error".to_string(),
         message: err.to_string(),
-    })?;
-let res = insert_pass_query(&pool, pass_data)
-    .await
-    .map_err(|err| QueryError {
-        name: "Database error".to_string(),
-        message: err.to_string(),
-    });
-
-res
-}
-
-#[tauri::command(async)]
-fn get_guest(guest_id: u64, delay_millis: u64, will_fail: bool) -> Result<String, QueryError> {
-    std::thread::sleep(Duration::from_millis(delay_millis));
-
-    match will_fail {
-        false => Ok(format!("{guest_id}")),
-        true => Err(QueryError {
-            name: "Create pass".to_string(),
-            message: "failed".to_string(),
-        }),
-    }
-}
-
-#[tauri::command(async)]
-async fn search_passes(search: &str) -> Result<Vec<SearchPassData>, QueryError> {
-    let mut passtype_map = HashMap::new();
-    passtype_map.insert("punch".to_string(), "Punch".to_string());
-    passtype_map.insert("annual".to_string(), "Annual".to_string());
-    passtype_map.insert("six_month".to_string(), "6 Month".to_string());
-    passtype_map.insert("free_pass".to_string(), "Free Pass".to_string());
-    passtype_map.insert("facial".to_string(), "Facial".to_string());
-
-    let pool = PgPool::connect(PG_CONNECT_STRING)
-        .await
-        .map_err(|err| QueryError {
-            name: "Database error".to_string(),
-            message: err.to_string(),
-        })?;
-    let res = search_all_passes(&pool, search)
-        .await
-        .map_err(|err| QueryError {
-            name: "Database error".to_string(),
-            message: err.to_string(),
-        });
-    res.map(|passes| {
-        passes
-            .into_iter()
-            .map(|pass_data| {
-                let passtype_code = pass_data.passtype;
-                SearchPassData {
-                    pass_id: pass_data.pass_id as u64,
-                    guest_id: pass_data.guest_id as u64,
-                    first_name: pass_data.first_name,
-                    last_name: pass_data.last_name,
-                    town: pass_data.town,
-                    remaining_uses: pass_data.remaining_uses as u64,
-                    passtype: PassType {
-                        name: passtype_map.get(&passtype_code).unwrap().clone(),
-                        code: passtype_code,
-                    },
-                    active: pass_data.active,
-                    creator: pass_data.creator,
-                    creation_time: pass_data.creation_time as u64,
-                }
-            })
-            .collect()
     })
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
+    let pg_pool = connect_pool().expect("Fatal error!");
+    let state = AppState {
+        pg_pool: Arc::new(Mutex::new(pg_pool)),
+    };
+
     let dashboard = CustomMenuItem::new("dashboard".to_string(), "Dashboard");
     let settings = CustomMenuItem::new("settings".to_string(), "Settings...");
     // let close = CustomMenuItem::new("quit".to_string(), "Quit");
@@ -223,6 +49,7 @@ fn main() {
         .add_submenu(submenu);
 
     tauri::Builder::default()
+        .manage(state)
         .menu(menu)
         .on_menu_event(|event| match event.menu_item_id() {
             "dashboard" => event.window().emit("dashboard", "").unwrap(),
@@ -236,7 +63,7 @@ fn main() {
             get_guest,
             log_visit,
             search_passes,
-            async_sleep
+            async_sleep,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

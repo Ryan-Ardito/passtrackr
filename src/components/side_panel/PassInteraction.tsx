@@ -6,11 +6,11 @@ import {
 
 import { Divider } from "primereact/divider";
 
-import { Panel, Screen } from "../types";
-import { logVisit } from "../api/api";
-import { showMessage } from "../utils/toast";
-import { useAppContext } from "../AppContext";
-import { CrudButton } from "./Buttons";
+import { SidePanel, Screen } from "../../types";
+import { logVisit } from "../../api/api";
+import { showMessage } from "../../utils/toast";
+import { useAppContext } from "../../AppContext";
+import { CrudButton } from "../Buttons";
 
 export const PassControl = () => {
   const { selectedPass, setSelectedPass, setScreen, setPanel, toast, search } =
@@ -62,18 +62,19 @@ export const PassControl = () => {
         label="View Pass"
         icon="pi pi-bars"
         disabled={!selectedPass.pass_id}
-        onClick={() => setScreen(Screen.ViewPass)}
+        // onClick={() => setPanel(SidePanel.ViewPass)}
+        onClick={() => setScreen(Screen.ViewGuest)}
       />
       <CrudButton
         label="View Guest"
         icon="pi pi-user"
         disabled={!selectedPass.pass_id}
-        onClick={() => setScreen(Screen.ViewPass)}
+        onClick={() => setScreen(Screen.ViewGuest)}
       />
       <CrudButton
         label="New Pass"
         icon="pi pi-id-card"
-        onClick={() => setPanel(Panel.AddPass)}
+        onClick={() => setPanel(SidePanel.AddPass)}
       />
       <Divider style={{margin: 6}}/>
       {selectedPass.pass_id && (

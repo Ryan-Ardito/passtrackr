@@ -4,7 +4,7 @@ import { Screen } from "../types";
 import { PassInfo } from "../components/PassInfo";
 import { useAppContext } from "../AppContext";
 
-export function ViewPass() {
+export function ViewGuest() {
   const { setScreen } = useAppContext();
 
   return (

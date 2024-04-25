@@ -8,7 +8,7 @@ import { SearchResults } from "../components/SearchResults";
 import { blankPass } from "../types";
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
-import { RightPanel } from "../components/SidePanel";
+import { RightPanel } from "../components/side_panel/SidePanel";
 
 export function Dashboard() {
   const {

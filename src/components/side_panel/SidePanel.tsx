@@ -1,16 +1,16 @@
 import { AddPass } from "./AddPass";
-import { Panel } from "../types";
+import { SidePanel } from "../../types";
 import { PassControl } from "./PassInteraction";
 
 interface PanelProps {
-  panel: Panel;
+  panel: SidePanel;
 }
 
 export const RightPanel = ({ panel }: PanelProps) => {
   return (
     <>
-      {panel === Panel.AddPass && <AddPass />}
-      {panel === Panel.PassInteraction && <PassControl />}
+      {panel === SidePanel.AddPass && <AddPass />}
+      {panel === SidePanel.PassInteraction && <PassControl />}
     </>
   );
 };

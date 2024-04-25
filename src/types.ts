@@ -1,13 +1,14 @@
 export enum Screen {
   Dashboard,
-  ViewPass,
+  ViewGuest,
   Settings,
   About,
 }
 
-export enum Panel {
+export enum SidePanel {
   PassInteraction,
   AddPass,
+  ViewPass
 }
 
 export interface PassType {

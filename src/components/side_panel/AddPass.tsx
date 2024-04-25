@@ -4,18 +4,19 @@ import * as Yup from "yup";
 import { ScrollPanel } from "primereact/scrollpanel";
 import { Divider } from "primereact/divider";
 
-import { Panel, passtypes, payMethods } from "../types";
-import { FormikDropdown, FormikField } from "./FormInput";
-import { createPass } from "../api/api";
+import { SidePanel, passtypes, payMethods } from "../../types";
+import { FormikDropdown, FormikField } from "../FormInput";
+import { createPass } from "../../api/api";
 import {
   InvalidateQueryFilters,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { showMessage } from "../utils/toast";
-import { useAppContext } from "../AppContext";
-import { CrudButton } from "./Buttons";
+import { showMessage } from "../../utils/toast";
+import { useAppContext } from "../../AppContext";
+import { CrudButton } from "../Buttons";
 import { ChangeEvent } from "react";
+import { Panel } from "primereact/panel";
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required("Required").max(50, "Invalid"),
@@ -55,7 +56,7 @@ export const AddPass = () => {
         search,
       ] as InvalidateQueryFilters);
       showMessage("Create pass", "Success!", toast, "success");
-      setPanel(Panel.PassInteraction);
+      setPanel(SidePanel.PassInteraction);
     },
   });
 
@@ -84,33 +85,57 @@ export const AddPass = () => {
     formik.handleChange(e);
   };
 
-
   return (
     <ScrollPanel className="flex-2">
-      <form onSubmit={formik.handleSubmit} className="flex-box flex-col" >
-        <FormikField label="First name" name="first_name" onChange={handleFieldChange} {...{ formik }} />
-        <FormikField label="Last name" name="last_name" onChange={handleFieldChange} {...{ formik }} />
-        <FormikField label="Town" name="town" onChange={handleFieldChange} {...{ formik }} />
-        <FormikDropdown
-          label="Passtype"
-          name="passtype"
-          options={passtypes}
-          {...{ formik }}
-        />
-        <FormikDropdown
-          label="Payment method"
-          name="pay_method"
-          options={payMethods}
-          {...{ formik }}
-        />
-        <FormikField label="Last four" name="last_four" {...{ formik }} />
-        <FormikField label="Amount paid" name="amount_paid" {...{ formik }} />
-        <FormikField
-          label="Employee signature"
-          name="signature"
-          {...{ formik }}
-        />
-        <Divider />
+      <form onSubmit={formik.handleSubmit} className="flex-box flex-col">
+        <Panel
+          header={
+            formik.values.guest_id
+              ? `Guest ${formik.values.guest_id}`
+              : "New Guest"
+          }
+        >
+          <FormikField
+            label="First name"
+            name="first_name"
+            onChange={handleFieldChange}
+            {...{ formik }}
+          />
+          <FormikField
+            label="Last name"
+            name="last_name"
+            onChange={handleFieldChange}
+            {...{ formik }}
+          />
+          <FormikField
+            label="Town"
+            name="town"
+            onChange={handleFieldChange}
+            {...{ formik }}
+          />
+        </Panel>
+        <Panel>
+          <FormikDropdown
+            label="Passtype"
+            name="passtype"
+            options={passtypes}
+            {...{ formik }}
+          />
+          <FormikDropdown
+            label="Payment method"
+            name="pay_method"
+            options={payMethods}
+            {...{ formik }}
+          />
+          <FormikField label="Last four" name="last_four" {...{ formik }} />
+          <FormikField label="Amount paid" name="amount_paid" {...{ formik }} />
+          <FormikField
+            label="Employee signature"
+            name="signature"
+            {...{ formik }}
+          />
+        </Panel>
+        <Divider style={{ margin: 6 }} />
         <div style={{ display: "flex", gap: "8px" }}>
           <CrudButton
             icon="pi pi-check"
@@ -122,7 +147,7 @@ export const AddPass = () => {
             icon="pi pi-times"
             severity="danger"
             label="Cancel"
-            onClick={() => setPanel(Panel.PassInteraction)}
+            onClick={() => setPanel(SidePanel.PassInteraction)}
           />
         </div>
       </form>

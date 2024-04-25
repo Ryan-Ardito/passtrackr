@@ -4,7 +4,7 @@ import { PrimeReactProvider } from "primereact/api";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Screen } from "./types";
 import { Dashboard } from "./screens/Dashboard";
-import { ViewPass } from "./screens/ViewPass";
+import { ViewGuest } from "./screens/ViewGuest";
 import { Settings } from "./screens/Settings";
 import { About } from "./screens/About";
 
@@ -16,7 +16,7 @@ export function AppContent() {
   return (
     <>
       {screen === Screen.Dashboard && <Dashboard />}
-      {screen === Screen.ViewPass && <ViewPass />}
+      {screen === Screen.ViewGuest && <ViewGuest />}
       {screen === Screen.Settings && <Settings />}
       {screen === Screen.About && <About />}
     </>
