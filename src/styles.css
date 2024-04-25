@@ -32,7 +32,7 @@ html {
 }
 
 .viewport-wrapper {
-  height: 88vh;
+  height: 87vh;
 }
 
 .p-toast {
@@ -86,6 +86,7 @@ html {
 
 #searchbar {
   display: flex;
+  width: 100%;
 }
 
 #search-results {

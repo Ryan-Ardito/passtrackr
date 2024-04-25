@@ -114,8 +114,8 @@ export const AddVisits = () => {
           />
         </div>
         <Divider style={{ margin: 6 }} />
+        {selectedPass.pass_id && <PassInfo selectedPass={selectedPass} />}
       </form>
-      {selectedPass.pass_id && <PassInfo selectedPass={selectedPass} />}
     </ScrollPanel>
   );
 };

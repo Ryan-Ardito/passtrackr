@@ -38,6 +38,7 @@ export const PassControl = () => {
   return (
     <div className="flex-box flex-col flex-1">
       {/* <Divider style={{ marginTop: "6px" }} /> */}
+      <Divider style={{marginTop: 11, marginBottom: 11}}/>
       <CrudButton
         label="Log Visit"
         icon="pi pi-check-square"
@@ -52,7 +53,7 @@ export const PassControl = () => {
         loading={isLogVisitPending}
         onClick={() => mutateLogVisit(selectedPass)}
       />
-      <Divider style={{margin: 6}}/>
+      <Divider style={{marginTop: 11, marginBottom: 11}}/>
       <CrudButton
         label="Add Visits"
         icon="pi pi-plus"
@@ -63,7 +64,6 @@ export const PassControl = () => {
         label="View Pass"
         icon="pi pi-bars"
         disabled={!selectedPass.pass_id}
-        // onClick={() => setPanel(SidePanel.ViewPass)}
         onClick={() => setScreen(Screen.ViewGuest)}
       />
       <CrudButton
@@ -77,7 +77,7 @@ export const PassControl = () => {
         icon="pi pi-id-card"
         onClick={() => setPanel(SidePanel.AddPass)}
       />
-      <Divider style={{margin: 6}}/>
+      <Divider style={{marginTop: 6, marginBottom: 6}}/>
       {selectedPass.pass_id && <PassInfo selectedPass={selectedPass}/>}
     </div>
   );

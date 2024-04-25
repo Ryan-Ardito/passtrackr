@@ -1,19 +1,39 @@
 import { InputText } from "primereact/inputtext";
 import { useAppContext } from "../AppContext";
+import { Button } from "primereact/button";
+import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
+import { FormEvent } from "react";
 
 export function SearchBar() {
-  const { debouncedSetSearch, isSearchFetching } = useAppContext();
+  const { debouncedSetSearch, isSearchFetching, search } = useAppContext();
+  const queryClient = useQueryClient();
+
+  const handleSearchButton = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Prevents the default form submission behavior
+    queryClient.invalidateQueries(["search", search] as InvalidateQueryFilters);
+  };
 
   return (
-    <span id="searchbar" className="p-input-icon-right">
-      {isSearchFetching && <i className="pi pi-spin pi-spinner" />}
-      <InputText
-        id="search-input"
-        className="p-inputtext-lg"
-        placeholder="Search passes..."
-        autoFocus
-        onChange={(e) => debouncedSetSearch(e.currentTarget.value)}
-      />
-    </span>
+    <form onSubmit={handleSearchButton}>
+      <div className="flex-box">
+        <span id="searchbar" className="p-input-icon-right">
+          {isSearchFetching && <i className="pi pi-spin pi-spinner" />}
+          <InputText
+            id="search-input"
+            className="p-inputtext-lg"
+            placeholder="Search passes..."
+            autoFocus
+            onChange={(e) => debouncedSetSearch(e.currentTarget.value)}
+          />
+        </span>
+        <Button
+          type="submit"
+          label="Search"
+          style={{ width: "6rem" }}
+          disabled={isSearchFetching}
+          onSubmit={() => {}}
+        />
+      </div>
+    </form>
   );
 }
