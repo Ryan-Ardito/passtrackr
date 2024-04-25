@@ -16,6 +16,7 @@ import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
 import { CrudButton } from "./Buttons";
 import { ChangeEvent } from "react";
+import { Panel } from "primereact/panel";
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required("Required").max(50, "Invalid"),
@@ -84,13 +85,29 @@ export const AddPass = () => {
     formik.handleChange(e);
   };
 
-
   return (
     <ScrollPanel className="flex-2">
-      <form onSubmit={formik.handleSubmit} className="flex-box flex-col" >
-        <FormikField label="First name" name="first_name" onChange={handleFieldChange} {...{ formik }} />
-        <FormikField label="Last name" name="last_name" onChange={handleFieldChange} {...{ formik }} />
-        <FormikField label="Town" name="town" onChange={handleFieldChange} {...{ formik }} />
+      <form onSubmit={formik.handleSubmit} className="flex-box flex-col">
+        <Panel>
+          <FormikField
+            label="First name"
+            name="first_name"
+            onChange={handleFieldChange}
+            {...{ formik }}
+          />
+          <FormikField
+            label="Last name"
+            name="last_name"
+            onChange={handleFieldChange}
+            {...{ formik }}
+          />
+          <FormikField
+            label="Town"
+            name="town"
+            onChange={handleFieldChange}
+            {...{ formik }}
+          />
+        </Panel>
         <FormikDropdown
           label="Passtype"
           name="passtype"
