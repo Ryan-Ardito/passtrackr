@@ -88,7 +88,13 @@ export const AddPass = () => {
   return (
     <ScrollPanel className="flex-2">
       <form onSubmit={formik.handleSubmit} className="flex-box flex-col">
-        <Panel>
+        <Panel
+          header={
+            formik.values.guest_id
+              ? `Guest ${formik.values.guest_id}`
+              : "New Guest"
+          }
+        >
           <FormikField
             label="First name"
             name="first_name"
@@ -108,26 +114,28 @@ export const AddPass = () => {
             {...{ formik }}
           />
         </Panel>
-        <FormikDropdown
-          label="Passtype"
-          name="passtype"
-          options={passtypes}
-          {...{ formik }}
-        />
-        <FormikDropdown
-          label="Payment method"
-          name="pay_method"
-          options={payMethods}
-          {...{ formik }}
-        />
-        <FormikField label="Last four" name="last_four" {...{ formik }} />
-        <FormikField label="Amount paid" name="amount_paid" {...{ formik }} />
-        <FormikField
-          label="Employee signature"
-          name="signature"
-          {...{ formik }}
-        />
-        <Divider />
+        <Panel>
+          <FormikDropdown
+            label="Passtype"
+            name="passtype"
+            options={passtypes}
+            {...{ formik }}
+          />
+          <FormikDropdown
+            label="Payment method"
+            name="pay_method"
+            options={payMethods}
+            {...{ formik }}
+          />
+          <FormikField label="Last four" name="last_four" {...{ formik }} />
+          <FormikField label="Amount paid" name="amount_paid" {...{ formik }} />
+          <FormikField
+            label="Employee signature"
+            name="signature"
+            {...{ formik }}
+          />
+        </Panel>
+        <Divider style={{ margin: 6 }} />
         <div style={{ display: "flex", gap: "8px" }}>
           <CrudButton
             icon="pi pi-check"
