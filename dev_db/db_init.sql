@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS guests (
-    guest_id SERIAL PRIMARY KEY,
-    first_name VARCHAR(50),
-    last_name VARCHAR(50),
+    guest_id SERIAL NOT NULL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
     email VARCHAR(100),
     town VARCHAR(100),
     notes TEXT,
@@ -10,20 +10,16 @@ CREATE TABLE IF NOT EXISTS guests (
 );
 
 CREATE TABLE IF NOT EXISTS passes (
-    pass_id SERIAL PRIMARY KEY,
-    guest_id INT REFERENCES guests(guest_id),
-    passtype VARCHAR(50),
-    remaining_uses INT CHECK (remaining_uses >= 0),
+    pass_id SERIAL NOT NULL PRIMARY KEY,
+    guest_id INT NOT NULL REFERENCES guests(guest_id),
+    passtype VARCHAR(50) NOT NULL,
+    remaining_uses INT NOT NULL CHECK (remaining_uses >= 0),
     active BOOLEAN,
     payment_method VARCHAR(50),
     amount_paid_cents INT,
     creator VARCHAR(100),
     creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
-
-CREATE INDEX passes_guest_id_index ON passes (guest_id);
-CREATE INDEX guests_guest_id_index ON guests (guest_id);
-
 
 COPY guests (guest_id, first_name, last_name, email, town, notes, creator)
 FROM '/app/dummy_guests.csv' DELIMITER ',' CSV;
