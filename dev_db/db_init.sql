@@ -21,6 +21,10 @@ CREATE TABLE IF NOT EXISTS passes (
     creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE INDEX passes_guest_id_index ON passes (guest_id);
+CREATE INDEX guests_guest_id_index ON guests (guest_id);
+
+
 COPY guests (guest_id, first_name, last_name, email, town, notes, creator)
 FROM '/app/dummy_guests.csv' DELIMITER ',' CSV;
 

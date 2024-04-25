@@ -3,6 +3,10 @@ import random
 from dataclasses import dataclass, asdict
 
 
+NUM_GUESTS = 100_000
+NUM_PASSES = 1_000_000
+
+
 PAYMENT_METHODS: list[str] = [
     "credit",
     "cash",
@@ -147,7 +151,7 @@ def main():
     first_names = old_first_names + new_first_names
 
     if not os.path.exists(guests_file) or not os.path.exists(passes_file):
-        guests = generate_guests(20_000, first_names, last_names)
+        guests = generate_guests(NUM_GUESTS, first_names, last_names)
         write_csv(guests, guests_file)
 
         passes = generate_passes(guests, first_names)
