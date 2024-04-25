@@ -16,7 +16,7 @@ export function AppContent() {
   return (
     <>
       {screen === Screen.Dashboard && <Dashboard />}
-      {screen === Screen.ViewPass && <ViewPass />}
+      {screen === Screen.ViewGuest && <ViewPass />}
       {screen === Screen.Settings && <Settings />}
       {screen === Screen.About && <About />}
     </>
