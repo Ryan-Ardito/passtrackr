@@ -5,7 +5,11 @@ use sqlx::{prelude::FromRow, Result, Row};
 use tauri::State;
 use time::OffsetDateTime;
 
-use crate::{api::PassFormData, AppState};
+use crate::{
+    api::PassFormData,
+    queries::{INSERT_GUEST, INSERT_PASS, LOG_VISIT, SEARCH_ALL},
+    AppState,
+};
 
 #[derive(Debug, Serialize, Clone)]
 pub struct QueryError {
@@ -72,15 +76,9 @@ pub async fn insert_new_pass(state: &State<'_, AppState>, pass_data: PassFormDat
 }
 
 pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> Result<i32> {
-    let query = r#"
-        INSERT INTO guests (first_name, last_name, town, email, notes, creator)
-        VALUES ($1, $2, $3, $4, $5, $6)
-        RETURNING guest_id
-    "#;
-
     let mutex = state.pg_pool.lock().await;
     let pool = mutex.deref();
-    let result = sqlx::query(query)
+    let result = sqlx::query(INSERT_GUEST)
         .bind(&data.first_name)
         .bind(&data.last_name)
         .bind(&data.town)
@@ -94,15 +92,9 @@ pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> R
 }
 
 pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Result<i32> {
-    let query = r#"
-        INSERT INTO passes (guest_id, passtype, remaining_uses, active, payment_method, amount_paid_cents, creator)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING pass_id
-    "#;
-
     let mutex = state.pg_pool.lock().await;
     let pool = mutex.deref();
-    let result = sqlx::query(query)
+    let result = sqlx::query(INSERT_PASS)
         .bind(&data.guest_id)
         .bind(&data.passtype)
         .bind(&data.remaining_uses)
@@ -117,20 +109,12 @@ pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Res
 }
 
 pub async fn log_visit_query(state: &State<'_, AppState>, pass_id: i32) -> Result<()> {
-    let use_pass_query = format!(
-        "
-        UPDATE passes
-        SET remaining_uses = CASE
-                WHEN remaining_uses > 0 THEN remaining_uses - 1
-                ELSE 0
-            END
-        WHERE pass_id = {pass_id};
-
-        "
-    );
     let mutex = state.pg_pool.lock().await;
     let pool = mutex.deref();
-    sqlx::query(&use_pass_query).execute(pool).await?;
+    sqlx::query(LOG_VISIT)
+        .bind(&pass_id)
+        .execute(pool)
+        .await?;
     Ok(())
 }
 
@@ -138,33 +122,9 @@ pub async fn search_all_passes(
     state: &State<'_, AppState>,
     search_term: &str,
 ) -> Result<Vec<PassSearchResponse>, sqlx::Error> {
-    let search_query = "
-        SELECT 
-            p.pass_id,
-            p.guest_id,
-            g.first_name,
-            g.last_name,
-            g.town,
-            p.remaining_uses,
-            p.passtype,
-            p.active,
-            p.creator,
-            p.creation_time
-        FROM 
-            passes AS p
-        JOIN 
-            guests AS g ON p.guest_id = g.guest_id
-        WHERE 
-            LOWER(CONCAT(g.first_name, ' ', g.last_name)) LIKE LOWER($1)
-            OR
-            LOWER(g.last_name) LIKE LOWER($1)
-        ORDER BY 
-            g.last_name, g.first_name, g.guest_id, p.pass_id;
-    ";
-
     let mutex = state.pg_pool.lock().await;
     let pool = mutex.deref();
-    let passes = sqlx::query_as(search_query)
+    let passes = sqlx::query_as(SEARCH_ALL)
         .bind(format!("{search_term}%"))
         .fetch_all(pool)
         .await;

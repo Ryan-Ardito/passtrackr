@@ -9,6 +9,7 @@ use tauri::{async_runtime::Mutex, CustomMenuItem, Menu, MenuItem, Submenu};
 
 pub mod api;
 pub mod database;
+pub mod queries;
 
 use api::{async_sleep, create_pass, get_guest, log_visit, search_passes};
 
