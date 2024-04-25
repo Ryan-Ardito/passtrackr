@@ -1,12 +1,18 @@
-:root {
-  /* font-family: Inter, Avenir, Helvetica, Arial, sans-serif; */
+html {
+  font-size: 20px;
+}
 
-  font-size: 18px;
+:root {
+  font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+.p-component {
+  font-family: inherit;
 }
 
 .p-scrollpanel-content {
@@ -23,10 +29,6 @@
   display: flex;
   flex-direction: column;
   gap: 8px
-}
-
-.p-datatable-tbody {
-  font-size: 20px;
 }
 
 .viewport-wrapper {
@@ -88,7 +90,7 @@
 
 #search-results {
   flex: 3;
-  height: 101%
+  height: 100%
 }
 
 #search-input {
