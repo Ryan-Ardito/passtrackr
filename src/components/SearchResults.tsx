@@ -32,7 +32,8 @@ export function SearchResults() {
       scrollable
       // scrollHeight="90%"
       paginator
-      rows={32}
+      rows={50}
+      alwaysShowPaginator={false}
       // virtualScrollerOptions={{ lazy: true, itemSize: 46, delay: 500, showLoader: true }}
       // virtualScrollerOptions={{ itemSize: 46 }}
       value={searchData}
