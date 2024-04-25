@@ -20,7 +20,7 @@ export const PassControl = () => {
   const { mutate: mutateLogVisit, isPending: isLogVisitPending } = useMutation({
     mutationKey: ["logVisit"],
     mutationFn: logVisit,
-    onError: (error) => showMessage(error.name, error.message, toast, "info"),
+    onError: (error) => showMessage(error.name, error.message, toast, "warn"),
     onSuccess: () => {
       queryClient.invalidateQueries([
         "search",
