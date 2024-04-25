@@ -5,7 +5,7 @@ import { ScrollPanel } from "primereact/scrollpanel";
 import { InputField, LabeledDropdown } from "./FormInput";
 import { useAppContext } from "../AppContext";
 
-export function PassInfo() {
+export function GuestInfo() {
   const { selectedPass, setSelectedPass } = useAppContext();
 
   return (

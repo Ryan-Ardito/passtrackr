@@ -1,7 +1,7 @@
 import { Button } from "primereact/button";
 
 import { Screen } from "../types";
-import { PassInfo } from "../components/PassInfo";
+import { GuestInfo } from "../components/GuestInfo";
 import { useAppContext } from "../AppContext";
 
 export function ViewGuest() {
@@ -10,7 +10,7 @@ export function ViewGuest() {
   return (
     <div className="viewport-wrapper">
       <div className="center-box">
-        <PassInfo />
+        <GuestInfo />
         <Button
           label="Back"
           onClick={(e) => {
