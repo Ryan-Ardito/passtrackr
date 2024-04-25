@@ -77,7 +77,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setSelectedPass(blankPass);
-  }, [searchData]);
+  }, [search]);
 
   // Window menu emissions from Tauri
   listen("dashboard", () => setScreen(Screen.Dashboard));
