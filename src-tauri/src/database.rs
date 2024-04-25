@@ -6,8 +6,8 @@ use tauri::State;
 use time::OffsetDateTime;
 
 use crate::{
-    api::PassFormData,
-    queries::{INSERT_GUEST, INSERT_PASS, LOG_VISIT, SEARCH_ALL},
+    api::{AddVisitsFormData, PassFormData},
+    queries::{INCREASE_REMAINING_USES, INSERT_GUEST, INSERT_PASS, LOG_VISIT, SEARCH_ALL},
     AppState,
 };
 
@@ -73,6 +73,18 @@ pub async fn insert_new_pass(state: &State<'_, AppState>, pass_data: PassFormDat
     };
 
     insert_pass(&state, &data).await
+}
+
+pub async fn increase_remaining_uses(state: &State<'_, AppState>, data: &AddVisitsFormData) -> Result<()> {
+    let mutex = state.pg_pool.lock().await;
+    let pool = mutex.deref();
+    sqlx::query(INCREASE_REMAINING_USES)
+        .bind(&data.pass_id)
+        .bind(&data.num_visits.code)
+        .execute(pool)
+        .await?;
+
+    Ok(())
 }
 
 pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> Result<i32> {

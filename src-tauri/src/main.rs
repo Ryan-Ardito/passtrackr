@@ -11,7 +11,7 @@ pub mod api;
 pub mod database;
 pub mod queries;
 
-use api::{async_sleep, create_pass, get_guest, log_visit, search_passes};
+use api::{async_sleep, create_pass, get_guest, log_visit, add_visits, search_passes};
 
 const PG_CONNECT_STRING: &str = "postgres://postgres:joyful@172.22.0.22/passtracker-dev";
 
@@ -63,6 +63,7 @@ async fn main() {
             create_pass,
             get_guest,
             log_visit,
+            add_visits,
             search_passes,
             async_sleep,
         ])

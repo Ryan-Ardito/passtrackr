@@ -5,7 +5,7 @@ use sqlx::prelude::FromRow;
 use tauri::State;
 
 use crate::{
-    database::{insert_new_pass, log_visit_query, search_all_passes, QueryError},
+    database::{increase_remaining_uses, insert_new_pass, log_visit_query, search_all_passes, QueryError},
     AppState,
 };
 
@@ -19,6 +19,12 @@ pub struct PassType {
 pub struct PayMethod {
     pub name: String,
     pub code: String,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct NumVisits {
+    pub name: String,
+    pub code: i32,
 }
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
@@ -48,6 +54,16 @@ pub struct PassFormData {
     pub signature: String,
 }
 
+#[derive(Serialize, Deserialize, Clone)]
+pub struct AddVisitsFormData {
+    pub pass_id: i32,
+    pub num_visits: NumVisits,
+    pub pay_method: PayMethod,
+    pub last_four: Option<String>,
+    pub amount_paid: Option<String>,
+    pub signature: String,
+}
+
 #[tauri::command(async)]
 pub async fn log_visit(state: State<'_, AppState>, pass: SearchPassData) -> Result<(), QueryError> {
     if pass.remaining_uses < 1 {
@@ -71,6 +87,21 @@ pub async fn log_visit(state: State<'_, AppState>, pass: SearchPassData) -> Resu
 pub fn async_sleep(millis: u64) -> Result<(), String> {
     std::thread::sleep(Duration::from_millis(millis));
     Ok(())
+}
+
+#[tauri::command(async)]
+pub async fn add_visits(
+    state: State<'_, AppState>,
+    add_visits_data: AddVisitsFormData,
+) -> Result<(), QueryError> {
+    let res = increase_remaining_uses(&state, &add_visits_data)
+        .await
+        .map_err(|err| QueryError {
+            name: "Database error".to_string(),
+            message: err.to_string(),
+        });
+
+    res
 }
 
 #[tauri::command(async)]

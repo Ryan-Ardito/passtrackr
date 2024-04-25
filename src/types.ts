@@ -8,13 +8,20 @@ export enum Screen {
 export enum SidePanel {
   PassInteraction,
   AddPass,
-  ViewPass
+  AddVisits
 }
 
 export interface PassType {
   name: string;
   code: string;
 }
+
+export const numAddVisits = [
+  { name: "1x Visits", code: 1 },
+  { name: "3x Visits", code: 3 },
+  { name: "5x Visits", code: 5 },
+  { name: "10x Visits", code: 10 },
+];
 
 export const payMethods = [
   { name: "Credit", code: "credit" },
@@ -32,6 +39,15 @@ export const passtypes: PassType[] = [
   { name: "3x Facial", code: "facial" },
   { name: "6x Facial", code: "facial" },
 ];
+
+export interface AddVisitsFormData {
+  pass_id: number | undefined;
+  num_visits: { name: string; code: number };
+  pay_method: { name: string; code: string };
+  last_four: string | undefined;
+  amount_paid: string;
+  signature: string;
+}
 
 export interface CreatePassData {
   guest_id: number | undefined;
