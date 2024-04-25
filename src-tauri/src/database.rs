@@ -1,13 +1,22 @@
+use std::{fmt::Display, future::Future, ops::Deref};
+
 use serde::{Deserialize, Serialize};
-use sqlx::{prelude::FromRow, PgPool, Result, Row};
+use sqlx::{prelude::FromRow, Error, PgPool, Result, Row};
+use tauri::State;
 use time::OffsetDateTime;
 
-use crate::api::PassFormData;
+use crate::{api::PassFormData, AppState};
 
 #[derive(Debug, Serialize, Clone)]
 pub struct QueryError {
     pub name: String,
     pub message: String,
+}
+
+impl Display for QueryError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(&self.message)
+    }
 }
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
@@ -103,7 +112,7 @@ pub async fn insert_pass(pool: &PgPool, data: &NewPassData) -> Result<i32> {
     Ok(result.get(0))
 }
 
-pub async fn log_visit_query(pool: &PgPool, pass_id: i32) -> Result<()> {
+pub async fn log_visit_query(state: &State<'_, AppState>, pass_id: i32) -> Result<()> {
     let use_pass_query = format!(
         "
         UPDATE passes
@@ -115,14 +124,16 @@ pub async fn log_visit_query(pool: &PgPool, pass_id: i32) -> Result<()> {
 
         "
     );
+    let mutex = state.pg_pool.lock().await;
+    let pool = mutex.deref();
     sqlx::query(&use_pass_query).execute(pool).await?;
     Ok(())
 }
 
 pub async fn search_all_passes(
-    pool: &PgPool,
+    state: &State<'_, AppState>,
     search_term: &str,
-) -> Result<Vec<PassSearchResponse>> {
+) -> Result<Vec<PassSearchResponse>, sqlx::Error> {
     let search_query = "
         SELECT 
             p.pass_id,
@@ -147,10 +158,12 @@ pub async fn search_all_passes(
             g.last_name, g.first_name, g.guest_id, p.pass_id;
     ";
 
+    let mutex = state.pg_pool.lock().await;
+    let pool = mutex.deref();
     let passes = sqlx::query_as(search_query)
         .bind(format!("{search_term}%"))
-        .fetch_all(pool)
-        .await?;
+        .fetch_all(pool);
+    // .await?;
 
-    Ok(passes)
+    passes.await
 }

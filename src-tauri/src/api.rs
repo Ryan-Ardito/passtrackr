@@ -1,9 +1,13 @@
-use std::{collections::HashMap, time::Duration};
+use std::{collections::HashMap, ops::Deref, time::Duration};
 
 use serde::{Deserialize, Serialize};
 use sqlx::{prelude::FromRow, PgPool};
+use tauri::State;
 
-use crate::database::{insert_new_pass, log_visit_query, search_all_passes, QueryError};
+use crate::{
+    database::{insert_new_pass, log_visit_query, search_all_passes, QueryError},
+    AppState,
+};
 
 const PG_CONNECT_STRING: &str = "postgres://postgres:joyful@172.22.0.22/passtracker-dev";
 
@@ -47,7 +51,7 @@ pub struct PassFormData {
 }
 
 #[tauri::command(async)]
-pub async fn log_visit(pass: SearchPassData) -> Result<(), QueryError> {
+pub async fn log_visit(state: State<'_, AppState>, pass: SearchPassData) -> Result<(), QueryError> {
     if pass.remaining_uses < 1 {
         return Err(QueryError {
             name: "Log visit".to_string(),
@@ -55,13 +59,14 @@ pub async fn log_visit(pass: SearchPassData) -> Result<(), QueryError> {
         });
     }
     let pass_id = pass.pass_id as i32;
-    let pool = PgPool::connect(PG_CONNECT_STRING)
-        .await
-        .map_err(|err| QueryError {
-            name: "Database error".to_string(),
-            message: err.to_string(),
-        })?;
-    let res = log_visit_query(&pool, pass_id)
+    // let pool = state.pg_pool;
+    // let pool = PgPool::connect(PG_CONNECT_STRING)
+    //     .await
+    //     .map_err(|err| QueryError {
+    //         name: "Database error".to_string(),
+    //         message: err.to_string(),
+    //     })?;
+    let res = log_visit_query(&state, pass_id)
         .await
         .map_err(|err| QueryError {
             name: "Database error".to_string(),
@@ -109,7 +114,10 @@ pub fn get_guest(guest_id: u64, delay_millis: u64, will_fail: bool) -> Result<St
 }
 
 #[tauri::command(async)]
-pub async fn search_passes(search: &str) -> Result<Vec<SearchPassData>, QueryError> {
+pub async fn search_passes(
+    state: State<'_, AppState>,
+    search: &str,
+) -> Result<Vec<SearchPassData>, QueryError> {
     // do this on the front end?
     let mut passtype_map = HashMap::new();
     passtype_map.insert("punch".to_string(), "Punch".to_string());
@@ -118,13 +126,15 @@ pub async fn search_passes(search: &str) -> Result<Vec<SearchPassData>, QueryErr
     passtype_map.insert("free_pass".to_string(), "Free Pass".to_string());
     passtype_map.insert("facial".to_string(), "Facial".to_string());
 
-    let pool = PgPool::connect(PG_CONNECT_STRING)
-        .await
-        .map_err(|err| QueryError {
-            name: "Database error".to_string(),
-            message: err.to_string(),
-        })?;
-    let res = search_all_passes(&pool, search)
+    // let mutex = state.inner().pg_pool.lock().expect("TODO BUG");
+    // let pool = mutex.deref();
+    // let pool = PgPool::connect(PG_CONNECT_STRING)
+    //     .await
+    //     .map_err(|err| QueryError {
+    //         name: "Database error".to_string(),
+    //         message: err.to_string(),
+    //     })?;
+    let res = search_all_passes(&state, search)
         .await
         .map_err(|err| QueryError {
             name: "Database error".to_string(),
