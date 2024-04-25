@@ -51,7 +51,10 @@ export const PassControl = () => {
           selectedPass.remaining_uses === 0
         }
         loading={isLogVisitPending}
-        onClick={() => mutateLogVisit(selectedPass)}
+        onClick={(e) => {
+          mutateLogVisit(selectedPass);
+          e.currentTarget.blur();
+        }}
       />
       <Divider style={{marginTop: 11, marginBottom: 11}}/>
       <CrudButton
