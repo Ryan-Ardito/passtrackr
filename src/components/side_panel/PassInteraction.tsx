@@ -37,7 +37,6 @@ export const PassControl = () => {
 
   return (
     <div className="flex-box flex-col flex-1">
-      {/* <Divider style={{ marginTop: "6px" }} /> */}
       <Divider style={{marginTop: 11, marginBottom: 11}}/>
       <CrudButton
         label="Log Visit"

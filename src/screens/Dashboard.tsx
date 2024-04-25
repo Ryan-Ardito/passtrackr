@@ -26,10 +26,8 @@ export function Dashboard() {
     }
   }, [searchStatus]);
 
-  // KLUDGE. possibly only an issue on dev.
-  // without it, a pass can remain selected with empty search results.
   useEffect(() => {
-    if (!searchData || !searchData.length) setSelectedPass(blankPass);
+    setSelectedPass(blankPass);
   }, [searchData]);
 
   return (
