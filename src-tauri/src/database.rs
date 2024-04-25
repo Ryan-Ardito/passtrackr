@@ -54,10 +54,10 @@ pub struct PassSearchResponse {
     pub creation_time: OffsetDateTime,
 }
 
-pub async fn insert_new_pass(pool: &PgPool, pass_data: PassFormData) -> Result<i32> {
+pub async fn insert_new_pass(state: &State<'_, AppState>, pass_data: PassFormData) -> Result<i32> {
     let guest_id = pass_data
         .guest_id
-        .unwrap_or(insert_guest(pool, &pass_data).await.unwrap() as u64);
+        .unwrap_or(insert_guest(&state, &pass_data).await.unwrap() as u64);
     let data = NewPassData {
         guest_id: guest_id as i32,
         passtype: pass_data.passtype.code,
@@ -68,16 +68,18 @@ pub async fn insert_new_pass(pool: &PgPool, pass_data: PassFormData) -> Result<i
         creator: pass_data.signature,
     };
 
-    Ok(insert_pass(pool, &data).await.unwrap())
+    Ok(insert_pass(&state, &data).await.unwrap())
 }
 
-pub async fn insert_guest(pool: &PgPool, data: &PassFormData) -> Result<i32> {
+pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> Result<i32> {
     let query = r#"
         INSERT INTO guests (first_name, last_name, town, email, notes, creator)
         VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING guest_id
     "#;
 
+    let mutex = state.pg_pool.lock().await;
+    let pool = mutex.deref();
     let result = sqlx::query(query)
         .bind(&data.first_name)
         .bind(&data.last_name)
@@ -91,13 +93,15 @@ pub async fn insert_guest(pool: &PgPool, data: &PassFormData) -> Result<i32> {
     Ok(result.get(0))
 }
 
-pub async fn insert_pass(pool: &PgPool, data: &NewPassData) -> Result<i32> {
+pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Result<i32> {
     let query = r#"
         INSERT INTO passes (guest_id, passtype, remaining_uses, active, payment_method, amount_paid_cents, creator)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING pass_id
     "#;
 
+    let mutex = state.pg_pool.lock().await;
+    let pool = mutex.deref();
     let result = sqlx::query(query)
         .bind(&data.guest_id)
         .bind(&data.passtype)

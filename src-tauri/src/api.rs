@@ -76,14 +76,8 @@ pub fn async_sleep(millis: u64) -> Result<(), String> {
 }
 
 #[tauri::command(async)]
-pub async fn create_pass(pass_data: PassFormData) -> Result<i32, QueryError> {
-    let pool = PgPool::connect(PG_CONNECT_STRING)
-        .await
-        .map_err(|err| QueryError {
-            name: "Database error".to_string(),
-            message: err.to_string(),
-        })?;
-    let res = insert_new_pass(&pool, pass_data)
+pub async fn create_pass(state: State<'_, AppState>, pass_data: PassFormData) -> Result<i32, QueryError> {
+    let res = insert_new_pass(&state, pass_data)
         .await
         .map_err(|err| QueryError {
             name: "Database error".to_string(),
