@@ -10,7 +10,6 @@ import {
   useEffect,
 } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { DebouncedFunc, debounce } from "lodash";
 
 import { Toast } from "primereact/toast";
 import "primeicons/primeicons.css";
@@ -26,7 +25,6 @@ interface AppContextProps {
   setSelectedPass: Dispatch<SetStateAction<PassData>>;
   search: string;
   setSearch: Dispatch<SetStateAction<string>>;
-  debouncedSetSearch: DebouncedFunc<Dispatch<SetStateAction<string>>>;
   panel: SidePanel;
   setPanel: Dispatch<SetStateAction<SidePanel>>;
   searchData: PassData[];
@@ -52,7 +50,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [selectedPass, setSelectedPass] = useState(blankPass);
 
   const [search, setSearch] = useState("");
-  const debouncedSetSearch = debounce(setSearch, 400);
   const [panel, setPanel] = useState(SidePanel.PassInteraction);
 
   const {
@@ -91,7 +88,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setSelectedPass,
     search,
     setSearch,
-    debouncedSetSearch,
     panel,
     setPanel,
     searchData,

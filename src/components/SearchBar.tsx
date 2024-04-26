@@ -3,9 +3,11 @@ import { useAppContext } from "../AppContext";
 import { Button } from "primereact/button";
 import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
 import { FormEvent } from "react";
+import { debounce } from "lodash";
 
 export function SearchBar() {
-  const { debouncedSetSearch, isSearchFetching, search } = useAppContext();
+  const { search, setSearch, isSearchFetching } = useAppContext();
+  const debouncedSetSearch = debounce(setSearch, 400);
   const queryClient = useQueryClient();
 
   const handleSearchButton = (e: FormEvent<HTMLFormElement>) => {
