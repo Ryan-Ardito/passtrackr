@@ -1,17 +1,17 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::sync::Arc;
+use std::{sync::Arc, time::Duration};
 
 use database::QueryError;
-use sqlx::PgPool;
+use sqlx::{postgres::PgPoolOptions, PgPool};
 use tauri::{async_runtime::Mutex, CustomMenuItem, Menu, MenuItem, Submenu};
 
 pub mod api;
 pub mod database;
 pub mod queries;
 
-use api::{async_sleep, create_pass, get_guest, log_visit, add_visits, search_passes};
+use api::{add_visits, async_sleep, create_pass, get_guest, log_visit, search_passes};
 
 const PG_CONNECT_STRING: &str = "postgres://postgres:joyful@172.22.0.22/passtracker-dev";
 // const PG_CONNECT_STRING: &str = "postgres://postgres:joyful_journey@35.247.29.177/passtracker";
@@ -21,10 +21,15 @@ pub struct AppState {
 }
 
 fn connect_pool() -> Result<PgPool, QueryError> {
-    PgPool::connect_lazy(PG_CONNECT_STRING).map_err(|err| QueryError {
-        name: "Database error".to_string(),
-        message: err.to_string(),
-    })
+    PgPoolOptions::new()
+        .min_connections(1)
+        .max_connections(16)
+        .acquire_timeout(Duration::from_secs(10))
+        .connect_lazy(PG_CONNECT_STRING)
+        .map_err(|err| QueryError {
+            name: "Database error".to_string(),
+            message: err.to_string(),
+        })
 }
 
 #[tokio::main]
