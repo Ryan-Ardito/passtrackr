@@ -5,7 +5,9 @@ use sqlx::prelude::FromRow;
 use tauri::State;
 
 use crate::{
-    database::{increase_remaining_uses, insert_new_pass, log_visit_query, search_all_passes, QueryError},
+    database::{
+        delete_pass_permanent, increase_remaining_uses, insert_new_pass, log_visit_query, search_all_passes, QueryError
+    },
     AppState,
 };
 
@@ -110,6 +112,21 @@ pub async fn create_pass(
     pass_data: PassFormData,
 ) -> Result<i32, QueryError> {
     let res = insert_new_pass(&state, pass_data)
+        .await
+        .map_err(|err| QueryError {
+            name: "Database error".to_string(),
+            message: err.to_string(),
+        });
+
+    res
+}
+
+#[tauri::command(async)]
+pub async fn delete_pass(
+    state: State<'_, AppState>,
+    pass_id: i32,
+) -> Result<(), QueryError> {
+    let res = delete_pass_permanent(&state, pass_id)
         .await
         .map_err(|err| QueryError {
             name: "Database error".to_string(),

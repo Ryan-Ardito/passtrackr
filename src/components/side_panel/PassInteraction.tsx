@@ -66,7 +66,7 @@ export const PassControl = () => {
         label="View Pass"
         icon="pi pi-bars"
         disabled={!selectedPass.pass_id}
-        onClick={() => setScreen(Screen.ViewGuest)}
+        onClick={() => setPanel(SidePanel.ViewPass)}
       />
       <CrudButton
         label="View Guest"

@@ -5,7 +5,7 @@ import { CSSProperties, MouseEventHandler } from "react";
 interface CrudButtonProps {
   label?: string | undefined;
   icon?: IconType<ButtonProps>;
-  type?: "submit" | "reset" | "button" | undefined
+  type?: "submit" | "reset" | "button" | undefined;
   disabled?: boolean;
   severity?:
     | "info"
@@ -34,20 +34,21 @@ export const CrudButton: React.FC<CrudButtonProps> = ({
   badge = undefined,
   onClick = () => null,
 }) => {
-    return (
-        <Button id="crud-button"
-            rounded
-            badge={badge}
-            raised={!disabled}
-            label={label}
-            icon={icon}
-            type={type}
-            disabled={disabled}
-            severity={severity}
-            size={size}
-            style={style}
-            loading={loading}
-            onClick={onClick}
-        />
-    )
+  return (
+    <Button
+      id="crud-button"
+      rounded
+      badge={badge}
+      raised={!disabled}
+      label={label}
+      icon={icon}
+      type={type}
+      disabled={disabled}
+      severity={severity}
+      size={size}
+      style={style}
+      loading={loading}
+      onClick={onClick}
+    />
+  );
 };

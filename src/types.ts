@@ -8,7 +8,8 @@ export enum Screen {
 export enum SidePanel {
   PassInteraction,
   AddPass,
-  AddVisits
+  AddVisits,
+  ViewPass,
 }
 
 export interface PassType {

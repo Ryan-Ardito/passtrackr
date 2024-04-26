@@ -22,12 +22,21 @@ export const logVisit = async (pass: PassData): Promise<void> => {
   }
   return invoke("log_visit", { pass, delayMillis: 600, willFail: false });
 };
-export const addVisits = async (addVisitsData: AddVisitsFormData): Promise<string> => {
+export const addVisits = async (
+  addVisitsData: AddVisitsFormData
+): Promise<string> => {
   return invoke("add_visits", { addVisitsData });
 };
 
 export const createPass = async (passData: CreatePassData): Promise<string> => {
   return invoke("create_pass", { passData });
+};
+
+export const deletePass = async (passId: number | undefined): Promise<string> => {
+  if (!passId) {
+    throw { name: "Delete Pass", message: "Pass not found" };
+  }
+  return invoke("delete_pass", { passId });
 };
 
 export const asyncSleep = async (millis: number): Promise<void> => {

@@ -7,7 +7,10 @@ use time::OffsetDateTime;
 
 use crate::{
     api::{AddVisitsFormData, PassFormData},
-    queries::{INCREASE_REMAINING_USES, INSERT_GUEST, INSERT_PASS, LOG_VISIT, SEARCH_ALL},
+    queries::{
+        DELETE_PASS_PERMANENT, INCREASE_REMAINING_USES, INSERT_GUEST, INSERT_PASS, LOG_VISIT,
+        SEARCH_ALL,
+    },
     AppState,
 };
 
@@ -75,7 +78,10 @@ pub async fn insert_new_pass(state: &State<'_, AppState>, pass_data: PassFormDat
     insert_pass(&state, &data).await
 }
 
-pub async fn increase_remaining_uses(state: &State<'_, AppState>, data: &AddVisitsFormData) -> Result<()> {
+pub async fn increase_remaining_uses(
+    state: &State<'_, AppState>,
+    data: &AddVisitsFormData,
+) -> Result<()> {
     let mutex = state.pg_pool.lock().await;
     let pool = mutex.deref();
     sqlx::query(INCREASE_REMAINING_USES)
@@ -120,13 +126,20 @@ pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Res
     result.try_get(0)
 }
 
-pub async fn log_visit_query(state: &State<'_, AppState>, pass_id: i32) -> Result<()> {
+pub async fn delete_pass_permanent(state: &State<'_, AppState>, pass_id: i32) -> Result<()> {
     let mutex = state.pg_pool.lock().await;
     let pool = mutex.deref();
-    sqlx::query(LOG_VISIT)
+    sqlx::query(DELETE_PASS_PERMANENT)
         .bind(&pass_id)
         .execute(pool)
         .await?;
+    Ok(())
+}
+
+pub async fn log_visit_query(state: &State<'_, AppState>, pass_id: i32) -> Result<()> {
+    let mutex = state.pg_pool.lock().await;
+    let pool = mutex.deref();
+    sqlx::query(LOG_VISIT).bind(&pass_id).execute(pool).await?;
     Ok(())
 }
 
