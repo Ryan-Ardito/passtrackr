@@ -19,6 +19,9 @@ use api::{
     toggle_pass_active,
 };
 
+// const PG_CONNECT_STRING: &str = "postgres://postgres:joyful@172.22.0.22/passtracker-dev";
+// const PG_CONNECT_STRING: &str = "postgres://postgres:joyful_journey@35.247.29.177/passtracker";
+
 const USERNAME: &str = "postgres";
 const PASSWORD: &str = "joyful";
 const DB_HOST: &str = "172.22.0.22";
@@ -48,6 +51,24 @@ fn connect_pool() -> PgPool {
         .connect_lazy_with(conn_opts)
 }
 
+// fn system_menu() -> Menu {
+//     let dashboard = CustomMenuItem::new("dashboard".to_string(), "Dashboard");
+//     let settings = CustomMenuItem::new("settings".to_string(), "Settings...");
+//     // let close = CustomMenuItem::new("quit".to_string(), "Quit");
+//     let about = CustomMenuItem::new("about".to_string(), "About...");
+//     let submenu = Submenu::new(
+//         "File",
+//         Menu::new()
+//             .add_item(dashboard)
+//             .add_item(settings)
+//             .add_native_item(MenuItem::Separator)
+//             .add_item(about),
+//     );
+//     Menu::new()
+//         .add_native_item(MenuItem::Copy)
+//         .add_submenu(submenu)
+// }
+
 #[tokio::main]
 async fn main() {
     let pg_pool = connect_pool();
@@ -55,21 +76,7 @@ async fn main() {
         pg_pool: Arc::new(Mutex::new(pg_pool)),
     };
 
-    // let dashboard = CustomMenuItem::new("dashboard".to_string(), "Dashboard");
-    // let settings = CustomMenuItem::new("settings".to_string(), "Settings...");
-    // // let close = CustomMenuItem::new("quit".to_string(), "Quit");
-    // let about = CustomMenuItem::new("about".to_string(), "About...");
-    // let submenu = Submenu::new(
-    //     "File",
-    //     Menu::new()
-    //         .add_item(dashboard)
-    //         .add_item(settings)
-    //         .add_native_item(MenuItem::Separator)
-    //         .add_item(about),
-    // );
-    // let menu = Menu::new()
-    //     .add_native_item(MenuItem::Copy)
-    //     .add_submenu(submenu);
+    // let menu = system_menu();
 
     tauri::Builder::default()
         .manage(state)
