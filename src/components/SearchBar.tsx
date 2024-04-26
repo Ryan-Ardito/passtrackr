@@ -11,7 +11,7 @@ export function SearchBar() {
   const queryClient = useQueryClient();
 
   const handleSearchButton = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevents the default form submission behavior
+    e.preventDefault();
     queryClient.invalidateQueries(["search", search] as InvalidateQueryFilters);
   };
 
