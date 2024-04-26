@@ -3,8 +3,10 @@
 
 use std::{sync::Arc, time::Duration};
 
-use database::QueryError;
-use sqlx::{postgres::PgPoolOptions, PgPool};
+use sqlx::{
+    postgres::{PgConnectOptions, PgPoolOptions},
+    PgPool,
+};
 use tauri::{async_runtime::Mutex, CustomMenuItem, Menu, MenuItem, Submenu};
 
 pub mod api;
@@ -13,28 +15,35 @@ pub mod queries;
 
 use api::{add_visits, async_sleep, create_pass, get_guest, log_visit, search_passes};
 
-const PG_CONNECT_STRING: &str = "postgres://postgres:joyful@172.22.0.22/passtracker-dev";
+// const PG_CONNECT_STRING: &str = "postgres://postgres:joyful@172.22.0.22/passtracker-dev";
 // const PG_CONNECT_STRING: &str = "postgres://postgres:joyful_journey@35.247.29.177/passtracker";
+
+const USERNAME: &str = "postgres";
+const PASSWORD: &str = "joyful";
+const DB_HOST: &str = "172.22.0.22";
+const DB_NAME: &str = "passtracker-dev";
 
 pub struct AppState {
     pg_pool: Arc<Mutex<PgPool>>,
 }
 
-fn connect_pool() -> Result<PgPool, QueryError> {
+fn connect_pool() -> PgPool {
+    let conn_opts = PgConnectOptions::new()
+        .username(USERNAME)
+        .password(PASSWORD)
+        .host(DB_HOST)
+        .database(DB_NAME);
+
     PgPoolOptions::new()
         .min_connections(1)
         .max_connections(16)
         .acquire_timeout(Duration::from_secs(10))
-        .connect_lazy(PG_CONNECT_STRING)
-        .map_err(|err| QueryError {
-            name: "Database error".to_string(),
-            message: err.to_string(),
-        })
+        .connect_lazy_with(conn_opts)
 }
 
 #[tokio::main]
 async fn main() {
-    let pg_pool = connect_pool().expect("Fatal error!");
+    let pg_pool = connect_pool();
     let state = AppState {
         pg_pool: Arc::new(Mutex::new(pg_pool)),
     };

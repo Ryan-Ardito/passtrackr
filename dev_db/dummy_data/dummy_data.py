@@ -4,7 +4,7 @@ from dataclasses import dataclass, asdict
 
 
 NUM_GUESTS = 100_000
-NUM_PASSES = 1_000_000
+NUM_PASSES = 250_000
 
 
 PAYMENT_METHODS: list[str] = [
@@ -104,7 +104,7 @@ def generate_guests(
 
 def generate_passes(guests: list[Guest], first_names: list[str]) -> list[PunchPass]:
     passes = []
-    for i in range(len(guests) * 2):
+    for i in range(NUM_PASSES):
         passholder = random.choice(guests)
 
         guest_id = passholder.guest_id
