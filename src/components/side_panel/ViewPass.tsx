@@ -73,7 +73,7 @@ export const ViewPass = () => {
         }}
       />
       <CrudButton
-        style={{marginTop: "auto"}}
+        style={{ marginTop: "auto" }}
         label="Delete Pass"
         icon="pi pi-times"
         severity="danger"
