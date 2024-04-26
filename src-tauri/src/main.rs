@@ -38,7 +38,8 @@ fn connect_pool() -> PgPool {
         .username(USERNAME)
         .password(PASSWORD)
         .host(DB_HOST)
-        .database(DB_NAME);
+        .database(DB_NAME)
+        .port(5432);
 
     PgPoolOptions::new()
         .min_connections(1)
