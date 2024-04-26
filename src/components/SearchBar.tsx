@@ -30,7 +30,6 @@ export function SearchBar() {
           type="submit"
           label="Search"
           style={{ width: "6rem" }}
-          disabled={isSearchFetching}
           onSubmit={() => {}}
         />
       </div>

@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AppProvider, useAppContext } from "./AppContext";
 import { PrimeReactProvider } from "primereact/api";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Screen } from "./types";
 import { Dashboard } from "./screens/Dashboard";
 import { ViewGuest } from "./screens/ViewGuest";
@@ -29,7 +29,7 @@ function App() {
       <PrimeReactProvider>
         <AppProvider>
           <AppContent />
-          <ReactQueryDevtools />
+          {/* <ReactQueryDevtools /> */}
         </AppProvider>
       </PrimeReactProvider>
     </QueryClientProvider>
