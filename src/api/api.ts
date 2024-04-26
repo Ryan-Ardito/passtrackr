@@ -36,7 +36,9 @@ export const setPassActive = async (passData: PassData): Promise<string> => {
   return invoke("toggle_pass_active", { passData });
 };
 
-export const deletePass = async (passId: number | undefined): Promise<string> => {
+export const deletePass = async (
+  passId: number | undefined
+): Promise<string> => {
   if (!passId) {
     throw { name: "Delete Pass", message: "Pass not found" };
   }
