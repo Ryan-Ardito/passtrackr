@@ -7,7 +7,7 @@ import {
 import { Divider } from "primereact/divider";
 
 import { SidePanel } from "../../types";
-import { deletePass } from "../../api/api";
+import { deletePass, setPassActive } from "../../api/api";
 import { showMessage } from "../../utils/toast";
 import { useAppContext } from "../../AppContext";
 import { CrudButton } from "../Buttons";
@@ -19,10 +19,10 @@ export const ViewPass = () => {
     useAppContext();
   const queryClient = useQueryClient();
 
-  const { mutate: mutateDeletePass, isPending: isDeletePassPending } =
+  const { mutate: mutateSetPassActive, isPending: isSetPassActivePending } =
     useMutation({
-      mutationKey: ["deletePass"],
-      mutationFn: deletePass,
+      mutationKey: ["setPassActive"],
+      mutationFn: setPassActive,
       onError: (error) => showMessage(error.name, error.message, toast, "warn"),
       onSuccess: () => {
         queryClient.invalidateQueries([
@@ -33,6 +33,19 @@ export const ViewPass = () => {
           ...selectedPass,
           active: !selectedPass.active,
         });
+      },
+    });
+
+  const { mutate: mutateDeletePass, isPending: isDeletePassPending } =
+    useMutation({
+      mutationKey: ["deletePass"],
+      mutationFn: deletePass,
+      onError: (error) => showMessage(error.name, error.message, toast, "warn"),
+      onSuccess: () => {
+        queryClient.invalidateQueries([
+          "search",
+          search,
+        ] as InvalidateQueryFilters);
         showMessage("Delete pass", "Success!", toast, "success");
       },
     });
@@ -44,7 +57,11 @@ export const ViewPass = () => {
       <Divider style={{ marginTop: 11, marginBottom: 11 }} />
       <div className="flex-box">
         <div>Active:</div>
-        <InputSwitch checked />
+        <InputSwitch
+          checked={selectedPass.active}
+          disabled={isSetPassActivePending}
+          onChange={() => mutateSetPassActive(selectedPass)}
+        />
       </div>
       <Divider style={{ marginTop: 11, marginBottom: 11 }} />
       <CrudButton

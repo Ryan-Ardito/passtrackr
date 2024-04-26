@@ -6,7 +6,8 @@ use tauri::State;
 
 use crate::{
     database::{
-        delete_pass_permanent, increase_remaining_uses, insert_new_pass, log_visit_query, search_all_passes, QueryError
+        delete_pass_permanent, increase_remaining_uses, insert_new_pass, log_visit_query,
+        search_all_passes, set_pass_active, QueryError,
     },
     AppState,
 };
@@ -86,6 +87,23 @@ pub async fn log_visit(state: State<'_, AppState>, pass: SearchPassData) -> Resu
 }
 
 #[tauri::command(async)]
+pub async fn toggle_pass_active(
+    state: State<'_, AppState>,
+    pass_data: SearchPassData,
+) -> Result<(), QueryError> {
+    let pass_id = pass_data.pass_id as i32;
+    let new_active = !pass_data.active;
+    let res = set_pass_active(&state, pass_id, new_active)
+        .await
+        .map_err(|err| QueryError {
+            name: "Database error".to_string(),
+            message: err.to_string(),
+        });
+
+    res
+}
+
+#[tauri::command(async)]
 pub fn async_sleep(millis: u64) -> Result<(), String> {
     std::thread::sleep(Duration::from_millis(millis));
     Ok(())
@@ -122,10 +140,7 @@ pub async fn create_pass(
 }
 
 #[tauri::command(async)]
-pub async fn delete_pass(
-    state: State<'_, AppState>,
-    pass_id: i32,
-) -> Result<(), QueryError> {
+pub async fn delete_pass(state: State<'_, AppState>, pass_id: i32) -> Result<(), QueryError> {
     let res = delete_pass_permanent(&state, pass_id)
         .await
         .map_err(|err| QueryError {

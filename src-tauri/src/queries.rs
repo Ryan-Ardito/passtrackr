@@ -13,6 +13,10 @@ SET remaining_uses = CASE
     END
 WHERE pass_id = $1;"#;
 
+pub const SET_PASS_ACTIVE: &str = r#"UPDATE passes
+SET active = $2
+WHERE pass_id = $1;"#;
+
 pub const DELETE_PASS_PERMANENT: &str = r#"DELETE FROM passes
 WHERE pass_id = $1;"#;
 

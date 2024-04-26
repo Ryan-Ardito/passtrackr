@@ -13,7 +13,7 @@ pub mod api;
 pub mod database;
 pub mod queries;
 
-use api::{add_visits, async_sleep, create_pass, delete_pass, get_guest, log_visit, search_passes};
+use api::{add_visits, async_sleep, create_pass, toggle_pass_active, delete_pass, get_guest, log_visit, search_passes};
 
 // const PG_CONNECT_STRING: &str = "postgres://postgres:joyful@172.22.0.22/passtracker-dev";
 // const PG_CONNECT_STRING: &str = "postgres://postgres:joyful_journey@35.247.29.177/passtracker";
@@ -76,6 +76,7 @@ async fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             create_pass,
+            toggle_pass_active,
             delete_pass,
             get_guest,
             log_visit,

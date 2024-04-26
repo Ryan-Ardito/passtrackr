@@ -9,7 +9,7 @@ use crate::{
     api::{AddVisitsFormData, PassFormData},
     queries::{
         DELETE_PASS_PERMANENT, INCREASE_REMAINING_USES, INSERT_GUEST, INSERT_PASS, LOG_VISIT,
-        SEARCH_ALL,
+        SEARCH_ALL, SET_PASS_ACTIVE,
     },
     AppState,
 };
@@ -140,6 +140,21 @@ pub async fn log_visit_query(state: &State<'_, AppState>, pass_id: i32) -> Resul
     let mutex = state.pg_pool.lock().await;
     let pool = mutex.deref();
     sqlx::query(LOG_VISIT).bind(&pass_id).execute(pool).await?;
+    Ok(())
+}
+
+pub async fn set_pass_active(
+    state: &State<'_, AppState>,
+    pass_id: i32,
+    new_state: bool,
+) -> Result<()> {
+    let mutex = state.pg_pool.lock().await;
+    let pool = mutex.deref();
+    sqlx::query(SET_PASS_ACTIVE)
+        .bind(&pass_id)
+        .bind(&new_state)
+        .execute(pool)
+        .await?;
     Ok(())
 }
 
