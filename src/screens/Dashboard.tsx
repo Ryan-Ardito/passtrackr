@@ -12,7 +12,7 @@ export function Dashboard() {
   return (
     <div className="viewport-wrapper">
       <div id="dashboard" className="h-full flex-box flex-col">
-        <Toast ref={toast} position="bottom-left" />
+        <Toast ref={toast} position="bottom-center" />
         <SearchBar />
         <div className="h-full flex-box">
           <SearchResults />
