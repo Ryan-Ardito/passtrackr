@@ -6,7 +6,7 @@ import {
 
 import { Divider } from "primereact/divider";
 
-import { SidePanel } from "../../types";
+import { SidePanel, blankPass } from "../../types";
 import { deletePass, setPassActive } from "../../api/api";
 import { showMessage } from "../../utils/toast";
 import { useAppContext } from "../../AppContext";
@@ -46,6 +46,7 @@ export const ViewPass = () => {
           "search",
           search,
         ] as InvalidateQueryFilters);
+        setSelectedPass(blankPass);
         showMessage("Delete pass", "Success!", toast, "success");
       },
     });
@@ -65,6 +66,14 @@ export const ViewPass = () => {
       </div>
       <Divider style={{ marginTop: 11, marginBottom: 11 }} />
       <CrudButton
+        label="Back"
+        icon="pi pi-arrow-left"
+        onClick={() => {
+          setPanel(SidePanel.PassInteraction);
+        }}
+      />
+      <CrudButton
+        style={{marginTop: "auto"}}
         label="Delete Pass"
         icon="pi pi-times"
         severity="danger"
@@ -72,13 +81,6 @@ export const ViewPass = () => {
         onClick={(e) => {
           mutateDeletePass(selectedPass.pass_id);
           e.currentTarget.blur();
-        }}
-      />
-      <CrudButton
-        label="Back"
-        icon="pi pi-arrow-left"
-        onClick={() => {
-          setPanel(SidePanel.PassInteraction);
         }}
       />
       {/* <Divider style={{marginTop: 11, marginBottom: 11}}/>
