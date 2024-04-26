@@ -21,7 +21,7 @@ export function SearchBar() {
           <InputText
             id="search-input"
             className="p-inputtext-lg"
-            placeholder="Search passes..."
+            placeholder="Search passholder..."
             autoFocus
             onChange={(e) => debouncedSetSearch(e.currentTarget.value)}
           />
