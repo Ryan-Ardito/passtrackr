@@ -21,6 +21,10 @@ const remainingBodyTemplate = (rowData: PassData) => {
 
 const passtypeTemplate = (rowData: PassData) => rowData?.passtype?.name;
 
+const passholderTemplate = (rowData: PassData) => {
+  return `${rowData?.first_name} ${rowData?.last_name}`;
+};
+
 export function SearchResults() {
   const { searchData, selectedPass, setSelectedPass } = useAppContext();
   return (
@@ -43,8 +47,15 @@ export function SearchResults() {
       onSelectionChange={(e) => setSelectedPass(e.value || blankPass)}
       dataKey="pass_id"
     >
-      <Column field="first_name" header="First Name" style={{ width: "35%" }} />
-      <Column field="last_name" header="Last Name" style={{ width: "35%" }} />
+      {/* <Column field="first_name" header="First Name" style={{ width: "35%" }} />
+      <Column field="last_name" header="Last Name" style={{ width: "35%" }} /> */}
+      <Column
+        field="passholder"
+        body={passholderTemplate}
+        header="Passholder"
+        style={{ width: "45%" }}
+      />
+      <Column field="town" header="Town" style={{ width: "25%" }} />
       <Column
         field="passtype"
         body={passtypeTemplate}
@@ -53,13 +64,13 @@ export function SearchResults() {
       />
       <Column
         field="remaining_uses"
-        header="Remaining"
+        header="Uses"
         body={remainingBodyTemplate}
         style={{ width: "10%" }}
       />
       <Column
         field="active"
-        header="Active"
+        // header="On"
         body={activeBodyTemplate}
         style={{ width: "10%" }}
       />
