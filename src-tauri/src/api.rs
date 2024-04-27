@@ -58,21 +58,21 @@ pub struct NumVisits {
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
 pub struct SearchPassData {
-    pub pass_id: u64,
-    pub guest_id: u64,
+    pub pass_id: i32,
+    pub guest_id: i32,
     pub first_name: String,
     pub last_name: String,
     pub town: String,
-    pub remaining_uses: u64,
+    pub remaining_uses: i32,
     pub passtype: PassType,
     pub active: bool,
     pub creator: String,
-    pub creation_time: u64,
+    pub creation_time: i64,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct PassFormData {
-    pub guest_id: Option<u64>,
+    pub guest_id: Option<i32>,
     pub first_name: String,
     pub last_name: String,
     pub town: String,
@@ -110,7 +110,7 @@ pub async fn log_visit(state: State<'_, AppState>, pass: SearchPassData) -> Resu
     if pass.remaining_uses < 1 {
         return Err(ToastError::new("Log visit", "No uses left"));
     }
-    let pass_id = pass.pass_id as i32;
+    let pass_id = pass.pass_id;
     let _query_result = log_visit_query(&state, pass_id).await?;
     Ok(())
 }
@@ -120,7 +120,7 @@ pub async fn toggle_pass_active(
     state: State<'_, AppState>,
     pass_data: SearchPassData,
 ) -> Result<(), ToastError> {
-    let pass_id = pass_data.pass_id as i32;
+    let pass_id = pass_data.pass_id;
     let new_active = !pass_data.active;
     let _query_result = set_pass_active(&state, pass_id, new_active).await?;
     Ok(())
@@ -158,7 +158,7 @@ pub async fn delete_pass(state: State<'_, AppState>, pass_id: i32) -> Result<(),
 #[tauri::command(async)]
 pub async fn get_guest(
     state: State<'_, AppState>,
-    guest_id: u64,
+    guest_id: i32,
 ) -> Result<ViewGuestData, ToastError> {
     let GetGuestData {
         guest_id,
@@ -169,7 +169,7 @@ pub async fn get_guest(
         notes,
         creator,
         creation_time,
-    } = get_guest_from_id(&state, guest_id as i32).await?;
+    } = get_guest_from_id(&state, guest_id).await?;
 
     Ok(ViewGuestData {
         guest_id,
@@ -194,19 +194,19 @@ pub async fn search_passes(
         .map(|pass_data| {
             let passtype_code = pass_data.passtype;
             SearchPassData {
-                pass_id: pass_data.pass_id as u64,
-                guest_id: pass_data.guest_id as u64,
+                pass_id: pass_data.pass_id,
+                guest_id: pass_data.guest_id,
                 first_name: pass_data.first_name,
                 last_name: pass_data.last_name,
                 town: pass_data.town,
-                remaining_uses: pass_data.remaining_uses as u64,
+                remaining_uses: pass_data.remaining_uses,
                 passtype: PassType {
                     name: passtype_code.clone(),
                     code: passtype_code.clone(),
                 },
                 active: pass_data.active,
                 creator: pass_data.creator,
-                creation_time: pass_data.creation_time.unix_timestamp() as u64,
+                creation_time: pass_data.creation_time.unix_timestamp(),
             }
         })
         .collect();

@@ -62,9 +62,9 @@ pub struct PassSearchResponse {
 pub async fn insert_new_pass(state: &State<'_, AppState>, pass_data: PassFormData) -> Result<i32> {
     let guest_id = pass_data
         .guest_id
-        .unwrap_or(insert_guest(&state, &pass_data).await? as u64);
+        .unwrap_or(insert_guest(&state, &pass_data).await?);
     let data = NewPassData {
-        guest_id: guest_id as i32,
+        guest_id: guest_id,
         passtype: pass_data.passtype.code,
         remaining_uses: 10,
         active: true,
