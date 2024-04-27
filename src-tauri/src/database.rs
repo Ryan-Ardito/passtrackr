@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use sqlx::{prelude::FromRow, Result, Row};
+use sqlx::{postgres::PgQueryResult, prelude::FromRow, Result, Row};
 use tauri::State;
 use time::OffsetDateTime;
 
@@ -47,10 +47,7 @@ pub struct PassSearchResponse {
     pub creation_time: OffsetDateTime,
 }
 
-pub async fn insert_new_pass(
-    state: &State<'_, AppState>,
-    pass_data: PassFormData,
-) -> Result<i32> {
+pub async fn insert_new_pass(state: &State<'_, AppState>, pass_data: PassFormData) -> Result<i32> {
     let guest_id = pass_data
         .guest_id
         .unwrap_or(insert_guest(&state, &pass_data).await? as u64);
@@ -70,21 +67,16 @@ pub async fn insert_new_pass(
 pub async fn increase_remaining_uses(
     state: &State<'_, AppState>,
     data: &AddVisitsFormData,
-) -> Result<()> {
+) -> Result<PgQueryResult> {
     let pool = state.pg_pool.as_ref();
     sqlx::query(INCREASE_REMAINING_USES)
         .bind(&data.pass_id)
         .bind(&data.num_visits.code)
         .execute(pool)
-        .await?;
-
-    Ok(())
+        .await
 }
 
-pub async fn insert_guest(
-    state: &State<'_, AppState>,
-    data: &PassFormData,
-) -> Result<i32> {
+pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> Result<i32> {
     let pool = state.pg_pool.as_ref();
     let result = sqlx::query(INSERT_GUEST)
         .bind(&data.first_name)
@@ -99,10 +91,7 @@ pub async fn insert_guest(
     result.try_get(0)
 }
 
-pub async fn insert_pass(
-    state: &State<'_, AppState>,
-    data: &NewPassData,
-) -> Result<i32> {
+pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Result<i32> {
     let pool = state.pg_pool.as_ref();
     let result = sqlx::query(INSERT_PASS)
         .bind(&data.guest_id)
@@ -121,33 +110,30 @@ pub async fn insert_pass(
 pub async fn delete_pass_permanent(
     state: &State<'_, AppState>,
     pass_id: i32,
-) -> Result<()> {
+) -> Result<PgQueryResult> {
     let pool = state.pg_pool.as_ref();
     sqlx::query(DELETE_PASS_PERMANENT)
         .bind(&pass_id)
         .execute(pool)
-        .await?;
-    Ok(())
+        .await
 }
 
-pub async fn log_visit_query(state: &State<'_, AppState>, pass_id: i32) -> Result<()> {
+pub async fn log_visit_query(state: &State<'_, AppState>, pass_id: i32) -> Result<PgQueryResult> {
     let pool = state.pg_pool.as_ref();
-    sqlx::query(LOG_VISIT).bind(&pass_id).execute(pool).await?;
-    Ok(())
+    sqlx::query(LOG_VISIT).bind(&pass_id).execute(pool).await
 }
 
 pub async fn set_pass_active(
     state: &State<'_, AppState>,
     pass_id: i32,
     new_state: bool,
-) -> Result<()> {
+) -> Result<PgQueryResult> {
     let pool = state.pg_pool.as_ref();
     sqlx::query(SET_PASS_ACTIVE)
         .bind(&pass_id)
         .bind(&new_state)
         .execute(pool)
-        .await?;
-    Ok(())
+        .await
 }
 
 pub async fn search_all_passes(
@@ -155,10 +141,8 @@ pub async fn search_all_passes(
     search_term: &str,
 ) -> Result<Vec<PassSearchResponse>> {
     let pool = state.pg_pool.as_ref();
-    let passes = sqlx::query_as(SEARCH_ALL)
+    sqlx::query_as(SEARCH_ALL)
         .bind(format!("{search_term}%"))
         .fetch_all(pool)
-        .await;
-
-    passes
+        .await
 }

@@ -99,7 +99,8 @@ pub async fn log_visit(state: State<'_, AppState>, pass: SearchPassData) -> Resu
         return Err(ToastError::new("Log visit", "No uses left"));
     }
     let pass_id = pass.pass_id as i32;
-    Ok(log_visit_query(&state, pass_id).await?)
+    let _query_result = log_visit_query(&state, pass_id).await?;
+    Ok(())
 }
 
 #[tauri::command(async)]
@@ -109,7 +110,8 @@ pub async fn toggle_pass_active(
 ) -> Result<(), ToastError> {
     let pass_id = pass_data.pass_id as i32;
     let new_active = !pass_data.active;
-    Ok(set_pass_active(&state, pass_id, new_active).await?)
+    let _query_result = set_pass_active(&state, pass_id, new_active).await?;
+    Ok(())
 }
 
 #[tauri::command(async)]
@@ -123,7 +125,8 @@ pub async fn add_visits(
     state: State<'_, AppState>,
     add_visits_data: AddVisitsFormData,
 ) -> Result<(), ToastError> {
-    Ok(increase_remaining_uses(&state, &add_visits_data).await?)
+    let _query_result = increase_remaining_uses(&state, &add_visits_data).await?;
+    Ok(())
 }
 
 #[tauri::command(async)]
@@ -136,7 +139,8 @@ pub async fn create_pass(
 
 #[tauri::command(async)]
 pub async fn delete_pass(state: State<'_, AppState>, pass_id: i32) -> Result<(), ToastError> {
-    Ok(delete_pass_permanent(&state, pass_id).await?)
+    let _query_result = delete_pass_permanent(&state, pass_id).await?;
+    Ok(())
 }
 
 #[tauri::command(async)]
@@ -145,7 +149,7 @@ pub fn get_guest(guest_id: u64, delay_millis: u64, will_fail: bool) -> Result<St
 
     match will_fail {
         false => Ok(format!("{guest_id}")),
-        true => Err(ToastError::new("Dataase error", "couldn't connect to db")),
+        true => Err(ToastError::new("Database error", "doh")),
     }
 }
 
