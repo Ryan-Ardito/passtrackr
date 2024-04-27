@@ -54,7 +54,7 @@ export const ViewPass = () => {
   return (
     <div className="flex-box flex-col flex-1">
       <Divider style={{ marginTop: 11, marginBottom: 11 }} />
-      {selectedPass.pass_id && <PassInfo selectedPass={selectedPass} />}
+      <PassInfo selectedPass={selectedPass} />
       <Divider style={{ marginTop: 11, marginBottom: 11 }} />
       <div className="flex-box">
         <div>Active:</div>

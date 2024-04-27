@@ -1,6 +1,6 @@
 import { Button, ButtonProps } from "primereact/button";
 import { IconType } from "primereact/utils";
-import { CSSProperties, MouseEventHandler, useState } from "react";
+import { CSSProperties, MouseEventHandler, useEffect, useState } from "react";
 
 interface DeleteButtonProps {
   label?: string | undefined;
@@ -35,10 +35,14 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({
 }) => {
   let [confirm, setConfirm] = useState(false);
 
+  useEffect(() => {
+    setConfirm(false);
+  }, [disabled]);
+
   return (
     <>
       <div style={{ display: "flex", marginTop: "auto", width: "100%" }}>
-        {confirm ? (
+        {confirm && !disabled ? (
           <>
             <Button
               id="delete-button"
@@ -50,6 +54,9 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({
               severity={severity}
               size={size}
               loading={loading}
+              onBlur={() => {
+                setConfirm(false);
+              }}
               onClick={(e) => {
                 onClick(e);
                 setConfirm(false);
