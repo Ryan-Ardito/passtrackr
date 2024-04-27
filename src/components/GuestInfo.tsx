@@ -21,13 +21,14 @@ export function GuestInfo() {
 
   return (
     <>
+      <div>Guest ID: {guestData?.guest_id}</div>
       <div>First name: {guestData?.first_name}</div>
       <div>Last name: {guestData?.last_name}</div>
       <div>Town: {guestData?.town}</div>
       <div>Email: {guestData?.email}</div>
       <div>Notes: {guestData?.notes}</div>
       <div>creator: {guestData?.creator}</div>
-      <div>Creation time: {creationTime && creationTime}</div>
+      <div>Creation time: {creationTime}</div>
     </>
   );
 }

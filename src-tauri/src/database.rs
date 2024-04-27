@@ -6,8 +6,8 @@ use time::OffsetDateTime;
 use crate::{
     api::{AddVisitsFormData, PassFormData},
     queries::{
-        DELETE_PASS_PERMANENT, INCREASE_REMAINING_USES, INSERT_GUEST, INSERT_PASS, LOG_VISIT,
-        SEARCH_ALL, SET_PASS_ACTIVE,
+        DELETE_PASS_PERMANENT, GET_GUEST, INCREASE_REMAINING_USES, INSERT_GUEST, INSERT_PASS,
+        LOG_VISIT, SEARCH_ALL, SET_PASS_ACTIVE,
     },
     AppState,
 };
@@ -31,6 +31,18 @@ pub struct NewGuestData {
     email: String,
     notes: String,
     creator: String,
+}
+
+#[derive(Deserialize, Serialize, Clone, FromRow)]
+pub struct GetGuestData {
+    pub guest_id: i32,
+    pub first_name: String,
+    pub last_name: String,
+    pub town: String,
+    pub email: String,
+    pub notes: String,
+    pub creator: String,
+    pub creation_time: OffsetDateTime,
 }
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
@@ -89,6 +101,14 @@ pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> R
         .await?;
 
     result.try_get(0)
+}
+
+pub async fn get_guest_from_id(state: &State<'_, AppState>, guest_id: i32) -> Result<GetGuestData> {
+    let pool = state.pg_pool.as_ref();
+    sqlx::query_as(GET_GUEST)
+        .bind(guest_id)
+        .fetch_one(pool)
+        .await
 }
 
 pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Result<i32> {

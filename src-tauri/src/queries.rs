@@ -1,3 +1,5 @@
+pub const GET_GUEST: &str = r#"SELECT * FROM guests WHERE guest_id = $1"#;
+
 pub const INSERT_GUEST: &str = r#"INSERT INTO guests (first_name, last_name, town, email, notes, creator)
 VALUES ($1, $2, $3, $4, $5, $6)
 RETURNING guest_id"#;

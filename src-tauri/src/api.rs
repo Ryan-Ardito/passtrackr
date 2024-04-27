@@ -6,8 +6,8 @@ use tauri::State;
 
 use crate::{
     database::{
-        delete_pass_permanent, increase_remaining_uses, insert_new_pass, log_visit_query,
-        search_all_passes, set_pass_active,
+        delete_pass_permanent, get_guest_from_id, increase_remaining_uses, insert_new_pass,
+        log_visit_query, search_all_passes, set_pass_active, GetGuestData,
     },
     AppState,
 };
@@ -93,6 +93,18 @@ pub struct AddVisitsFormData {
     pub signature: String,
 }
 
+#[derive(Deserialize, Serialize, Clone, FromRow)]
+pub struct ViewGuestData {
+    guest_id: i32,
+    first_name: String,
+    last_name: String,
+    town: String,
+    email: String,
+    notes: String,
+    creator: String,
+    creation_time: i64,
+}
+
 #[tauri::command(async)]
 pub async fn log_visit(state: State<'_, AppState>, pass: SearchPassData) -> Result<(), ToastError> {
     if pass.remaining_uses < 1 {
@@ -144,13 +156,31 @@ pub async fn delete_pass(state: State<'_, AppState>, pass_id: i32) -> Result<(),
 }
 
 #[tauri::command(async)]
-pub fn get_guest(guest_id: u64, delay_millis: u64, will_fail: bool) -> Result<String, ToastError> {
-    std::thread::sleep(Duration::from_millis(delay_millis));
+pub async fn get_guest(
+    state: State<'_, AppState>,
+    guest_id: u64,
+) -> Result<ViewGuestData, ToastError> {
+    let GetGuestData {
+        guest_id,
+        first_name,
+        last_name,
+        town,
+        email,
+        notes,
+        creator,
+        creation_time,
+    } = get_guest_from_id(&state, guest_id as i32).await?;
 
-    match will_fail {
-        false => Ok(format!("{guest_id}")),
-        true => Err(ToastError::new("Database error", "doh")),
-    }
+    Ok(ViewGuestData {
+        guest_id,
+        first_name,
+        last_name,
+        town,
+        email,
+        notes,
+        creator,
+        creation_time: creation_time.unix_timestamp(),
+    })
 }
 
 #[tauri::command(async)]

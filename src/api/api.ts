@@ -19,9 +19,9 @@ export const getGuest = async (
   guestId: number | undefined
 ): Promise<GuestData> => {
   if (!guestId) {
-    throw { name: "Fetch guest", message: "No guest ID" };
+    throw { name: "View guest", message: "No guest ID" };
   }
-  return invoke("get_guest", { guestId, delayMillis: 600, willFail: false });
+  return invoke("get_guest", { guestId });
 };
 
 export const logVisit = async (pass: PassData): Promise<void> => {
