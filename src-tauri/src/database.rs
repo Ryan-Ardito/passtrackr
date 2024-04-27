@@ -19,7 +19,7 @@ pub struct NewPassData {
     remaining_uses: i32,
     active: bool,
     payment_method: String,
-    amount_paid_cents: i32,
+    amount_paid_cents: Option<i32>,
     creator: String,
 }
 
@@ -63,13 +63,14 @@ pub async fn insert_new_pass(state: &State<'_, AppState>, pass_data: PassFormDat
     let guest_id = pass_data
         .guest_id
         .unwrap_or(insert_guest(&state, &pass_data).await?);
+
     let data = NewPassData {
-        guest_id: guest_id,
+        guest_id,
         passtype: pass_data.passtype.code,
         remaining_uses: 10,
         active: true,
         payment_method: pass_data.pay_method.code,
-        amount_paid_cents: 350,
+        amount_paid_cents: pass_data.amount_paid.map(|num| (num * 100.0) as i32),
         creator: pass_data.signature,
     };
 

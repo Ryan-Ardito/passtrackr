@@ -79,7 +79,7 @@ pub struct PassFormData {
     pub passtype: PassType,
     pub pay_method: PayMethod,
     pub last_four: Option<String>,
-    pub amount_paid: Option<String>,
+    pub amount_paid: Option<f64>,
     pub signature: String,
 }
 
