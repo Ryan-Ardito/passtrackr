@@ -67,7 +67,7 @@ export const AddVisits = () => {
     initialValues: {
       pass_id: selectedPass.pass_id,
       num_visits: { name: "1x Visits", code: 1 },
-      pay_method: { name: "Credit", code: "credit" },
+      pay_method: { name: "Credit", code: "Credit" },
       last_four: "",
       amount_paid: "",
       signature: "",

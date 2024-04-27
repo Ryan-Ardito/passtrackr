@@ -67,7 +67,7 @@ export const AddPass = () => {
       last_name: selectedPass.last_name,
       town: selectedPass.town,
       passtype: passtypes[0],
-      pay_method: { name: "Credit", code: "credit" },
+      pay_method: { name: "Credit", code: "Credit" },
       last_four: "",
       amount_paid: "",
       signature: "",
