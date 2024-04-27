@@ -10,7 +10,7 @@ import { SidePanel, blankPass } from "../../types";
 import { deletePass, setPassActive } from "../../api/api";
 import { showMessage } from "../../utils/toast";
 import { useAppContext } from "../../AppContext";
-import { CrudButton } from "../Buttons";
+import { CrudButton, DeleteButton } from "../Buttons";
 import { PassInfo } from "../PassInfo";
 import { InputSwitch } from "primereact/inputswitch";
 
@@ -72,8 +72,7 @@ export const ViewPass = () => {
           setPanel(SidePanel.PassInteraction);
         }}
       />
-      <CrudButton
-        style={{ marginTop: "auto" }}
+      <DeleteButton
         label="Delete Pass"
         icon="pi pi-times"
         severity="danger"

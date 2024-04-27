@@ -152,7 +152,7 @@ export const LabeledDropdown: React.FC<DropdownProps> = ({
 
 interface TextInputButtonProps {
   label: string;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 export const TextInputButton: React.FC<TextInputButtonProps> = ({
