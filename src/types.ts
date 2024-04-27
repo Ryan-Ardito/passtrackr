@@ -75,6 +75,17 @@ export interface PassData {
   creation_time: number;
 }
 
+export interface GuestData {
+  guest_id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  town: string;
+  notes: string;
+  creator: string;
+  creation_time: number;
+}
+
 export const blankPass: PassData = {
   pass_id: undefined,
   guest_id: undefined,

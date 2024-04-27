@@ -1,46 +1,28 @@
-import { passtypes } from "../types";
-
-import { ScrollPanel } from "primereact/scrollpanel";
-
-import { InputField, LabeledDropdown } from "./FormInput";
 import { useAppContext } from "../AppContext";
+import { useQuery } from "@tanstack/react-query";
+import { getGuest } from "../api/api";
 
 export function GuestInfo() {
-  const { selectedPass, setSelectedPass } = useAppContext();
+  const { selectedPass } = useAppContext();
+
+  const { data: guestData, isFetching: isGuestFetching } = useQuery({
+    queryKey: ["guest", selectedPass.guest_id],
+    queryFn: () => getGuest(selectedPass.guest_id),
+  });
+
+  if (isGuestFetching) {
+    return <>Loading...</>;
+  }
 
   return (
-    <ScrollPanel className="pass-info">
-      <InputField
-        label="First Name:"
-        value={selectedPass.first_name}
-        onChange={(value) =>
-          setSelectedPass({ ...selectedPass, first_name: value })
-        }
-      />
-
-      <InputField
-        label="Last Name:"
-        value={selectedPass.last_name}
-        onChange={(value) =>
-          setSelectedPass({ ...selectedPass, last_name: value })
-        }
-      />
-
-      <InputField
-        label="Town:"
-        value={selectedPass.town}
-        onChange={(value) => setSelectedPass({ ...selectedPass, town: value })}
-      />
-
-      <LabeledDropdown
-        label="Passtype:"
-        name="passtype"
-        value={selectedPass.passtype}
-        options={passtypes}
-        onChange={(e) => {
-          setSelectedPass({...selectedPass, passtype: e.value });
-        }}
-      />
-    </ScrollPanel>
+    <>
+      <div>First name: {guestData?.first_name}</div>
+      <div>Last name: {guestData?.last_name}</div>
+      <div>Town: {guestData?.town}</div>
+      <div>Email: {guestData?.email}</div>
+      <div>Notes: {guestData?.notes}</div>
+      <div>creator: {guestData?.creator}</div>
+      <div>Creation time: {guestData?.creation_time}</div>
+    </>
   );
 }

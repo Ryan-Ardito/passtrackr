@@ -1,6 +1,11 @@
 import { invoke } from "@tauri-apps/api/tauri";
 
-import { AddVisitsFormData, CreatePassData, PassData } from "../types";
+import {
+  AddVisitsFormData,
+  CreatePassData,
+  GuestData,
+  PassData,
+} from "../types";
 
 export const searchPasses = async (
   searchString: string
@@ -12,7 +17,12 @@ export const searchPasses = async (
   });
 };
 
-export const getGuest = async (guestId: number): Promise<void> => {
+export const getGuest = async (
+  guestId: number | undefined
+): Promise<GuestData> => {
+  if (!guestId) {
+    throw { name: "Fetch guest", message: "No guest ID" };
+  }
   return invoke("get_guest", { guestId, delayMillis: 600, willFail: false });
 };
 
@@ -22,6 +32,7 @@ export const logVisit = async (pass: PassData): Promise<void> => {
   }
   return invoke("log_visit", { pass, delayMillis: 600, willFail: false });
 };
+
 export const addVisits = async (
   addVisitsData: AddVisitsFormData
 ): Promise<string> => {
