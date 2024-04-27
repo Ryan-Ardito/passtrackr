@@ -37,57 +37,57 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({
 
   return (
     <>
-        <div style={{display: "flex", marginTop: "auto", width: "100%"}}>
-      {confirm ? (
-        <>
+      <div style={{ display: "flex", marginTop: "auto", width: "100%" }}>
+        {confirm ? (
+          <>
+            <Button
+              id="delete-button"
+              rounded
+              raised={!disabled}
+              icon={icon}
+              type={type}
+              disabled={disabled}
+              severity={severity}
+              size={size}
+              loading={loading}
+              onClick={(e) => {
+                onClick(e);
+                setConfirm(false);
+              }}
+            />
+            <Button
+              label="Are you Sure?"
+              rounded
+              raised={!disabled}
+              type={type}
+              disabled={disabled}
+              size={size}
+              style={style}
+              loading={loading}
+              onClick={() => {
+                setConfirm(false);
+              }}
+            />
+          </>
+        ) : (
           <Button
             id="delete-button"
             rounded
             raised={!disabled}
+            label={label}
             icon={icon}
             type={type}
             disabled={disabled}
             severity={severity}
             size={size}
-            loading={loading}
-            onClick={(e) => {
-              onClick(e);
-              setConfirm(false);
-            }}
-          />
-          <Button
-            label="Are you Sure?"
-            rounded
-            raised={!disabled}
-            type={type}
-            disabled={disabled}
-            size={size}
             style={style}
-            loading={loading}
-            onClick={() => {
-              setConfirm(false);
+            onClick={(e) => {
+              e.preventDefault();
+              setConfirm(true);
             }}
           />
-        </>
-      ) : (
-        <Button
-          id="delete-button"
-          rounded
-          raised={!disabled}
-          label={label}
-          icon={icon}
-          type={type}
-          disabled={disabled}
-          severity={severity}
-          size={size}
-          style={style}
-          onClick={(e) => {
-            e.preventDefault();
-            setConfirm(true);
-          }}
-        />
-      )}
-        </div>
+        )}
+      </div>
     </>
   );
 };
