@@ -55,8 +55,9 @@ export const AddVisits = () => {
       ] as InvalidateQueryFilters);
       setSelectedPass({
         ...selectedPass,
-        remaining_uses:
-          selectedPass.remaining_uses + formik.values.num_visits.code,
+        remaining_uses: selectedPass.remaining_uses
+          ? selectedPass.remaining_uses + formik.values.num_visits.code
+          : undefined,
       });
       showMessage("Add Visits", "Success!", toast, "success");
       setPanel(SidePanel.PassInteraction);

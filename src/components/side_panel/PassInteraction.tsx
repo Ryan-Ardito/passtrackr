@@ -29,7 +29,9 @@ export const PassControl = () => {
       ] as InvalidateQueryFilters);
       setSelectedPass({
         ...selectedPass,
-        remaining_uses: selectedPass.remaining_uses - 1,
+        remaining_uses: selectedPass.remaining_uses
+          ? selectedPass.remaining_uses - 1
+          : undefined,
       });
       showMessage("Log visit", "Success!", toast, "success");
     },
@@ -37,7 +39,7 @@ export const PassControl = () => {
 
   return (
     <div className="flex-box flex-col flex-1">
-      <Divider style={{marginTop: 11, marginBottom: 11}}/>
+      <Divider style={{ marginTop: 11, marginBottom: 11 }} />
       <CrudButton
         label="Log Visit"
         icon="pi pi-check-square"
@@ -55,7 +57,7 @@ export const PassControl = () => {
           e.currentTarget.blur();
         }}
       />
-      <Divider style={{marginTop: 11, marginBottom: 11}}/>
+      <Divider style={{ marginTop: 11, marginBottom: 11 }} />
       <CrudButton
         label="Add Visits"
         icon="pi pi-plus"
@@ -79,8 +81,8 @@ export const PassControl = () => {
         icon="pi pi-id-card"
         onClick={() => setPanel(SidePanel.AddPass)}
       />
-      <Divider style={{marginTop: 6, marginBottom: 6}}/>
-      {selectedPass.pass_id && <PassInfo selectedPass={selectedPass}/>}
+      <Divider style={{ marginTop: 6, marginBottom: 6 }} />
+      {selectedPass.pass_id && <PassInfo selectedPass={selectedPass} />}
     </div>
   );
 };
