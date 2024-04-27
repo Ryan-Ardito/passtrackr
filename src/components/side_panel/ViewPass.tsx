@@ -76,6 +76,7 @@ export const ViewPass = () => {
         label="Delete Pass"
         icon="pi pi-times"
         severity="danger"
+        disabled={!selectedPass.pass_id}
         loading={isDeletePassPending}
         onClick={(e) => {
           mutateDeletePass(selectedPass.pass_id);
