@@ -1,4 +1,4 @@
-use std::{fmt::Display, ops::Deref};
+use std::fmt::Display;
 
 use serde::{Deserialize, Serialize};
 use sqlx::{prelude::FromRow, Result, Row};
@@ -82,8 +82,7 @@ pub async fn increase_remaining_uses(
     state: &State<'_, AppState>,
     data: &AddVisitsFormData,
 ) -> Result<()> {
-    let mutex = state.pg_pool.lock().await;
-    let pool = mutex.deref();
+    let pool = state.pg_pool.as_ref();
     sqlx::query(INCREASE_REMAINING_USES)
         .bind(&data.pass_id)
         .bind(&data.num_visits.code)
@@ -94,8 +93,7 @@ pub async fn increase_remaining_uses(
 }
 
 pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> Result<i32> {
-    let mutex = state.pg_pool.lock().await;
-    let pool = mutex.deref();
+    let pool = state.pg_pool.as_ref();
     let result = sqlx::query(INSERT_GUEST)
         .bind(&data.first_name)
         .bind(&data.last_name)
@@ -110,8 +108,7 @@ pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> R
 }
 
 pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Result<i32> {
-    let mutex = state.pg_pool.lock().await;
-    let pool = mutex.deref();
+    let pool = state.pg_pool.as_ref();
     let result = sqlx::query(INSERT_PASS)
         .bind(&data.guest_id)
         .bind(&data.passtype)
@@ -127,8 +124,7 @@ pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Res
 }
 
 pub async fn delete_pass_permanent(state: &State<'_, AppState>, pass_id: i32) -> Result<()> {
-    let mutex = state.pg_pool.lock().await;
-    let pool = mutex.deref();
+    let pool = state.pg_pool.as_ref();
     sqlx::query(DELETE_PASS_PERMANENT)
         .bind(&pass_id)
         .execute(pool)
@@ -137,8 +133,7 @@ pub async fn delete_pass_permanent(state: &State<'_, AppState>, pass_id: i32) ->
 }
 
 pub async fn log_visit_query(state: &State<'_, AppState>, pass_id: i32) -> Result<()> {
-    let mutex = state.pg_pool.lock().await;
-    let pool = mutex.deref();
+    let pool = state.pg_pool.as_ref();
     sqlx::query(LOG_VISIT).bind(&pass_id).execute(pool).await?;
     Ok(())
 }
@@ -148,8 +143,7 @@ pub async fn set_pass_active(
     pass_id: i32,
     new_state: bool,
 ) -> Result<()> {
-    let mutex = state.pg_pool.lock().await;
-    let pool = mutex.deref();
+    let pool = state.pg_pool.as_ref();
     sqlx::query(SET_PASS_ACTIVE)
         .bind(&pass_id)
         .bind(&new_state)
@@ -162,8 +156,7 @@ pub async fn search_all_passes(
     state: &State<'_, AppState>,
     search_term: &str,
 ) -> Result<Vec<PassSearchResponse>, sqlx::Error> {
-    let mutex = state.pg_pool.lock().await;
-    let pool = mutex.deref();
+    let pool = state.pg_pool.as_ref();
     let passes = sqlx::query_as(SEARCH_ALL)
         .bind(format!("{search_term}%"))
         .fetch_all(pool)

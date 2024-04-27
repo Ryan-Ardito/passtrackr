@@ -7,7 +7,6 @@ use sqlx::{
     postgres::{PgConnectOptions, PgPoolOptions},
     PgPool,
 };
-use tauri::async_runtime::Mutex;
 // use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
 
 pub mod api;
@@ -33,7 +32,7 @@ const DB_NAME: &str = "passtracker-dev";
 // const DB_NAME: &str = "passtracker";
 
 pub struct AppState {
-    pg_pool: Arc<Mutex<PgPool>>,
+    pg_pool: Arc<PgPool>,
 }
 
 fn connect_pool() -> PgPool {
@@ -73,7 +72,7 @@ fn connect_pool() -> PgPool {
 async fn main() {
     let pg_pool = connect_pool();
     let state = AppState {
-        pg_pool: Arc::new(Mutex::new(pg_pool)),
+        pg_pool: Arc::new(pg_pool),
     };
 
     // let menu = system_menu();
