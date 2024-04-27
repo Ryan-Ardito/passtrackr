@@ -21,6 +21,23 @@ CREATE TABLE IF NOT EXISTS passes (
     creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS payments (
+    payment_id SERIAL NOT NULL PRIMARY KEY,
+    guest_id INT NOT NULL REFERENCES guests(guest_id),
+    pass_id INT REFERENCES passes(pass_id),
+    payment_method VARCHAR(50),
+    amount_paid_cents INT,
+    creator VARCHAR(100),
+    creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS visits (
+    visit_id SERIAL NOT NULL PRIMARY KEY,
+    guest_id INT NOT NULL REFERENCES guests(guest_id),
+    pass_id INT REFERENCES passes(pass_id),
+    creation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 COPY guests (guest_id, first_name, last_name, email, town, notes, creator)
 FROM '/app/dummy_guests.csv' DELIMITER ',' CSV;
 
