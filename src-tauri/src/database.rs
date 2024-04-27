@@ -3,6 +3,7 @@ use std::fmt::Display;
 use serde::{Deserialize, Serialize};
 use sqlx::{prelude::FromRow, Result, Row};
 use tauri::State;
+use thiserror::Error;
 use time::OffsetDateTime;
 
 use crate::{
@@ -14,10 +15,19 @@ use crate::{
     AppState,
 };
 
-#[derive(Debug, Serialize, Clone)]
+#[derive(Debug, Serialize, Clone, Error)]
 pub struct QueryError {
     pub name: String,
     pub message: String,
+}
+
+impl QueryError {
+    pub fn new(message: &str) -> Self {
+        Self {
+            name: "Query error".to_string(),
+            message: message.to_string(),
+        }
+    }
 }
 
 impl Display for QueryError {
@@ -155,7 +165,7 @@ pub async fn set_pass_active(
 pub async fn search_all_passes(
     state: &State<'_, AppState>,
     search_term: &str,
-) -> Result<Vec<PassSearchResponse>, sqlx::Error> {
+) -> Result<Vec<PassSearchResponse>> {
     let pool = state.pg_pool.as_ref();
     let passes = sqlx::query_as(SEARCH_ALL)
         .bind(format!("{search_term}%"))
