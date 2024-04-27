@@ -1,8 +1,7 @@
-use std::{collections::HashMap, fmt::Display, time::Duration};
+use std::{collections::HashMap, time::Duration};
 
 use serde::{Deserialize, Serialize};
 use sqlx::prelude::FromRow;
-use thiserror::Error;
 use tauri::State;
 
 use crate::{
@@ -13,43 +12,29 @@ use crate::{
     AppState,
 };
 
-#[derive(Debug, Serialize, Clone, Error)]
-pub struct QueryError {
+#[derive(Debug, Serialize, Clone)]
+pub struct ToastError {
     pub name: String,
     pub message: String,
 }
 
-impl QueryError {
-    pub fn new(message: &str) -> Self {
+impl ToastError {
+    pub fn new(name: &str, message: &str) -> Self {
         Self {
-            name: "Query error".to_string(),
+            name: name.to_string(),
             message: message.to_string(),
         }
     }
 }
 
-impl Display for QueryError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(&self.message)
-    }
-}
-
-// A custom error type that represents all possible in our command
-#[derive(Debug, thiserror::Error)]
-pub enum ThizError {
-    #[error("Database error: {0}")]
-    Database(#[from] sqlx::Error),
-    #[error("Database error: {0}")]
-    Generic(#[from] QueryError),
-}
-
-// we must also implement serde::Serialize
-impl serde::Serialize for ThizError {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::ser::Serializer,
-    {
-        serializer.serialize_str(self.to_string().as_ref())
+impl<E> From<E> for ToastError
+where
+    E: std::error::Error,
+{
+    fn from(value: E) -> Self {
+        let name = "Error".to_string();
+        let message = value.to_string();
+        Self { name, message }
     }
 }
 
@@ -109,11 +94,9 @@ pub struct AddVisitsFormData {
 }
 
 #[tauri::command(async)]
-pub async fn log_visit(state: State<'_, AppState>, pass: SearchPassData) -> Result<(), ThizError> {
+pub async fn log_visit(state: State<'_, AppState>, pass: SearchPassData) -> Result<(), ToastError> {
     if pass.remaining_uses < 1 {
-        return Err(ThizError::Generic(QueryError::new(
-            "couldn't connect to db",
-        )));
+        return Err(ToastError::new("Log visit", "No uses left"));
     }
     let pass_id = pass.pass_id as i32;
     Ok(log_visit_query(&state, pass_id).await?)
@@ -123,7 +106,7 @@ pub async fn log_visit(state: State<'_, AppState>, pass: SearchPassData) -> Resu
 pub async fn toggle_pass_active(
     state: State<'_, AppState>,
     pass_data: SearchPassData,
-) -> Result<(), ThizError> {
+) -> Result<(), ToastError> {
     let pass_id = pass_data.pass_id as i32;
     let new_active = !pass_data.active;
     Ok(set_pass_active(&state, pass_id, new_active).await?)
@@ -139,7 +122,7 @@ pub fn async_sleep(millis: u64) -> Result<(), String> {
 pub async fn add_visits(
     state: State<'_, AppState>,
     add_visits_data: AddVisitsFormData,
-) -> Result<(), ThizError> {
+) -> Result<(), ToastError> {
     Ok(increase_remaining_uses(&state, &add_visits_data).await?)
 }
 
@@ -147,24 +130,22 @@ pub async fn add_visits(
 pub async fn create_pass(
     state: State<'_, AppState>,
     pass_data: PassFormData,
-) -> Result<i32, ThizError> {
+) -> Result<i32, ToastError> {
     Ok(insert_new_pass(&state, pass_data).await?)
 }
 
 #[tauri::command(async)]
-pub async fn delete_pass(state: State<'_, AppState>, pass_id: i32) -> Result<(), ThizError> {
+pub async fn delete_pass(state: State<'_, AppState>, pass_id: i32) -> Result<(), ToastError> {
     Ok(delete_pass_permanent(&state, pass_id).await?)
 }
 
 #[tauri::command(async)]
-pub fn get_guest(guest_id: u64, delay_millis: u64, will_fail: bool) -> Result<String, ThizError> {
+pub fn get_guest(guest_id: u64, delay_millis: u64, will_fail: bool) -> Result<String, ToastError> {
     std::thread::sleep(Duration::from_millis(delay_millis));
 
     match will_fail {
         false => Ok(format!("{guest_id}")),
-        true => Err(ThizError::Generic(QueryError::new(
-            "couldn't connect to db",
-        ))),
+        true => Err(ToastError::new("Dataase error", "couldn't connect to db")),
     }
 }
 
@@ -172,7 +153,7 @@ pub fn get_guest(guest_id: u64, delay_millis: u64, will_fail: bool) -> Result<St
 pub async fn search_passes(
     state: State<'_, AppState>,
     search: &str,
-) -> Result<Vec<SearchPassData>, ThizError> {
+) -> Result<Vec<SearchPassData>, ToastError> {
     // do this on the front end?
     let mut passtype_map = HashMap::new();
     passtype_map.insert("punch".to_string(), "Punch".to_string());

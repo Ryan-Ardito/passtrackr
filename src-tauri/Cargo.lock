@@ -2025,7 +2025,6 @@ dependencies = [
  "sqlx",
  "tauri",
  "tauri-build",
- "thiserror",
  "time",
  "tokio",
 ]

@@ -47,7 +47,10 @@ pub struct PassSearchResponse {
     pub creation_time: OffsetDateTime,
 }
 
-pub async fn insert_new_pass(state: &State<'_, AppState>, pass_data: PassFormData) -> Result<i32> {
+pub async fn insert_new_pass(
+    state: &State<'_, AppState>,
+    pass_data: PassFormData,
+) -> Result<i32> {
     let guest_id = pass_data
         .guest_id
         .unwrap_or(insert_guest(&state, &pass_data).await? as u64);
@@ -78,7 +81,10 @@ pub async fn increase_remaining_uses(
     Ok(())
 }
 
-pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> Result<i32> {
+pub async fn insert_guest(
+    state: &State<'_, AppState>,
+    data: &PassFormData,
+) -> Result<i32> {
     let pool = state.pg_pool.as_ref();
     let result = sqlx::query(INSERT_GUEST)
         .bind(&data.first_name)
@@ -93,7 +99,10 @@ pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> R
     result.try_get(0)
 }
 
-pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Result<i32> {
+pub async fn insert_pass(
+    state: &State<'_, AppState>,
+    data: &NewPassData,
+) -> Result<i32> {
     let pool = state.pg_pool.as_ref();
     let result = sqlx::query(INSERT_PASS)
         .bind(&data.guest_id)
@@ -109,7 +118,10 @@ pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Res
     result.try_get(0)
 }
 
-pub async fn delete_pass_permanent(state: &State<'_, AppState>, pass_id: i32) -> Result<()> {
+pub async fn delete_pass_permanent(
+    state: &State<'_, AppState>,
+    pass_id: i32,
+) -> Result<()> {
     let pool = state.pg_pool.as_ref();
     sqlx::query(DELETE_PASS_PERMANENT)
         .bind(&pass_id)
