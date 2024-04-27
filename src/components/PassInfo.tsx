@@ -5,6 +5,11 @@ interface PassInfoProps {
 }
 
 export const PassInfo: React.FC<PassInfoProps> = ({ selectedPass }) => {
+  let creationTime = undefined;
+  if (selectedPass?.creation_time) {
+    creationTime = new Date(selectedPass.creation_time * 1000).toDateString();
+  }
+
   return (
     <div>
       <div>pass_id: {selectedPass.pass_id}</div>
@@ -16,7 +21,7 @@ export const PassInfo: React.FC<PassInfoProps> = ({ selectedPass }) => {
       <div>passtype: {selectedPass.passtype.name}</div>
       <div>active: {selectedPass.active ? "yes" : "no"}</div>
       <div>creator: {selectedPass.creator}</div>
-      <div>creation_time: {selectedPass.creation_time}</div>
+      <div>creation_time: {creationTime}</div>
     </div>
   );
 };

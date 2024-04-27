@@ -10,6 +10,11 @@ export function GuestInfo() {
     queryFn: () => getGuest(selectedPass.guest_id),
   });
 
+  let creationTime = undefined;
+  if (guestData?.creation_time) {
+    creationTime = new Date(guestData.creation_time).toDateString();
+  }
+
   if (isGuestFetching) {
     return <>Loading...</>;
   }
@@ -22,7 +27,7 @@ export function GuestInfo() {
       <div>Email: {guestData?.email}</div>
       <div>Notes: {guestData?.notes}</div>
       <div>creator: {guestData?.creator}</div>
-      <div>Creation time: {guestData?.creation_time}</div>
+      <div>Creation time: {creationTime && creationTime}</div>
     </>
   );
 }
