@@ -8,18 +8,18 @@ NUM_PASSES = 250_000
 
 
 PAYMENT_METHODS: list[str] = [
-    "credit",
-    "cash",
-    "check",
-    "comp",
+    "Credit",
+    "Cash",
+    "Check",
+    "Comp",
 ]
 
 PASSTYPES: list[str] = [
-    "punch",
-    "annual",
-    "six_month",
-    "free_pass",
-    "facial",
+    "Punch",
+    "Annual",
+    "6 Month",
+    "Free Pass",
+    "Facial",
 ]
 
 TOWN_SUFFIXES = [

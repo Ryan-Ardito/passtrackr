@@ -12,8 +12,6 @@ export const searchPasses = async (
 ): Promise<PassData[]> => {
   return invoke("search_passes", {
     search: searchString,
-    delayMillis: 350,
-    willFail: false,
   });
 };
 

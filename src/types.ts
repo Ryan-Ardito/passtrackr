@@ -18,27 +18,27 @@ export interface PassType {
 }
 
 export const numAddVisits = [
-  { name: "1x Visits", code: 1 },
-  { name: "3x Visits", code: 3 },
-  { name: "5x Visits", code: 5 },
   { name: "10x Visits", code: 10 },
+  { name: "5x Visits", code: 5 },
+  { name: "3x Visits", code: 3 },
+  { name: "1x Visits", code: 1 },
 ];
 
 export const payMethods = [
-  { name: "Credit", code: "credit" },
-  { name: "Cash", code: "cash" },
-  { name: "Check", code: "check" },
-  { name: "Complimentary", code: "comp" },
+  { name: "Credit", code: "Credit" },
+  { name: "Cash", code: "Cash" },
+  { name: "Check", code: "Check" },
+  { name: "Comp", code: "Comp" },
 ];
 
 export const passtypes: PassType[] = [
-  { name: "10x Punch", code: "punch" },
-  { name: "6x Punch", code: "punch" },
-  { name: "Annual", code: "annual" },
-  { name: "6 Month", code: "six_month" },
-  { name: "Free Pass", code: "free_pass" },
-  { name: "3x Facial", code: "facial" },
-  { name: "6x Facial", code: "facial" },
+  { name: "10x Punch", code: "Punch" },
+  { name: "6x Punch", code: "Punch" },
+  { name: "Annual", code: "Annual" },
+  { name: "6 Month", code: "6 Month" },
+  { name: "Free Pass", code: "Free Pass" },
+  { name: "3x Facial", code: "Facial" },
+  { name: "6x Facial", code: "Facial" },
 ];
 
 export interface AddVisitsFormData {

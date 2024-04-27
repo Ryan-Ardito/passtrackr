@@ -1,4 +1,4 @@
-use std::{collections::HashMap, time::Duration};
+use std::time::Duration;
 
 use serde::{Deserialize, Serialize};
 use sqlx::prelude::FromRow;
@@ -154,14 +154,6 @@ pub async fn search_passes(
     state: State<'_, AppState>,
     search: &str,
 ) -> Result<Vec<SearchPassData>, ToastError> {
-    // do this on the front end?
-    let mut passtype_map = HashMap::new();
-    passtype_map.insert("punch".to_string(), "Punch".to_string());
-    passtype_map.insert("annual".to_string(), "Annual".to_string());
-    passtype_map.insert("six_month".to_string(), "6 Month".to_string());
-    passtype_map.insert("free_pass".to_string(), "Free Pass".to_string());
-    passtype_map.insert("facial".to_string(), "Facial".to_string());
-
     let passes = search_all_passes(&state, search).await?;
     let result = passes
         .into_iter()
@@ -175,8 +167,8 @@ pub async fn search_passes(
                 town: pass_data.town,
                 remaining_uses: pass_data.remaining_uses as u64,
                 passtype: PassType {
-                    name: passtype_map.get(&passtype_code).unwrap().clone(),
-                    code: passtype_code,
+                    name: passtype_code.clone(),
+                    code: passtype_code.clone(),
                 },
                 active: pass_data.active,
                 creator: pass_data.creator,
