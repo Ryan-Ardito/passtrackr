@@ -1,16 +1,38 @@
-use std::{collections::HashMap, time::Duration};
+use std::{collections::HashMap, fmt::Display, time::Duration};
 
 use serde::{Deserialize, Serialize};
 use sqlx::prelude::FromRow;
+use thiserror::Error;
 use tauri::State;
 
 use crate::{
     database::{
         delete_pass_permanent, increase_remaining_uses, insert_new_pass, log_visit_query,
-        search_all_passes, set_pass_active, QueryError,
+        search_all_passes, set_pass_active,
     },
     AppState,
 };
+
+#[derive(Debug, Serialize, Clone, Error)]
+pub struct QueryError {
+    pub name: String,
+    pub message: String,
+}
+
+impl QueryError {
+    pub fn new(message: &str) -> Self {
+        Self {
+            name: "Query error".to_string(),
+            message: message.to_string(),
+        }
+    }
+}
+
+impl Display for QueryError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(&self.message)
+    }
+}
 
 // A custom error type that represents all possible in our command
 #[derive(Debug, thiserror::Error)]

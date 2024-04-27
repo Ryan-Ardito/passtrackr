@@ -1,9 +1,6 @@
-use std::fmt::Display;
-
 use serde::{Deserialize, Serialize};
 use sqlx::{prelude::FromRow, Result, Row};
 use tauri::State;
-use thiserror::Error;
 use time::OffsetDateTime;
 
 use crate::{
@@ -14,27 +11,6 @@ use crate::{
     },
     AppState,
 };
-
-#[derive(Debug, Serialize, Clone, Error)]
-pub struct QueryError {
-    pub name: String,
-    pub message: String,
-}
-
-impl QueryError {
-    pub fn new(message: &str) -> Self {
-        Self {
-            name: "Query error".to_string(),
-            message: message.to_string(),
-        }
-    }
-}
-
-impl Display for QueryError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(&self.message)
-    }
-}
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
 pub struct NewPassData {
