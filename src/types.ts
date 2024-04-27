@@ -68,11 +68,11 @@ export interface PassData {
   first_name: string;
   last_name: string;
   town: string;
-  remaining_uses: number;
+  remaining_uses: number | undefined;
   passtype: PassType;
   active: boolean;
   creator: string;
-  creation_time: number;
+  creation_time: number | undefined;
 }
 
 export interface GuestData {
@@ -92,9 +92,9 @@ export const blankPass: PassData = {
   first_name: "",
   last_name: "",
   town: "",
-  remaining_uses: 0,
+  remaining_uses: undefined,
   passtype: passtypes[0],
   active: false,
   creator: "",
-  creation_time: 10,
+  creation_time: undefined,
 };
