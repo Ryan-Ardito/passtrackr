@@ -10,8 +10,8 @@ const activeBodyTemplate = (rowData: PassData) => {
 const remainingBodyTemplate = (rowData: PassData) => {
   return (
     <>
-      {rowData.passtype.code === "lifetime" ? (
-        <img src="src/assets/infinity.png" height={"14px"} />
+      {rowData.passtype.code === "Unlimited" ? (
+        <img src="src/assets/infinity.png" height={"12x"} />
       ) : (
         rowData.remaining_uses
       )}
@@ -29,7 +29,8 @@ export function SearchResults() {
   const { searchData, selectedPass, setSelectedPass } = useAppContext();
   return (
     <DataTable
-      style={{ width: "1px" }} // prevents table from running off the screen
+      // avoid table from running off the screen. kludge
+      style={{ width: "1px" }}
       id="search-results"
       className="flex-box flex-col"
       size="large"
