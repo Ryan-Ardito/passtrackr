@@ -7,7 +7,7 @@ use crate::{
     api::{AddVisitsFormData, PassFormData},
     queries::{
         DELETE_PASS_PERMANENT, GET_GUEST, GET_PASS, INCREASE_REMAINING_USES, INSERT_GUEST,
-        INSERT_PASS, LOG_VISIT, SEARCH_ALL, SET_PASS_ACTIVE,
+        INSERT_PASS, INSERT_PAYMENT, INSERT_VISIT, LOG_VISIT, SEARCH_ALL, SET_PASS_ACTIVE,
     },
     AppState,
 };
@@ -44,6 +44,14 @@ pub struct GetPassData {
     pub amount_paid_cents: i32,
     pub creator: String,
     pub creation_time: OffsetDateTime,
+}
+
+#[derive(Deserialize, Serialize, Clone, FromRow)]
+pub struct InsertPaymentData {
+    pub pass_id: i32,
+    pub payment_method: String,
+    pub amount_paid_cents: i32,
+    pub creator: String,
 }
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
@@ -97,6 +105,25 @@ pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> R
         .await?;
 
     result.try_get(0)
+}
+
+pub async fn insert_visit(state: &State<'_, AppState>, pass_id: i32) -> Result<PgQueryResult> {
+    let pool = state.pg_pool.as_ref();
+    sqlx::query(INSERT_VISIT).bind(&pass_id).execute(pool).await
+}
+
+pub async fn insert_payment(
+    state: &State<'_, AppState>,
+    data: &InsertPaymentData,
+) -> Result<PgQueryResult> {
+    let pool = state.pg_pool.as_ref();
+    sqlx::query(INSERT_PAYMENT)
+        .bind(&data.pass_id)
+        .bind(&data.payment_method)
+        .bind(&data.amount_paid_cents)
+        .bind(&data.creator)
+        .execute(pool)
+        .await
 }
 
 pub async fn get_guest_from_id(state: &State<'_, AppState>, guest_id: i32) -> Result<GetGuestData> {

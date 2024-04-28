@@ -10,6 +10,11 @@ pub const INSERT_PASS: &str = r#"INSERT INTO passes (guest_id, passtype, remaini
 VALUES ($1, $2, $3, $4, $5, $6, $7)
 RETURNING pass_id"#;
 
+pub const INSERT_PAYMENT: &str = r#"INSERT INTO payments (pass_id, payment_method, amount_paid_cents, creator)
+VALUES ($1, $2, $3, $4)"#;
+
+pub const INSERT_VISIT: &str = r#"INSERT INTO visits (pass_id) VALUES ($1)"#;
+
 pub const LOG_VISIT: &str = r#"UPDATE passes
 SET remaining_uses = CASE
         WHEN remaining_uses > 0 THEN remaining_uses - 1
