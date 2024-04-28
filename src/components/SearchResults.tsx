@@ -29,6 +29,7 @@ export function SearchResults() {
   const { searchData, selectedPass, setSelectedPass } = useAppContext();
   return (
     <DataTable
+      style={{ width: "1px" }} // prevents table from running off the screen
       id="search-results"
       className="flex-box flex-col"
       size="large"
