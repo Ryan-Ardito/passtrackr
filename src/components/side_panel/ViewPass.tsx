@@ -60,7 +60,7 @@ export const ViewPass = () => {
         <div>Active:</div>
         <InputSwitch
           checked={selectedPass.active}
-          disabled={isSetPassActivePending}
+          disabled={isSetPassActivePending || !selectedPass.pass_id}
           onChange={() => mutateSetPassActive(selectedPass)}
         />
       </div>
