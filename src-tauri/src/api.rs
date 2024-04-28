@@ -158,14 +158,24 @@ pub async fn add_visits(
 #[tauri::command(async)]
 pub async fn create_pass(
     state: State<'_, AppState>,
-    pass_data: PassFormData,
+    mut pass_data: PassFormData,
 ) -> Result<i32, ToastError> {
     let PassFormData {
         guest_id,
+        first_name,
+        last_name,
+        town,
         passtype,
         amount_paid,
+        signature,
         ..
-    } = &pass_data;
+    } = pass_data.clone();
+
+    // strip whitespace
+    pass_data.first_name = first_name.trim().to_string();
+    pass_data.last_name = last_name.trim().to_string();
+    pass_data.town = town.trim().to_string();
+    pass_data.signature = signature.trim().to_string();
 
     // insert new guest if no guest_id provided
     let guest_id = guest_id.unwrap_or(insert_guest(&state, &pass_data).await?);
@@ -187,6 +197,7 @@ pub async fn create_pass(
         amount_paid_cents,
         creator: pass_data.signature,
     };
+
     Ok(insert_pass(&state, &data).await?)
 }
 
