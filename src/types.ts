@@ -58,7 +58,7 @@ export interface CreatePassData {
   passtype: PassType;
   pay_method: { name: string; code: string };
   last_four: string | undefined;
-  amount_paid: string;
+  amount_paid: string | undefined;
   signature: string;
 }
 
@@ -73,6 +73,19 @@ export interface PassData {
   active: boolean;
   creator: string;
   creation_time: number | undefined;
+}
+
+export interface ViewPassData {
+  pass_id: number;
+  guest_id: number;
+  first_name: string;
+  last_name: string;
+  town: string;
+  remaining_uses: number;
+  passtype: PassType;
+  active: boolean;
+  creator: string;
+  creation_time: number;
 }
 
 export interface GuestData {

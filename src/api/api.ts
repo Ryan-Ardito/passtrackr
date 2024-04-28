@@ -5,6 +5,7 @@ import {
   CreatePassData,
   GuestData,
   PassData,
+  ViewPassData,
 } from "../types";
 
 export const searchPasses = async (
@@ -24,11 +25,20 @@ export const getGuest = async (
   return invoke("get_guest", { guestId });
 };
 
+export const getPass = async (
+  passId: number | undefined
+): Promise<ViewPassData> => {
+  if (!passId) {
+    throw { name: "View pass", message: "No pass ID" };
+  }
+  return invoke("get_pass", { guestId: passId });
+};
+
 export const logVisit = async (pass: PassData): Promise<void> => {
   if (!pass.active) {
     throw { name: "Log visit", message: "Pass is inactive" };
   }
-  return invoke("log_visit", { pass, delayMillis: 600, willFail: false });
+  return invoke("log_visit", { pass });
 };
 
 export const addVisits = async (

@@ -6,8 +6,9 @@ use tauri::State;
 
 use crate::{
     database::{
-        delete_pass_permanent, get_guest_from_id, increase_remaining_uses, insert_new_pass,
-        log_visit_query, search_all_passes, set_pass_active, GetGuestData,
+        delete_pass_permanent, get_guest_from_id, get_pass_from_id, increase_remaining_uses,
+        insert_guest, insert_pass, log_visit_query, search_all_passes, set_pass_active,
+        GetGuestData, GetPassData, NewPassData,
     },
     AppState,
 };
@@ -70,6 +71,19 @@ pub struct SearchPassData {
     pub creation_time: i64,
 }
 
+#[derive(Deserialize, Serialize, Clone, FromRow)]
+pub struct ViewPassData {
+    pub pass_id: i32,
+    pub guest_id: i32,
+    pub passtype: PassType,
+    pub remaining_uses: i32,
+    pub active: bool,
+    pub payment_method: String,
+    pub amount_paid_cents: i32,
+    pub creator: String,
+    pub creation_time: i64,
+}
+
 #[derive(Serialize, Deserialize, Clone)]
 pub struct PassFormData {
     pub guest_id: Option<i32>,
@@ -79,7 +93,7 @@ pub struct PassFormData {
     pub passtype: PassType,
     pub pay_method: PayMethod,
     pub last_four: Option<String>,
-    pub amount_paid: Option<f64>,
+    pub amount_paid: Option<String>,
     pub signature: String,
 }
 
@@ -146,13 +160,73 @@ pub async fn create_pass(
     state: State<'_, AppState>,
     pass_data: PassFormData,
 ) -> Result<i32, ToastError> {
-    Ok(insert_new_pass(&state, pass_data).await?)
+    let PassFormData {
+        guest_id,
+        passtype,
+        amount_paid,
+        ..
+    } = &pass_data;
+
+    // insert new guest if no guest_id provided
+    let guest_id = guest_id.unwrap_or(insert_guest(&state, &pass_data).await?);
+
+    let amount_paid_cents = match &amount_paid {
+        Some(num_str) => {
+            let amount: f64 = num_str.clone().parse()?;
+            Some((amount * 100.0) as i32)
+        }
+        None => None,
+    };
+
+    let data = NewPassData {
+        guest_id,
+        passtype: passtype.code.clone(),
+        remaining_uses: 69,
+        active: true,
+        payment_method: Some(pass_data.pay_method.code),
+        amount_paid_cents,
+        creator: pass_data.signature,
+    };
+    Ok(insert_pass(&state, &data).await?)
 }
 
 #[tauri::command(async)]
 pub async fn delete_pass(state: State<'_, AppState>, pass_id: i32) -> Result<(), ToastError> {
     let _query_result = delete_pass_permanent(&state, pass_id).await?;
     Ok(())
+}
+
+#[tauri::command(async)]
+pub async fn get_pass(
+    state: State<'_, AppState>,
+    pass_id: i32,
+) -> Result<ViewPassData, ToastError> {
+    let GetPassData {
+        pass_id,
+        guest_id,
+        passtype,
+        remaining_uses,
+        active,
+        payment_method,
+        amount_paid_cents,
+        creator,
+        creation_time,
+    } = get_pass_from_id(&state, pass_id).await?;
+
+    Ok(ViewPassData {
+        pass_id,
+        guest_id,
+        passtype: PassType {
+            name: passtype.clone(),
+            code: passtype.clone(),
+        },
+        remaining_uses,
+        active,
+        payment_method,
+        amount_paid_cents,
+        creator,
+        creation_time: creation_time.unix_timestamp(),
+    })
 }
 
 #[tauri::command(async)]

@@ -6,21 +6,21 @@ use time::OffsetDateTime;
 use crate::{
     api::{AddVisitsFormData, PassFormData},
     queries::{
-        DELETE_PASS_PERMANENT, GET_GUEST, INCREASE_REMAINING_USES, INSERT_GUEST, INSERT_PASS,
-        LOG_VISIT, SEARCH_ALL, SET_PASS_ACTIVE,
+        DELETE_PASS_PERMANENT, GET_GUEST, GET_PASS, INCREASE_REMAINING_USES, INSERT_GUEST,
+        INSERT_PASS, LOG_VISIT, SEARCH_ALL, SET_PASS_ACTIVE,
     },
     AppState,
 };
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
 pub struct NewPassData {
-    guest_id: i32,
-    passtype: String,
-    remaining_uses: i32,
-    active: bool,
-    payment_method: String,
-    amount_paid_cents: Option<i32>,
-    creator: String,
+    pub guest_id: i32,
+    pub passtype: String,
+    pub remaining_uses: i32,
+    pub active: bool,
+    pub payment_method: Option<String>,
+    pub amount_paid_cents: Option<i32>,
+    pub creator: String,
 }
 
 #[derive(Deserialize, Serialize, Clone)]
@@ -31,6 +31,19 @@ pub struct NewGuestData {
     email: String,
     notes: String,
     creator: String,
+}
+
+#[derive(Deserialize, Serialize, Clone, FromRow)]
+pub struct GetPassData {
+    pub pass_id: i32,
+    pub guest_id: i32,
+    pub passtype: String,
+    pub remaining_uses: i32,
+    pub active: bool,
+    pub payment_method: String,
+    pub amount_paid_cents: i32,
+    pub creator: String,
+    pub creation_time: OffsetDateTime,
 }
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
@@ -57,24 +70,6 @@ pub struct PassSearchResponse {
     pub active: bool,
     pub creator: String,
     pub creation_time: OffsetDateTime,
-}
-
-pub async fn insert_new_pass(state: &State<'_, AppState>, pass_data: PassFormData) -> Result<i32> {
-    let guest_id = pass_data
-        .guest_id
-        .unwrap_or(insert_guest(&state, &pass_data).await?);
-
-    let data = NewPassData {
-        guest_id,
-        passtype: pass_data.passtype.code,
-        remaining_uses: 10,
-        active: true,
-        payment_method: pass_data.pay_method.code,
-        amount_paid_cents: pass_data.amount_paid.map(|num| (num * 100.0) as i32),
-        creator: pass_data.signature,
-    };
-
-    insert_pass(&state, &data).await
 }
 
 pub async fn increase_remaining_uses(
@@ -110,6 +105,11 @@ pub async fn get_guest_from_id(state: &State<'_, AppState>, guest_id: i32) -> Re
         .bind(guest_id)
         .fetch_one(pool)
         .await
+}
+
+pub async fn get_pass_from_id(state: &State<'_, AppState>, pass_id: i32) -> Result<GetPassData> {
+    let pool = state.pg_pool.as_ref();
+    sqlx::query_as(GET_PASS).bind(pass_id).fetch_one(pool).await
 }
 
 pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Result<i32> {
