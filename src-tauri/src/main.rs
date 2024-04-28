@@ -80,13 +80,13 @@ async fn main() {
     tauri::Builder::default()
         .manage(state)
         // .menu(menu)
-        .on_menu_event(|event| match event.menu_item_id() {
-            "dashboard" => event.window().emit("dashboard", "").unwrap(),
-            "settings" => event.window().emit("settings", "").unwrap(),
-            "about" => event.window().emit("about", "").unwrap(),
-            // "quit" => std::process::exit(0),
-            _ => (),
-        })
+        // .on_menu_event(|event| match event.menu_item_id() {
+        //     "dashboard" => event.window().emit("dashboard", "").expect("Fatal error!"),
+        //     "settings" => event.window().emit("settings", "").expect("Fatal error!"),
+        //     "about" => event.window().emit("about", "").expect("Fatal error!"),
+        //     // "quit" => std::process::exit(0),
+        //     _ => (),
+        // })
         .invoke_handler(tauri::generate_handler![
             create_pass,
             toggle_pass_active,
@@ -98,5 +98,5 @@ async fn main() {
             async_sleep,
         ])
         .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+        .expect("Fatal error!");
 }
