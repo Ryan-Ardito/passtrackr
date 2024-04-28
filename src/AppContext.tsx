@@ -99,6 +99,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AppContext.Provider value={contextValues}>{children}</AppContext.Provider>
+    <AppContext.Provider value={contextValues}>
+      <Toast ref={toast} position="bottom-center" />
+      {children}
+    </AppContext.Provider>
   );
 }
