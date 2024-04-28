@@ -44,7 +44,7 @@ FROM
 JOIN 
     guests AS g ON p.guest_id = g.guest_id
 WHERE 
-    LOWER(CONCAT(g.first_name, ' ', g.last_name)) LIKE LOWER($1)
+    full_name_lower LIKE LOWER($1)
     OR
     LOWER(g.last_name) LIKE LOWER($1)
 ORDER BY 
