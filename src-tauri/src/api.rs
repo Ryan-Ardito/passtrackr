@@ -253,7 +253,7 @@ pub async fn get_guest(
         email,
         notes,
         creator,
-        creation_time: creation_time.unix_timestamp(),
+        creation_time: creation_time.unix_timestamp() * 1000,
     })
 }
 
@@ -280,7 +280,7 @@ pub async fn search_passes(
                 },
                 active: pass_data.active,
                 creator: pass_data.creator,
-                creation_time: pass_data.creation_time.unix_timestamp(),
+                creation_time: pass_data.creation_time.unix_timestamp() * 1000,
             }
         })
         .collect();

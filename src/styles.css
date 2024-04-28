@@ -100,4 +100,5 @@ html {
 
 #crud-button {
   flex-shrink: 0;
+  user-select: none;
 }
