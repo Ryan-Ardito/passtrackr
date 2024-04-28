@@ -44,7 +44,6 @@ fn connect_pool() -> PgPool {
         .port(5432);
 
     PgPoolOptions::new()
-        .min_connections(1)
         .max_connections(6)
         .acquire_timeout(Duration::from_secs(10))
         .connect_lazy_with(conn_opts)
