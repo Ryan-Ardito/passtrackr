@@ -7,8 +7,8 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "passreact",
-    "version": "0.0.0"
+    "productName": "passtracker",
+    "version": "0.1.0"
   },
   "tauri": {
     "allowlist": {
