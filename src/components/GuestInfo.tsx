@@ -20,7 +20,7 @@ export function GuestInfo() {
   }
 
   return (
-    <>
+    <div id="guest-info">
       <div>Guest ID: {guestData?.guest_id}</div>
       <div>First name: {guestData?.first_name}</div>
       <div>Last name: {guestData?.last_name}</div>
@@ -29,6 +29,6 @@ export function GuestInfo() {
       <div>Notes: {guestData?.notes}</div>
       <div>creator: {guestData?.creator}</div>
       <div>Creation time: {creationTime}</div>
-    </>
+    </div>
   );
 }

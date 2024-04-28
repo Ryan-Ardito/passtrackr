@@ -65,10 +65,20 @@ html {
   flex-direction: column;
   gap: 10px;
 }
-
+/* 
 .center-box {
   width: 400px;
   margin: 0 auto;
+} */
+
+#view-guest-screen {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr)
+}
+
+#edit-guest {
+  grid-column: 2;
 }
 
 .flex-1 {

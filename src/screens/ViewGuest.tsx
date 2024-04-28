@@ -9,15 +9,17 @@ export function ViewGuest() {
 
   return (
     <div className="viewport-wrapper">
-      <div className="center-box">
-        <GuestInfo />
-        <Button
-          label="Back"
-          onClick={(e) => {
-            e.preventDefault();
-            setScreen(Screen.Dashboard);
-          }}
-        />
+      <div id="view-guest-screen" className="center-box">
+        <div id="edit-guest">
+          <GuestInfo />
+          <Button
+            label="Back"
+            onClick={(e) => {
+              e.preventDefault();
+              setScreen(Screen.Dashboard);
+            }}
+          />
+        </div>
       </div>
     </div>
   );
