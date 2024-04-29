@@ -84,16 +84,14 @@ pub async fn increase_remaining_uses(
     state: &State<'_, AppState>,
     data: &AddVisitsFormData,
 ) -> Result<PgQueryResult> {
-    let pool = state.pg_pool.as_ref();
     sqlx::query(INCREASE_REMAINING_USES)
         .bind(&data.pass_id)
         .bind(&data.num_visits.code)
-        .execute(pool)
+        .execute(&state.pg_pool)
         .await
 }
 
 pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> Result<i32> {
-    let pool = state.pg_pool.as_ref();
     let result = sqlx::query(INSERT_GUEST)
         .bind(&data.first_name)
         .bind(&data.last_name)
@@ -101,46 +99,47 @@ pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> R
         .bind(&"")
         .bind(&"")
         .bind(&data.signature)
-        .fetch_one(pool)
+        .fetch_one(&state.pg_pool)
         .await?;
 
     result.try_get(0)
 }
 
 pub async fn insert_visit(state: &State<'_, AppState>, pass_id: i32) -> Result<PgQueryResult> {
-    let pool = state.pg_pool.as_ref();
-    sqlx::query(INSERT_VISIT).bind(&pass_id).execute(pool).await
+    sqlx::query(INSERT_VISIT)
+        .bind(&pass_id)
+        .execute(&state.pg_pool)
+        .await
 }
 
 pub async fn insert_payment(
     state: &State<'_, AppState>,
     data: &InsertPaymentData,
 ) -> Result<PgQueryResult> {
-    let pool = state.pg_pool.as_ref();
     sqlx::query(INSERT_PAYMENT)
         .bind(&data.pass_id)
         .bind(&data.payment_method)
         .bind(&data.amount_paid_cents)
         .bind(&data.creator)
-        .execute(pool)
+        .execute(&state.pg_pool)
         .await
 }
 
 pub async fn get_guest_from_id(state: &State<'_, AppState>, guest_id: i32) -> Result<GetGuestData> {
-    let pool = state.pg_pool.as_ref();
     sqlx::query_as(GET_GUEST)
         .bind(guest_id)
-        .fetch_one(pool)
+        .fetch_one(&state.pg_pool)
         .await
 }
 
 pub async fn get_pass_from_id(state: &State<'_, AppState>, pass_id: i32) -> Result<GetPassData> {
-    let pool = state.pg_pool.as_ref();
-    sqlx::query_as(GET_PASS).bind(pass_id).fetch_one(pool).await
+    sqlx::query_as(GET_PASS)
+        .bind(pass_id)
+        .fetch_one(&state.pg_pool)
+        .await
 }
 
 pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Result<i32> {
-    let pool = state.pg_pool.as_ref();
     let result = sqlx::query(INSERT_PASS)
         .bind(&data.guest_id)
         .bind(&data.passtype)
@@ -149,7 +148,7 @@ pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Res
         .bind(&data.payment_method)
         .bind(&data.amount_paid_cents)
         .bind(&data.creator)
-        .fetch_one(pool)
+        .fetch_one(&state.pg_pool)
         .await?;
 
     result.try_get(0)
@@ -159,16 +158,17 @@ pub async fn delete_pass_permanent(
     state: &State<'_, AppState>,
     pass_id: i32,
 ) -> Result<PgQueryResult> {
-    let pool = state.pg_pool.as_ref();
     sqlx::query(DELETE_PASS_PERMANENT)
         .bind(&pass_id)
-        .execute(pool)
+        .execute(&state.pg_pool)
         .await
 }
 
 pub async fn log_visit_query(state: &State<'_, AppState>, pass_id: i32) -> Result<PgQueryResult> {
-    let pool = state.pg_pool.as_ref();
-    sqlx::query(LOG_VISIT).bind(&pass_id).execute(pool).await
+    sqlx::query(LOG_VISIT)
+        .bind(&pass_id)
+        .execute(&state.pg_pool)
+        .await
 }
 
 pub async fn set_pass_active(
@@ -176,11 +176,10 @@ pub async fn set_pass_active(
     pass_id: i32,
     new_state: bool,
 ) -> Result<PgQueryResult> {
-    let pool = state.pg_pool.as_ref();
     sqlx::query(SET_PASS_ACTIVE)
         .bind(&pass_id)
         .bind(&new_state)
-        .execute(pool)
+        .execute(&state.pg_pool)
         .await
 }
 
@@ -188,9 +187,8 @@ pub async fn search_all_passes(
     state: &State<'_, AppState>,
     search_term: &str,
 ) -> Result<Vec<PassSearchResponse>> {
-    let pool = state.pg_pool.as_ref();
     sqlx::query_as(SEARCH_ALL)
         .bind(format!("{search_term}%"))
-        .fetch_all(pool)
+        .fetch_all(&state.pg_pool)
         .await
 }

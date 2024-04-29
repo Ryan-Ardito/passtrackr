@@ -1,7 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::{sync::Arc, time::Duration};
+use std::time::Duration;
 
 use sqlx::{
     postgres::{PgConnectOptions, PgPoolOptions},
@@ -32,7 +32,7 @@ const DB_NAME: &str = "passtracker-dev";
 // const DB_NAME: &str = "passtracker";
 
 pub struct AppState {
-    pg_pool: Arc<PgPool>,
+    pg_pool: PgPool,
 }
 
 fn connect_pool() -> PgPool {
@@ -70,9 +70,7 @@ fn connect_pool() -> PgPool {
 #[tokio::main]
 async fn main() {
     let pg_pool = connect_pool();
-    let state = AppState {
-        pg_pool: Arc::new(pg_pool),
-    };
+    let state = AppState { pg_pool };
 
     // let menu = system_menu();
 
