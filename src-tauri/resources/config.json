@@ -1,0 +1,7 @@
+{
+    "username": "postgres",
+    "password": "joyful",
+    "host_ip": "172.22.0.22",
+    "db_name": "passtracker-dev",
+    "port": 5432
+}
