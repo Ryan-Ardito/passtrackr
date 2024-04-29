@@ -18,6 +18,8 @@ use api::{
     toggle_pass_active,
 };
 
+const CONFIG_FILEPATH: &str = "resources/config.json";
+
 const USERNAME: &str = "postgres";
 const PASSWORD: &str = "joyful";
 const DB_HOST: &str = "172.22.0.22";
@@ -50,10 +52,9 @@ fn connection_options(file_path: &str) -> PgConnectOptions {
         db_name: DB_NAME.to_string(),
         port: PORT,
     };
-    let file = File::open(file_path);
-    let config = match file {
-        Ok(handle) => {
-            let reader = BufReader::new(handle);
+    let config = match File::open(file_path) {
+        Ok(file) => {
+            let reader = BufReader::new(file);
             serde_json::from_reader(reader).unwrap_or(default_config)
         }
         Err(_) => default_config,
@@ -75,7 +76,7 @@ fn create_pool(conn_opts: PgConnectOptions) -> PgPool {
 
 #[tokio::main]
 async fn main() {
-    let conn_opts = connection_options("resources/config.json");
+    let conn_opts = connection_options(CONFIG_FILEPATH);
     let pg_pool = create_pool(conn_opts);
     let state = AppState { pg_pool };
 
