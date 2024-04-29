@@ -22,7 +22,7 @@ const CONFIG_FILEPATH: &str = "resources/config.json";
 
 const USERNAME: &str = "postgres";
 const PASSWORD: &str = "joyful";
-const DB_HOST: &str = "172.22.0.22";
+const HOST_IP: &str = "172.22.0.22";
 const DB_NAME: &str = "passtracker-dev";
 const PORT: u16 = 5432;
 
@@ -48,7 +48,7 @@ fn connection_options(file_path: &str) -> PgConnectOptions {
     let default_config = DatabaseConfig {
         username: USERNAME.to_string(),
         password: PASSWORD.to_string(),
-        host_ip: DB_HOST.to_string(),
+        host_ip: HOST_IP.to_string(),
         db_name: DB_NAME.to_string(),
         port: PORT,
     };
