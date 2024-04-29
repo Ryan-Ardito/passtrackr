@@ -20,11 +20,11 @@ use api::{
 
 const CONFIG_FILEPATH: &str = "resources/config.json";
 
-const USERNAME: &str = "postgres";
-const PASSWORD: &str = "joyful";
-const HOST_IP: &str = "172.22.0.22";
-const DB_NAME: &str = "passtracker-dev";
-const PORT: u16 = 5432;
+const DEFAULT_USERNAME: &str = "postgres";
+const DEFAULT_PASSWORD: &str = "postgres";
+const DEFAULT_HOST_IP: &str = "127.0.0.1";
+const DEFAULT_DB_NAME: &str = "postgres";
+const DEFAULT_PORT: u16 = 5432;
 
 // const USERNAME: &str = "postgres";
 // const PASSWORD: &str = "joyful_journey";
@@ -46,11 +46,11 @@ struct DatabaseConfig {
 
 fn connection_options(file_path: &str) -> PgConnectOptions {
     let default_config = DatabaseConfig {
-        username: USERNAME.to_string(),
-        password: PASSWORD.to_string(),
-        host_ip: HOST_IP.to_string(),
-        db_name: DB_NAME.to_string(),
-        port: PORT,
+        username: DEFAULT_USERNAME.to_string(),
+        password: DEFAULT_PASSWORD.to_string(),
+        host_ip: DEFAULT_HOST_IP.to_string(),
+        db_name: DEFAULT_DB_NAME.to_string(),
+        port: DEFAULT_PORT,
     };
     let config = match File::open(file_path) {
         Ok(file) => {
