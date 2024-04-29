@@ -7,7 +7,6 @@ use sqlx::{
     postgres::{PgConnectOptions, PgPoolOptions},
     PgPool,
 };
-// use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
 
 pub mod api;
 pub mod database;
@@ -49,41 +48,13 @@ fn connect_pool() -> PgPool {
         .connect_lazy_with(conn_opts)
 }
 
-// fn system_menu() -> Menu {
-//     let dashboard = CustomMenuItem::new("dashboard".to_string(), "Dashboard");
-//     let settings = CustomMenuItem::new("settings".to_string(), "Settings...");
-//     // let close = CustomMenuItem::new("quit".to_string(), "Quit");
-//     let about = CustomMenuItem::new("about".to_string(), "About...");
-//     let submenu = Submenu::new(
-//         "File",
-//         Menu::new()
-//             .add_item(dashboard)
-//             .add_item(settings)
-//             .add_native_item(MenuItem::Separator)
-//             .add_item(about),
-//     );
-//     Menu::new()
-//         .add_native_item(MenuItem::Copy)
-//         .add_submenu(submenu)
-// }
-
 #[tokio::main]
 async fn main() {
     let pg_pool = connect_pool();
     let state = AppState { pg_pool };
 
-    // let menu = system_menu();
-
     tauri::Builder::default()
         .manage(state)
-        // .menu(menu)
-        // .on_menu_event(|event| match event.menu_item_id() {
-        //     "dashboard" => event.window().emit("dashboard", "").expect("Fatal error!"),
-        //     "settings" => event.window().emit("settings", "").expect("Fatal error!"),
-        //     "about" => event.window().emit("about", "").expect("Fatal error!"),
-        //     // "quit" => std::process::exit(0),
-        //     _ => (),
-        // })
         .invoke_handler(tauri::generate_handler![
             create_pass,
             toggle_pass_active,
