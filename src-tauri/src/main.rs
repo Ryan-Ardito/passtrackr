@@ -1,8 +1,9 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::time::Duration;
+use std::{fs::File, io::BufReader, time::Duration};
 
+use serde::{Deserialize, Serialize};
 use sqlx::{
     postgres::{PgConnectOptions, PgPoolOptions},
     PgPool,
@@ -17,13 +18,10 @@ use api::{
     toggle_pass_active,
 };
 
-// const PG_CONNECT_STRING: &str = "postgres://postgres:joyful@172.22.0.22/passtracker-dev";
-// const PG_CONNECT_STRING: &str = "postgres://postgres:joyful_journey@35.247.29.177/passtracker";
-
-const USERNAME: &str = "postgres";
-const PASSWORD: &str = "joyful";
-const DB_HOST: &str = "172.22.0.22";
-const DB_NAME: &str = "passtracker-dev";
+// const USERNAME: &str = "postgres";
+// const PASSWORD: &str = "joyful";
+// const DB_HOST: &str = "172.22.0.22";
+// const DB_NAME: &str = "passtracker-dev";
 
 // const USERNAME: &str = "postgres";
 // const PASSWORD: &str = "joyful_journey";
@@ -34,14 +32,29 @@ pub struct AppState {
     pg_pool: PgPool,
 }
 
-fn create_pool() -> PgPool {
-    let conn_opts = PgConnectOptions::new()
-        .username(USERNAME)
-        .password(PASSWORD)
-        .host(DB_HOST)
-        .database(DB_NAME)
-        .port(5432);
+#[derive(Debug, Deserialize, Serialize)]
+struct DatabaseConfig {
+    username: String,
+    password: String,
+    host_ip: String,
+    db_name: String,
+    port: u16,
+}
 
+fn connection_options(file_path: &str) -> PgConnectOptions {
+    let file = File::open(file_path).expect("Could not open config.json!");
+    let reader = BufReader::new(file);
+    let config: DatabaseConfig =
+        serde_json::from_reader(reader).expect("Failed to parse config.json");
+    PgConnectOptions::new()
+        .username(&config.username)
+        .password(&config.password)
+        .host(&config.host_ip)
+        .database(&config.db_name)
+        .port(config.port)
+}
+
+fn create_pool(conn_opts: PgConnectOptions) -> PgPool {
     PgPoolOptions::new()
         .max_connections(6)
         .acquire_timeout(Duration::from_secs(10))
@@ -50,7 +63,8 @@ fn create_pool() -> PgPool {
 
 #[tokio::main]
 async fn main() {
-    let pg_pool = create_pool();
+    let conn_opts = connection_options("resources/config.json");
+    let pg_pool = create_pool(conn_opts);
     let state = AppState { pg_pool };
 
     tauri::Builder::default()

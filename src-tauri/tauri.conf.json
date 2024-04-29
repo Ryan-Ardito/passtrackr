@@ -19,6 +19,9 @@
       }
     },
     "bundle": {
+      "resources": [
+        "resources/*"
+      ],
       "active": true,
       "targets": "all",
       "identifier": "jjpt",
