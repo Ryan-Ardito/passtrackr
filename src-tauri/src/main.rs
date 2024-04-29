@@ -18,10 +18,11 @@ use api::{
     toggle_pass_active,
 };
 
-// const USERNAME: &str = "postgres";
-// const PASSWORD: &str = "joyful";
-// const DB_HOST: &str = "172.22.0.22";
-// const DB_NAME: &str = "passtracker-dev";
+const USERNAME: &str = "postgres";
+const PASSWORD: &str = "joyful";
+const DB_HOST: &str = "172.22.0.22";
+const DB_NAME: &str = "passtracker-dev";
+const PORT: u16 = 5432;
 
 // const USERNAME: &str = "postgres";
 // const PASSWORD: &str = "joyful_journey";
@@ -42,10 +43,21 @@ struct DatabaseConfig {
 }
 
 fn connection_options(file_path: &str) -> PgConnectOptions {
-    let file = File::open(file_path).expect("Could not open config.json!");
-    let reader = BufReader::new(file);
-    let config: DatabaseConfig =
-        serde_json::from_reader(reader).expect("Failed to parse config.json");
+    let default_config = DatabaseConfig {
+        username: USERNAME.to_string(),
+        password: PASSWORD.to_string(),
+        host_ip: DB_HOST.to_string(),
+        db_name: DB_NAME.to_string(),
+        port: PORT,
+    };
+    let file = File::open(file_path);
+    let config = match file {
+        Ok(handle) => {
+            let reader = BufReader::new(handle);
+            serde_json::from_reader(reader).unwrap_or(default_config)
+        }
+        Err(_) => default_config,
+    };
     PgConnectOptions::new()
         .username(&config.username)
         .password(&config.password)
