@@ -34,7 +34,7 @@ pub struct AppState {
     pg_pool: PgPool,
 }
 
-fn connect_pool() -> PgPool {
+fn create_pool() -> PgPool {
     let conn_opts = PgConnectOptions::new()
         .username(USERNAME)
         .password(PASSWORD)
@@ -50,7 +50,7 @@ fn connect_pool() -> PgPool {
 
 #[tokio::main]
 async fn main() {
-    let pg_pool = connect_pool();
+    let pg_pool = create_pool();
     let state = AppState { pg_pool };
 
     tauri::Builder::default()
