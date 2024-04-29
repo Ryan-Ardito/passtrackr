@@ -49,8 +49,8 @@ FROM
 JOIN 
     guests AS g ON p.guest_id = g.guest_id
 WHERE 
-    full_name_lower LIKE LOWER($1)
+    first_last ILIKE $1
     OR
-    LOWER(g.last_name) LIKE LOWER($1)
+    g.last_name ILIKE $1
 ORDER BY 
     g.last_name, g.first_name, g.guest_id, p.pass_id;"#;
