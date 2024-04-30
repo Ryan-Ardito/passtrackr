@@ -313,7 +313,7 @@ pub async fn search_passes(
     state: State<'_, AppState>,
     search: &str,
 ) -> Result<Vec<SearchPassData>, ToastError> {
-    let passes = search_all_passes(&state, search).await?;
+    let passes = search_all_passes(&state, search.trim()).await?;
     let result = passes
         .into_iter()
         .map(|pass_data| {
