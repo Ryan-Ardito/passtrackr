@@ -52,7 +52,7 @@ export const ViewPass = () => {
     });
 
   return (
-    <div className="flex-box flex-col flex-1">
+    <div className="flex-col flex-1">
       <Divider style={{ marginTop: 11, marginBottom: 11 }} />
       <PassInfo selectedPass={selectedPass} />
       <Divider style={{ marginTop: 11, marginBottom: 11 }} />

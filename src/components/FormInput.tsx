@@ -22,7 +22,6 @@ export const InputField: React.FC<InputFieldProps> = ({
       <InputText
         className="form-text-input"
         value={value}
-        style={{ padding: 8 }}
         onChange={(e) => onChange(e.target.value)}
       />
     </>

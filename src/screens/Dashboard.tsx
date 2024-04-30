@@ -10,9 +10,9 @@ export function Dashboard() {
 
   return (
     <div className="viewport-wrapper">
-      <div id="dashboard" className="h-full flex-box flex-col">
+      <div id="dashboard" className="flex-box flex-col">
         <SearchBar />
-        <div className="h-full flex-box" style={{overflow: "hidden"}}>
+        <div className="flex-box" style={{overflow: "hidden"}}>
           <SearchResults />
           <Divider layout="vertical" style={{ margin: 6 }} />
           <RightPanel {...{ panel }} />
