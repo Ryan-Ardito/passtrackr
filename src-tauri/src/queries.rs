@@ -2,15 +2,18 @@ pub const GET_GUEST: &str = r#"SELECT * FROM guests WHERE guest_id = $1"#;
 
 pub const GET_PASS: &str = r#"SELECT * FROM passes WHERE pass_id = $1"#;
 
-pub const INSERT_GUEST: &str = r#"INSERT INTO guests (first_name, last_name, town, email, notes, creator)
+pub const INSERT_GUEST: &str = r#"INSERT
+INTO guests (first_name, last_name, town, email, notes, creator)
 VALUES ($1, $2, $3, $4, $5, $6)
 RETURNING guest_id"#;
 
-pub const INSERT_PASS: &str = r#"INSERT INTO passes (guest_id, passtype, remaining_uses, active, payment_method, amount_paid_cents, creator)
+pub const INSERT_PASS: &str = r#"INSERT
+INTO passes (guest_id, passtype, remaining_uses, active, payment_method, amount_paid_cents, creator)
 VALUES ($1, $2, $3, $4, $5, $6, $7)
 RETURNING pass_id"#;
 
-pub const INSERT_PAYMENT: &str = r#"INSERT INTO payments (pass_id, payment_method, amount_paid_cents, creator)
+pub const INSERT_PAYMENT: &str = r#"INSERT
+INTO payments (pass_id, payment_method, amount_paid_cents, creator)
 VALUES ($1, $2, $3, $4)"#;
 
 pub const INSERT_VISIT: &str = r#"INSERT INTO visits (pass_id) VALUES ($1)"#;

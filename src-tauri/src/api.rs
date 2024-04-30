@@ -188,10 +188,21 @@ pub async fn create_pass(
         None => None,
     };
 
+    let remaining_uses = match passtype.name.as_str() {
+        "10x Punch" => 10,
+        "6x Punch" => 6,
+        "Annual" => 22,
+        "6 Month" => 11,
+        "Free Pass" => 13,
+        "3x Facial" => 3,
+        "6x Facial" => 6,
+        _ => 1
+    };
+
     let data = NewPassData {
         guest_id,
         passtype: passtype.code.clone(),
-        remaining_uses: 69,
+        remaining_uses,
         active: true,
         payment_method: Some(pass_data.pay_method.code),
         amount_paid_cents,
