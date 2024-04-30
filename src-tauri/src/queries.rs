@@ -49,7 +49,7 @@ FROM
 JOIN 
     guests AS g ON p.guest_id = g.guest_id
 WHERE 
-    first_last ILIKE $1
+    first_name || ' ' || last_name ILIKE $1
     OR
     g.last_name ILIKE $1
 ORDER BY 
