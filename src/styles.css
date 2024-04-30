@@ -17,6 +17,11 @@ html, body {
   font-family: inherit;
 }
 
+.p-button-label {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 .p-scrollpanel-content {
   /* fix phantom scrollbar */
   overflow-x: hidden;
