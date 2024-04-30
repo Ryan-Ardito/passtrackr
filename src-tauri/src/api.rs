@@ -119,6 +119,17 @@ pub struct ViewGuestData {
     creation_time: i64,
 }
 
+#[derive(Deserialize)]
+enum NewPassType {
+    TenPunch,
+    SixPunch,
+    Annual,
+    SixMonth,
+    FreePass,
+    ThreeFacial,
+    SixFacial,
+}
+
 #[tauri::command(async)]
 pub async fn log_visit(state: State<'_, AppState>, pass: SearchPassData) -> Result<(), ToastError> {
     if pass.remaining_uses < 1 {
@@ -165,8 +176,6 @@ pub async fn create_pass(
         first_name,
         last_name,
         town,
-        passtype,
-        amount_paid,
         signature,
         ..
     } = pass_data.clone();
@@ -180,7 +189,7 @@ pub async fn create_pass(
     // insert new guest if no guest_id provided
     let guest_id = guest_id.unwrap_or(insert_guest(&state, &pass_data).await?);
 
-    let amount_paid_cents = match &amount_paid {
+    let amount_paid_cents = match &pass_data.amount_paid {
         Some(num_str) => {
             let amount: f64 = num_str.clone().parse()?;
             Some((amount * 100.0) as i32)
@@ -188,20 +197,21 @@ pub async fn create_pass(
         None => None,
     };
 
-    let remaining_uses = match passtype.name.as_str() {
-        "10x Punch" => 10,
-        "6x Punch" => 6,
-        "Annual" => 22,
-        "6 Month" => 11,
-        "Free Pass" => 13,
-        "3x Facial" => 3,
-        "6x Facial" => 6,
-        _ => 1
+    let passtype: NewPassType = serde_json::from_str(pass_data.passtype.code.as_str())?;
+
+    let remaining_uses = match passtype {
+        NewPassType::TenPunch => 10,
+        NewPassType::SixPunch => 6,
+        NewPassType::Annual => 22,
+        NewPassType::SixMonth => 11,
+        NewPassType::FreePass => 13,
+        NewPassType::ThreeFacial => 3,
+        NewPassType::SixFacial => 6,
     };
 
     let data = NewPassData {
         guest_id,
-        passtype: passtype.code.clone(),
+        passtype: pass_data.passtype.code.clone(),
         remaining_uses,
         active: true,
         payment_method: Some(pass_data.pay_method.code),
