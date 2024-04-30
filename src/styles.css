@@ -35,7 +35,7 @@ html, body {
 
 .viewport-wrapper {
   height: 100vh;
-  padding: 8px;
+  padding: 8px 8px 0px;
 }
 
 .p-toast {
@@ -60,10 +60,10 @@ html, body {
 .flex-box {
   display: flex;
   height: 100%;
-  width: 100%;
-  justify-content: top;
-  min-width: 0;
-  overflow: hidden;
+  /* width: 100%; */
+  /* justify-content: top; */
+  /* min-width: 0; */
+  /* overflow: hidden; */
   gap: 6px;
 }
 
@@ -102,10 +102,20 @@ html, body {
 
 #search-results {
   flex: 3;
+  min-width: 0px;
+}
+
+#dashboard {
+  overflow: hidden;
+}
+
+#right-panel {
+  min-width: 0px;
 }
 
 #create-pass {
   flex: 2;
+  /* overflow-y: hidden; */
 }
 
 #search-input {

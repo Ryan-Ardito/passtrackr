@@ -1,7 +1,6 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-import { ScrollPanel } from "primereact/scrollpanel";
 import { Divider } from "primereact/divider";
 
 import { SidePanel, passtypes, payMethods } from "../../types";
@@ -86,71 +85,69 @@ export const AddPass = () => {
   };
 
   return (
-    <ScrollPanel id="create-pass">
-      <form onSubmit={formik.handleSubmit} className="flex-box flex-col">
-        <Panel
-          header={
-            formik.values.guest_id
-              ? `Guest ${formik.values.guest_id}`
-              : "New Guest"
-          }
-        >
-          <FormikField
-            label="First name"
-            name="first_name"
-            onChange={handleFieldChange}
-            {...{ formik }}
-          />
-          <FormikField
-            label="Last name"
-            name="last_name"
-            onChange={handleFieldChange}
-            {...{ formik }}
-          />
-          <FormikField
-            label="Town"
-            name="town"
-            onChange={handleFieldChange}
-            {...{ formik }}
-          />
-        </Panel>
-        <Panel>
-          <FormikDropdown
-            label="Passtype"
-            name="passtype"
-            options={passtypes}
-            {...{ formik }}
-          />
-          <FormikDropdown
-            label="Payment method"
-            name="pay_method"
-            options={payMethods}
-            {...{ formik }}
-          />
-          <FormikField label="Last four" name="last_four" {...{ formik }} />
-          <FormikField label="Amount paid" name="amount_paid" {...{ formik }} />
-          <FormikField
-            label="Employee signature"
-            name="signature"
-            {...{ formik }}
-          />
-        </Panel>
-        <Divider style={{ margin: 6 }} />
-        <div style={{ display: "flex", gap: "8px" }}>
-          <CrudButton
-            icon="pi pi-check"
-            type="submit"
-            label="Create Pass"
-            loading={formik.isSubmitting}
-          />
-          <CrudButton
-            icon="pi pi-times"
-            severity="danger"
-            label="Cancel"
-            onClick={() => setPanel(SidePanel.PassInteraction)}
-          />
-        </div>
-      </form>
-    </ScrollPanel>
+    <form onSubmit={formik.handleSubmit} className="flex-box flex-col">
+      <Panel
+        header={
+          formik.values.guest_id
+            ? `Guest ${formik.values.guest_id}`
+            : "New Guest"
+        }
+      >
+        <FormikField
+          label="First name"
+          name="first_name"
+          onChange={handleFieldChange}
+          {...{ formik }}
+        />
+        <FormikField
+          label="Last name"
+          name="last_name"
+          onChange={handleFieldChange}
+          {...{ formik }}
+        />
+        <FormikField
+          label="Town"
+          name="town"
+          onChange={handleFieldChange}
+          {...{ formik }}
+        />
+      </Panel>
+      <Panel>
+        <FormikDropdown
+          label="Passtype"
+          name="passtype"
+          options={passtypes}
+          {...{ formik }}
+        />
+        <FormikDropdown
+          label="Payment method"
+          name="pay_method"
+          options={payMethods}
+          {...{ formik }}
+        />
+        <FormikField label="Last four" name="last_four" {...{ formik }} />
+        <FormikField label="Amount paid" name="amount_paid" {...{ formik }} />
+        <FormikField
+          label="Employee signature"
+          name="signature"
+          {...{ formik }}
+        />
+      </Panel>
+      <Divider style={{ margin: 6 }} />
+      <div style={{ display: "flex", gap: "8px" }}>
+        <CrudButton
+          icon="pi pi-check"
+          type="submit"
+          label="Create Pass"
+          loading={formik.isSubmitting}
+        />
+        <CrudButton
+          icon="pi pi-times"
+          severity="danger"
+          label="Cancel"
+          onClick={() => setPanel(SidePanel.PassInteraction)}
+        />
+      </div>
+    </form>
   );
 };
