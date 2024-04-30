@@ -43,27 +43,10 @@ html, body {
   z-index: 10000;
 }
 
-/* .form-input-label {
-  margin-top: 3px;
-  margin-bottom: 3px;
-} */
-
-/* .required {
-  display: inline-block;
-  margin-right: 16px;
-} */
-
-/* .h-full {
-  height: 100%;
-} */
-
 .flex-box {
   display: flex;
   height: 100%;
   /* width: 100%; */
-  /* justify-content: top; */
-  /* min-width: 0; */
-  /* overflow: hidden; */
   gap: 6px;
 }
 
