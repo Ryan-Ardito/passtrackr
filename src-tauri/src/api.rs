@@ -46,6 +46,12 @@ pub struct PassType {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct PassAmountType {
+    pub name: String,
+    pub code: NewPassType,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct PayMethod {
     pub name: String,
     pub code: String,
@@ -90,7 +96,7 @@ pub struct PassFormData {
     pub first_name: String,
     pub last_name: String,
     pub town: String,
-    pub passtype: PassType,
+    pub passtype: PassAmountType,
     pub pay_method: PayMethod,
     pub last_four: Option<String>,
     pub amount_paid: Option<String>,
@@ -119,8 +125,8 @@ pub struct ViewGuestData {
     creation_time: i64,
 }
 
-#[derive(Deserialize)]
-enum NewPassType {
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+pub enum NewPassType {
     TenPunch,
     SixPunch,
     Annual,
@@ -128,6 +134,20 @@ enum NewPassType {
     FreePass,
     ThreeFacial,
     SixFacial,
+}
+
+impl NewPassType {
+    pub fn pass_type_code(&self) -> &str {
+        match self {
+            Self::TenPunch => "Punch",
+            Self::SixPunch => "Punch",
+            Self::Annual => "Annual",
+            Self::SixMonth => "6 Month",
+            Self::FreePass => "Free Pass",
+            Self::ThreeFacial => "Facial",
+            Self::SixFacial => "Facial",
+        }
+    }
 }
 
 #[tauri::command(async)]
@@ -176,6 +196,7 @@ pub async fn create_pass(
         first_name,
         last_name,
         town,
+        passtype,
         signature,
         ..
     } = pass_data.clone();
@@ -197,9 +218,7 @@ pub async fn create_pass(
         None => None,
     };
 
-    let passtype: NewPassType = serde_json::from_str(pass_data.passtype.code.as_str())?;
-
-    let remaining_uses = match passtype {
+    let remaining_uses = match passtype.code {
         NewPassType::TenPunch => 10,
         NewPassType::SixPunch => 6,
         NewPassType::Annual => 22,
@@ -211,7 +230,7 @@ pub async fn create_pass(
 
     let data = NewPassData {
         guest_id,
-        passtype: pass_data.passtype.code.clone(),
+        passtype: pass_data.passtype.code.pass_type_code().to_string(),
         remaining_uses,
         active: true,
         payment_method: Some(pass_data.pay_method.code),
