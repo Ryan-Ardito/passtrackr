@@ -92,7 +92,7 @@ pub async fn increase_remaining_uses(
 }
 
 pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> Result<i32> {
-    let result = sqlx::query(INSERT_GUEST)
+    let new_guest = sqlx::query(INSERT_GUEST)
         .bind(&data.first_name)
         .bind(&data.last_name)
         .bind(&data.town)
@@ -102,7 +102,8 @@ pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> R
         .fetch_one(&state.pg_pool)
         .await?;
 
-    result.try_get(0)
+    let new_guest_id = new_guest.try_get(0);
+    new_guest_id
 }
 
 pub async fn insert_visit(state: &State<'_, AppState>, pass_id: i32) -> Result<PgQueryResult> {
@@ -140,7 +141,7 @@ pub async fn get_pass_from_id(state: &State<'_, AppState>, pass_id: i32) -> Resu
 }
 
 pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Result<i32> {
-    let result = sqlx::query(INSERT_PASS)
+    let row = sqlx::query(INSERT_PASS)
         .bind(&data.guest_id)
         .bind(&data.passtype)
         .bind(&data.remaining_uses)
@@ -151,7 +152,8 @@ pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Res
         .fetch_one(&state.pg_pool)
         .await?;
 
-    result.try_get(0)
+    let new_pass_id = row.try_get(0);
+    new_pass_id
 }
 
 pub async fn delete_pass_permanent(
