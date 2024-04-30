@@ -86,7 +86,7 @@ export const AddPass = () => {
   };
 
   return (
-    <ScrollPanel className="flex-2">
+    <ScrollPanel id="create-pass">
       <form onSubmit={formik.handleSubmit} className="flex-box flex-col">
         <Panel
           header={

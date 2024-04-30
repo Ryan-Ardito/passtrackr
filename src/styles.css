@@ -1,5 +1,7 @@
-html {
+html, body {
   font-size: 20px;
+  margin: 0px;
+  padding: 0px;
 }
 
 :root {
@@ -32,7 +34,8 @@ html {
 }
 
 .viewport-wrapper {
-  height: 87vh;
+  height: 100vh;
+  padding: 8px;
 }
 
 .p-toast {
@@ -56,8 +59,11 @@ html {
 
 .flex-box {
   display: flex;
-  padding-top: 2px;
+  height: 100%;
+  width: 100%;
   justify-content: top;
+  min-width: 0;
+  overflow: hidden;
   gap: 6px;
 }
 
@@ -65,11 +71,6 @@ html {
   flex-direction: column;
   gap: 10px;
 }
-/* 
-.center-box {
-  width: 400px;
-  margin: 0 auto;
-} */
 
 #view-guest-screen {
   display: grid;
@@ -91,7 +92,7 @@ html {
 
 .form-text-input {
   padding: 8;
-  width: 100%
+  width: 100%;
 }
 
 #searchbar {
@@ -101,7 +102,10 @@ html {
 
 #search-results {
   flex: 3;
-  height: 100%
+}
+
+#create-pass {
+  flex: 2;
 }
 
 #search-input {
