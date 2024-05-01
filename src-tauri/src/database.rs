@@ -88,14 +88,14 @@ pub struct PaymentRow {
     pub payment_method: String,
     pub amount_paid_cents: i32,
     pub creator: String,
-    pub creation_time: i64,
+    pub creation_time: OffsetDateTime,
 }
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
 pub struct VisitRow {
     pub visit_id: i32,
     pub pass_id: i32,
-    pub creation_time: i64,
+    pub creation_time: OffsetDateTime,
 }
 
 pub async fn get_payments_from_pass_id(

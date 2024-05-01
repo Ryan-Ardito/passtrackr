@@ -14,8 +14,8 @@ pub mod database;
 pub mod queries;
 
 use api::{
-    add_visits, async_sleep, create_pass, delete_pass, get_guest, log_visit, search_passes,
-    toggle_pass_active,
+    add_visits, async_sleep, create_pass, delete_pass, get_guest, get_payments, get_visits,
+    log_visit, search_passes, toggle_pass_active,
 };
 
 const CONFIG_FILEPATH: &str = "resources/config.json";
@@ -83,6 +83,8 @@ async fn main() {
     tauri::Builder::default()
         .manage(state)
         .invoke_handler(tauri::generate_handler![
+            get_visits,
+            get_payments,
             create_pass,
             toggle_pass_active,
             delete_pass,
