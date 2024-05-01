@@ -34,7 +34,7 @@ export const getPass = async (
   return invoke("get_pass", { guestId: passId });
 };
 
-export const logVisit = async (pass: PassData): Promise<void> => {
+export const logVisit = async (pass: PassData): Promise<number> => {
   if (!pass.active) {
     throw { name: "Log visit", message: "Pass is inactive" };
   }

@@ -23,7 +23,8 @@ SET remaining_uses = CASE
         WHEN remaining_uses > 0 THEN remaining_uses - 1
         ELSE 0
     END
-WHERE pass_id = $1;"#;
+WHERE pass_id = $1
+RETURNING remaining_uses;"#;
 
 pub const SET_PASS_ACTIVE: &str = r#"UPDATE passes
 SET active = $2

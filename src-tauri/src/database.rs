@@ -116,17 +116,19 @@ pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> R
     new_guest_id
 }
 
-pub async fn use_pass(state: &State<'_, AppState>, pass_id: i32) -> Result<()> {
+pub async fn use_pass(state: &State<'_, AppState>, pass_id: i32) -> Result<i32> {
     let mut transaction = state.pg_pool.begin().await?;
-    let _use_pass_res = sqlx::query(LOG_VISIT)
+    let use_pass_res = sqlx::query(LOG_VISIT)
         .bind(&pass_id)
-        .execute(&mut *transaction)
+        .fetch_one(&mut *transaction)
         .await?;
     let _insert_visit_res = sqlx::query(INSERT_VISIT)
         .bind(&pass_id)
         .execute(&mut *transaction)
         .await?;
-    transaction.commit().await
+    transaction.commit().await?;
+    let remaining_uses = use_pass_res.try_get(0)?;
+    Ok(remaining_uses)
 }
 
 pub async fn insert_visit(state: &State<'_, AppState>, pass_id: i32) -> Result<()> {

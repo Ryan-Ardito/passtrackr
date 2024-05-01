@@ -22,16 +22,14 @@ export const PassControl = () => {
     mutationKey: ["logVisit"],
     mutationFn: logVisit,
     onError: (error) => showMessage(error.name, error.message, toast, "warn"),
-    onSuccess: () => {
+    onSuccess: (remaining_uses) => {
       queryClient.invalidateQueries([
         "search",
         search,
       ] as InvalidateQueryFilters);
       setSelectedPass({
         ...selectedPass,
-        remaining_uses: selectedPass.remaining_uses
-          ? selectedPass.remaining_uses - 1
-          : undefined,
+        remaining_uses,
       });
       showMessage("Log visit", "Success!", toast, "success");
     },

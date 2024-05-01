@@ -151,18 +151,24 @@ impl NewPassType {
 }
 
 #[tauri::command(async)]
-pub async fn log_visit(state: State<'_, AppState>, pass: SearchPassData) -> Result<(), ToastError> {
+pub async fn log_visit(
+    state: State<'_, AppState>,
+    pass: SearchPassData,
+) -> Result<i32, ToastError> {
     if pass.remaining_uses < 1 {
         return Err(ToastError::new("Log visit", "No uses left"));
     }
     let pass_id = pass.pass_id;
-    match pass.passtype.code.as_str() {
+    let remaining_uses = match pass.passtype.code.as_str() {
         // rewrite this as a parsed enum
-        "Annual" | "Free Pass" | "6 Month" => insert_visit(&state, pass_id).await?,
+        "Annual" | "Free Pass" | "6 Month" => {
+            insert_visit(&state, pass_id).await?;
+            pass.remaining_uses
+        }
         "Punch" | "Facial" => use_pass(&state, pass_id).await?,
-        _ => (),
+        _ => pass.remaining_uses,
     };
-    Ok(())
+    Ok(remaining_uses)
 }
 
 #[tauri::command(async)]
@@ -194,7 +200,8 @@ pub async fn add_visits(
         }
         None => None,
     };
-    let _query_result = increase_remaining_uses(&state, &add_visits_data, amount_paid_cents).await?;
+    let _query_result =
+        increase_remaining_uses(&state, &add_visits_data, amount_paid_cents).await?;
     Ok(())
 }
 
