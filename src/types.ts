@@ -60,7 +60,7 @@ export interface PaymentRow {
   payment_id: number;
   pass_id: number;
   pay_method: string | undefined;
-  amount_paid_cents: number | undefined;
+  amount_paid: number | undefined;
   creator: string;
   creation_time: number;
 }

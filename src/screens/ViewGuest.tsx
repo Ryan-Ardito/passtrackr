@@ -4,15 +4,16 @@ import { Screen } from "../types";
 import { GuestInfo } from "../components/GuestInfo";
 import { useAppContext } from "../AppContext";
 import { VisitsTable } from "../components/VisitsTable";
+import { PaymentsTable } from "../components/PaymentsTable";
 
 export function ViewGuest() {
   const { setScreen } = useAppContext();
 
   return (
     <div className="viewport-wrapper">
-      <div id="view-guest-screen" className="center-box">
+      <div id="view-guest-screen">
+        <VisitsTable />
         <div id="edit-guest">
-          <VisitsTable />
           <GuestInfo />
           <Button
             label="Back"
@@ -22,6 +23,7 @@ export function ViewGuest() {
             }}
           />
         </div>
+        <PaymentsTable />
       </div>
     </div>
   );
