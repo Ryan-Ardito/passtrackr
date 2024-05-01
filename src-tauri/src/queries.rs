@@ -20,9 +20,9 @@ pub const INSERT_VISIT: &str = r#"INSERT INTO visits (pass_id) VALUES ($1)"#;
 
 pub const LOG_VISIT: &str = r#"UPDATE passes
 SET remaining_uses = CASE
-        WHEN remaining_uses > 0 THEN remaining_uses - 1
-        ELSE 0
-    END
+    WHEN remaining_uses > 0 THEN remaining_uses - 1
+    ELSE 0
+END
 WHERE pass_id = $1
 RETURNING remaining_uses;"#;
 
