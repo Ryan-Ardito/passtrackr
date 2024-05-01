@@ -5,7 +5,9 @@ import {
   CreatePassData,
   GuestData,
   PassData,
+  PaymentRow,
   ViewPassData,
+  VisistRow,
 } from "../types";
 
 export const searchPasses = async (
@@ -14,6 +16,14 @@ export const searchPasses = async (
   return invoke("search_passes", {
     search: searchString,
   });
+};
+
+export const getPayments = async (passId: number): Promise<PaymentRow[]> => {
+  return invoke("get_payments_from_pass_id", { passId });
+};
+
+export const getVisits = async (passId: number): Promise<VisistRow[]> => {
+  return invoke("get_visits_from_pass_id", { passId });
 };
 
 export const getGuest = async (

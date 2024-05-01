@@ -7,8 +7,8 @@ use crate::{
     api::{AddVisitsFormData, PassFormData},
     queries::{
         DELETE_PASS_PERMANENT, DELETE_PAYMENTS_PASS_ID, DELETE_VISITS_PASS_ID, GET_GUEST, GET_PASS,
-        INCREASE_REMAINING_USES, INSERT_GUEST, INSERT_PASS, INSERT_PAYMENT, INSERT_VISIT,
-        LOG_VISIT, SEARCH_ALL, SET_PASS_ACTIVE,
+        GET_PAYMENTS_FROM_PASS_ID, GET_VISITS_FROM_PASS_ID, INCREASE_REMAINING_USES, INSERT_GUEST,
+        INSERT_PASS, INSERT_PAYMENT, INSERT_VISIT, LOG_VISIT, SEARCH_ALL, SET_PASS_ACTIVE,
     },
     AppState,
 };
@@ -79,6 +79,43 @@ pub struct PassSearchResponse {
     pub active: bool,
     pub creator: String,
     pub creation_time: OffsetDateTime,
+}
+
+#[derive(Deserialize, Serialize, Clone, FromRow)]
+pub struct PaymentRow {
+    pub payment_id: i32,
+    pub pass_id: i32,
+    pub payment_method: String,
+    pub amount_paid_cents: i32,
+    pub creator: String,
+    pub creation_time: i64,
+}
+
+#[derive(Deserialize, Serialize, Clone, FromRow)]
+pub struct VisitRow {
+    pub visit_id: i32,
+    pub pass_id: i32,
+    pub creation_time: i64,
+}
+
+pub async fn get_payments_from_pass_id(
+    state: &State<'_, AppState>,
+    pass_id: i32,
+) -> Result<Vec<PaymentRow>> {
+    sqlx::query_as(GET_PAYMENTS_FROM_PASS_ID)
+        .bind(&pass_id)
+        .fetch_all(&state.pg_pool)
+        .await
+}
+
+pub async fn get_visits_from_pass_id(
+    state: &State<'_, AppState>,
+    pass_id: i32,
+) -> Result<Vec<VisitRow>> {
+    sqlx::query_as(GET_VISITS_FROM_PASS_ID)
+        .bind(&pass_id)
+        .fetch_all(&state.pg_pool)
+        .await
 }
 
 pub async fn increase_remaining_uses(

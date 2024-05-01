@@ -50,6 +50,21 @@ export interface AddVisitsFormData {
   signature: string;
 }
 
+export interface VisistRow {
+  visit_id: number;
+  pass_id: number;
+  creation_time: number;
+}
+
+export interface PaymentRow {
+  payment_id: number;
+  pass_id: number;
+  pay_method: string | undefined;
+  amount_paid_cents: number | undefined;
+  creator: string;
+  creation_time: number;
+}
+
 export interface CreatePassData {
   guest_id: number | undefined;
   first_name: string;

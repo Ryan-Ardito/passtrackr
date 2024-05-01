@@ -6,9 +6,7 @@ use tauri::State;
 
 use crate::{
     database::{
-        delete_pass_permanent, get_guest_from_id, get_pass_from_id, increase_remaining_uses,
-        insert_guest, insert_pass, insert_visit, search_all_passes, set_pass_active, use_pass,
-        GetGuestData, GetPassData, NewPassData,
+        delete_pass_permanent, get_guest_from_id, get_pass_from_id, get_payments_from_pass_id, get_visits_from_pass_id, increase_remaining_uses, insert_guest, insert_pass, insert_visit, search_all_passes, set_pass_active, use_pass, GetGuestData, GetPassData, NewPassData, PaymentRow, VisitRow
     },
     AppState,
 };
@@ -263,6 +261,16 @@ pub async fn create_pass(
 #[tauri::command(async)]
 pub async fn delete_pass(state: State<'_, AppState>, pass_id: i32) -> Result<u64, ToastError> {
     Ok(delete_pass_permanent(&state, pass_id).await?)
+}
+
+#[tauri::command(async)]
+pub async fn get_payments(state: State<'_, AppState>, pass_id: i32) -> Result<Vec<PaymentRow>, ToastError> {
+    Ok(get_payments_from_pass_id(&state, pass_id).await?)
+}
+
+#[tauri::command(async)]
+pub async fn get_visits(state: State<'_, AppState>, pass_id: i32) -> Result<Vec<VisitRow>, ToastError> {
+    Ok(get_visits_from_pass_id(&state, pass_id).await?)
 }
 
 #[tauri::command(async)]
