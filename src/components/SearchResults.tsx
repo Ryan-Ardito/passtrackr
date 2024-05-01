@@ -12,9 +12,9 @@ const remainingBodyTemplate = (rowData: PassData) => {
     <>
       {rowData.passtype.code === "Unlimited" && <img src="src/assets/infinity.png" height={"12x"} />}
       {rowData.passtype.code === "Punch" && rowData.remaining_uses}
-      {rowData.passtype.code === "Annual" && <i className="pi pi-calendar" />}
-      {rowData.passtype.code === "6 Month" && <i className="pi pi-calendar-plus" />}
-      {rowData.passtype.code === "Free Pass" && <i className="pi pi-clock" />}
+      {rowData.passtype.code === "Annual" && (rowData.active ? <i className="pi pi-calendar" /> : <i className="pi pi-times" />)}
+      {rowData.passtype.code === "6 Month" && (rowData.active ? <i className="pi pi-check" /> : <i className="pi pi-times" />)}
+      {rowData.passtype.code === "Free Pass" && (rowData.active ? <i className="pi pi-clock" /> : <i className="pi pi-times" />)}
       {rowData.passtype.code === "Facial" && rowData.remaining_uses}
     </>
   );
