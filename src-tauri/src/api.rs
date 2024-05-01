@@ -187,7 +187,14 @@ pub async fn add_visits(
     state: State<'_, AppState>,
     add_visits_data: AddVisitsFormData,
 ) -> Result<(), ToastError> {
-    let _query_result = increase_remaining_uses(&state, &add_visits_data).await?;
+    let amount_paid_cents = match &add_visits_data.amount_paid {
+        Some(num_str) => {
+            let amount: f64 = num_str.clone().parse()?;
+            Some((amount * 100.0) as i32)
+        }
+        None => None,
+    };
+    let _query_result = increase_remaining_uses(&state, &add_visits_data, amount_paid_cents).await?;
     Ok(())
 }
 

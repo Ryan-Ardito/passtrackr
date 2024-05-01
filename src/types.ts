@@ -46,7 +46,7 @@ export interface AddVisitsFormData {
   num_visits: { name: string; code: number };
   pay_method: { name: string; code: string };
   last_four: string | undefined;
-  amount_paid: string;
+  amount_paid: string | undefined;
   signature: string;
 }
 
