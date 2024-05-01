@@ -162,7 +162,7 @@ pub struct Visit {
 pub struct Payment {
     payment_id: i32,
     pass_id: i32,
-    payment_method: PayMethod,
+    payment_method: String,
     amount_paid: f64,
     creator: String,
     creation_time: i64,
@@ -291,7 +291,6 @@ pub async fn get_payments(
     Ok(get_payments_from_pass_id(&state, pass_id).await?.iter().map(|payment| {
         let PaymentRow { payment_id, pass_id, payment_method,
             amount_paid_cents, creator, creation_time } = payment.clone();
-        let payment_method = PayMethod { name: payment_method.clone(), code: payment_method.clone()};
         let amount_paid = amount_paid_cents as f64 / 100.0;
         let creation_time = creation_time.unix_timestamp();
         Payment { payment_id, pass_id, payment_method, amount_paid, creator, creation_time }
