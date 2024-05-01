@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use sqlx::{postgres::PgQueryResult, prelude::FromRow, Result, Row};
+use sqlx::{postgres::PgQueryResult, prelude::FromRow, Postgres, Result, Row, Transaction};
 use tauri::State;
 use time::OffsetDateTime;
 
@@ -49,8 +49,8 @@ pub struct GetPassData {
 #[derive(Deserialize, Serialize, Clone, FromRow)]
 pub struct InsertPaymentData {
     pub pass_id: i32,
-    pub payment_method: String,
-    pub amount_paid_cents: i32,
+    pub payment_method: Option<String>,
+    pub amount_paid_cents: Option<i32>,
     pub creator: String,
 }
 
@@ -127,19 +127,6 @@ pub async fn insert_visit(state: &State<'_, AppState>, pass_id: i32) -> Result<(
     Ok(())
 }
 
-pub async fn insert_payment(
-    state: &State<'_, AppState>,
-    data: &InsertPaymentData,
-) -> Result<PgQueryResult> {
-    sqlx::query(INSERT_PAYMENT)
-        .bind(&data.pass_id)
-        .bind(&data.payment_method)
-        .bind(&data.amount_paid_cents)
-        .bind(&data.creator)
-        .execute(&state.pg_pool)
-        .await
-}
-
 pub async fn get_guest_from_id(state: &State<'_, AppState>, guest_id: i32) -> Result<GetGuestData> {
     sqlx::query_as(GET_GUEST)
         .bind(guest_id)
@@ -155,6 +142,7 @@ pub async fn get_pass_from_id(state: &State<'_, AppState>, pass_id: i32) -> Resu
 }
 
 pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Result<i32> {
+    let mut transaction = state.pg_pool.begin().await?;
     let row = sqlx::query(INSERT_PASS)
         .bind(&data.guest_id)
         .bind(&data.passtype)
@@ -163,11 +151,33 @@ pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Res
         .bind(&data.payment_method)
         .bind(&data.amount_paid_cents)
         .bind(&data.creator)
-        .fetch_one(&state.pg_pool)
+        .fetch_one(&mut *transaction)
         .await?;
 
-    let new_pass_id = row.try_get(0);
-    new_pass_id
+    let new_pass_id = row.try_get(0)?;
+    let pay_data = InsertPaymentData {
+        pass_id: new_pass_id,
+        payment_method: data.payment_method.clone(),
+        amount_paid_cents: data.amount_paid_cents,
+        creator: data.creator.clone(),
+    };
+    let _payment_res = insert_payment(&mut transaction, &pay_data).await?;
+    transaction.commit().await?;
+
+    Ok(new_pass_id)
+}
+
+pub async fn insert_payment(
+    transaction: &mut Transaction<'_, Postgres>,
+    data: &InsertPaymentData,
+) -> Result<PgQueryResult> {
+    sqlx::query(INSERT_PAYMENT)
+        .bind(&data.pass_id)
+        .bind(&data.payment_method)
+        .bind(&data.amount_paid_cents)
+        .bind(&data.creator)
+        .execute(&mut **transaction)
+        .await
 }
 
 pub async fn delete_pass_permanent(
