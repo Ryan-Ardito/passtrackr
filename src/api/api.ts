@@ -43,7 +43,7 @@ export const logVisit = async (pass: PassData): Promise<number> => {
 
 export const addVisits = async (
   addVisitsData: AddVisitsFormData
-): Promise<string> => {
+): Promise<number> => {
   return invoke("add_visits", { addVisitsData });
 };
 

@@ -48,16 +48,14 @@ export const AddVisits = () => {
       showMessage(error.name, error.message, toast, "warn");
       formik.setSubmitting(false);
     },
-    onSuccess: () => {
+    onSuccess: (remaining_uses) => {
       queryClient.invalidateQueries([
         "search",
         search,
       ] as InvalidateQueryFilters);
       setSelectedPass({
         ...selectedPass,
-        remaining_uses: selectedPass.remaining_uses
-          ? selectedPass.remaining_uses + formik.values.num_visits.code
-          : undefined,
+        remaining_uses,
       });
       showMessage("Add Visits", "Success!", toast, "success");
       setPanel(SidePanel.PassInteraction);

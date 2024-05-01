@@ -84,21 +84,22 @@ pub async fn increase_remaining_uses(
     state: &State<'_, AppState>,
     data: &AddVisitsFormData,
     amount_paid_cents: Option<i32>,
-) -> Result<()> {
+) -> Result<i32> {
     let mut transaction = state.pg_pool.begin().await?;
-    sqlx::query(INCREASE_REMAINING_USES)
+    let remaining_uses_res = sqlx::query(INCREASE_REMAINING_USES)
         .bind(&data.pass_id)
         .bind(&data.num_visits.code)
-        .execute(&mut *transaction)
+        .fetch_one(&mut *transaction)
         .await?;
     let pay_data = InsertPaymentData {
         pass_id: data.pass_id,
         payment_method: Some(data.pay_method.code.clone()),
-        amount_paid_cents: amount_paid_cents,
+        amount_paid_cents,
         creator: data.signature.clone(),
     };
     let _payment_res = insert_payment(&mut transaction, &pay_data).await?;
-    transaction.commit().await
+    transaction.commit().await?;
+    remaining_uses_res.try_get(0)
 }
 
 pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> Result<i32> {

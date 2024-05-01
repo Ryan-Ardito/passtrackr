@@ -192,7 +192,7 @@ pub fn async_sleep(millis: u64) -> Result<(), String> {
 pub async fn add_visits(
     state: State<'_, AppState>,
     add_visits_data: AddVisitsFormData,
-) -> Result<(), ToastError> {
+) -> Result<i32, ToastError> {
     let amount_paid_cents = match &add_visits_data.amount_paid {
         Some(num_str) => {
             let amount: f64 = num_str.clone().parse()?;
@@ -200,9 +200,9 @@ pub async fn add_visits(
         }
         None => None,
     };
-    let _query_result =
+    let remaining_uses =
         increase_remaining_uses(&state, &add_visits_data, amount_paid_cents).await?;
-    Ok(())
+    Ok(remaining_uses)
 }
 
 #[tauri::command(async)]
