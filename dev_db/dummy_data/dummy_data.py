@@ -150,12 +150,11 @@ def main():
 
     first_names = old_first_names + new_first_names
 
-    if not os.path.exists(guests_file) or not os.path.exists(passes_file):
-        guests = generate_guests(NUM_GUESTS, first_names, last_names)
-        write_csv(guests, guests_file)
+    guests = generate_guests(NUM_GUESTS, first_names, last_names)
+    write_csv(guests, guests_file)
 
-        passes = generate_passes(guests, first_names)
-        write_csv(passes, passes_file)
+    passes = generate_passes(guests, first_names)
+    write_csv(passes, passes_file)
 
 
 if __name__ == "__main__":
