@@ -6,8 +6,9 @@ use time::OffsetDateTime;
 use crate::{
     api::{AddVisitsFormData, PassFormData},
     queries::{
-        DELETE_PASS_PERMANENT, GET_GUEST, GET_PASS, INCREASE_REMAINING_USES, INSERT_GUEST,
-        INSERT_PASS, INSERT_PAYMENT, INSERT_VISIT, LOG_VISIT, SEARCH_ALL, SET_PASS_ACTIVE,
+        DELETE_PASS_PERMANENT, DELETE_PAYMENTS_PASS_ID, DELETE_VISITS_PASS_ID, GET_GUEST, GET_PASS,
+        INCREASE_REMAINING_USES, INSERT_GUEST, INSERT_PASS, INSERT_PAYMENT, INSERT_VISIT,
+        LOG_VISIT, SEARCH_ALL, SET_PASS_ACTIVE,
     },
     AppState,
 };
@@ -193,14 +194,20 @@ pub async fn insert_payment(
         .await
 }
 
-pub async fn delete_pass_permanent(
-    state: &State<'_, AppState>,
-    pass_id: i32,
-) -> Result<PgQueryResult> {
-    sqlx::query(DELETE_PASS_PERMANENT)
-        .bind(&pass_id)
-        .execute(&state.pg_pool)
-        .await
+pub async fn delete_pass_permanent(state: &State<'_, AppState>, pass_id: i32) -> Result<()> {
+    let mut transaction = state.pg_pool.begin().await?;
+    let queries = [
+        DELETE_PAYMENTS_PASS_ID,
+        DELETE_VISITS_PASS_ID,
+        DELETE_PASS_PERMANENT,
+    ];
+    for query in queries {
+        sqlx::query(query)
+            .bind(&pass_id)
+            .execute(&mut *transaction)
+            .await?;
+    }
+    transaction.commit().await
 }
 
 pub async fn set_pass_active(

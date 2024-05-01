@@ -262,8 +262,7 @@ pub async fn create_pass(
 
 #[tauri::command(async)]
 pub async fn delete_pass(state: State<'_, AppState>, pass_id: i32) -> Result<(), ToastError> {
-    let _query_result = delete_pass_permanent(&state, pass_id).await?;
-    Ok(())
+    Ok(delete_pass_permanent(&state, pass_id).await?)
 }
 
 #[tauri::command(async)]

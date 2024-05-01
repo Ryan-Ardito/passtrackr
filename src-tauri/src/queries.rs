@@ -30,8 +30,11 @@ pub const SET_PASS_ACTIVE: &str = r#"UPDATE passes
 SET active = $2
 WHERE pass_id = $1;"#;
 
-pub const DELETE_PASS_PERMANENT: &str = r#"DELETE FROM passes
-WHERE pass_id = $1;"#;
+pub const DELETE_PAYMENTS_PASS_ID: &str = r#"DELETE FROM payments WHERE pass_id = $1;"#;
+
+pub const DELETE_VISITS_PASS_ID: &str = r#"DELETE FROM visits WHERE pass_id = $1;"#;
+
+pub const DELETE_PASS_PERMANENT: &str = r#"DELETE FROM passes WHERE pass_id = $1;"#;
 
 pub const INCREASE_REMAINING_USES: &str = r#"UPDATE passes
 SET remaining_uses = remaining_uses + $2
