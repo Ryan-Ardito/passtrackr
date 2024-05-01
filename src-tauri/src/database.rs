@@ -106,11 +106,25 @@ pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> R
     new_guest_id
 }
 
-pub async fn insert_visit(state: &State<'_, AppState>, pass_id: i32) -> Result<PgQueryResult> {
+pub async fn use_pass(state: &State<'_, AppState>, pass_id: i32) -> Result<()> {
+    let mut transaction = state.pg_pool.begin().await?;
+    let _use_pass_res = sqlx::query(LOG_VISIT)
+        .bind(&pass_id)
+        .execute(&mut *transaction)
+        .await?;
+    let _insert_visit_res = sqlx::query(INSERT_VISIT)
+        .bind(&pass_id)
+        .execute(&mut *transaction)
+        .await?;
+    transaction.commit().await
+}
+
+pub async fn insert_visit(state: &State<'_, AppState>, pass_id: i32) -> Result<()> {
     sqlx::query(INSERT_VISIT)
         .bind(&pass_id)
         .execute(&state.pg_pool)
-        .await
+        .await?;
+    Ok(())
 }
 
 pub async fn insert_payment(
@@ -161,13 +175,6 @@ pub async fn delete_pass_permanent(
     pass_id: i32,
 ) -> Result<PgQueryResult> {
     sqlx::query(DELETE_PASS_PERMANENT)
-        .bind(&pass_id)
-        .execute(&state.pg_pool)
-        .await
-}
-
-pub async fn log_visit_query(state: &State<'_, AppState>, pass_id: i32) -> Result<PgQueryResult> {
-    sqlx::query(LOG_VISIT)
         .bind(&pass_id)
         .execute(&state.pg_pool)
         .await

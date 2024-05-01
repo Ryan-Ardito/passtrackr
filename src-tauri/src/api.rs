@@ -7,7 +7,7 @@ use tauri::State;
 use crate::{
     database::{
         delete_pass_permanent, get_guest_from_id, get_pass_from_id, increase_remaining_uses,
-        insert_guest, insert_pass, log_visit_query, search_all_passes, set_pass_active,
+        insert_guest, insert_pass, insert_visit, search_all_passes, set_pass_active, use_pass,
         GetGuestData, GetPassData, NewPassData,
     },
     AppState,
@@ -156,7 +156,12 @@ pub async fn log_visit(state: State<'_, AppState>, pass: SearchPassData) -> Resu
         return Err(ToastError::new("Log visit", "No uses left"));
     }
     let pass_id = pass.pass_id;
-    let _query_result = log_visit_query(&state, pass_id).await?;
+    match pass.passtype.code.as_str() {
+        // rewrite this as a parsed enum
+        "Annual" | "Free Pass" | "6 Month" => insert_visit(&state, pass_id).await?,
+        "Punch" | "Facial" => use_pass(&state, pass_id).await?,
+        _ => (),
+    };
     Ok(())
 }
 
@@ -221,9 +226,9 @@ pub async fn create_pass(
     let remaining_uses = match passtype.code {
         NewPassType::TenPunch => 10,
         NewPassType::SixPunch => 6,
-        NewPassType::Annual => 22,
-        NewPassType::SixMonth => 11,
-        NewPassType::FreePass => 13,
+        NewPassType::Annual => 365,
+        NewPassType::SixMonth => 182,
+        NewPassType::FreePass => 100,
         NewPassType::ThreeFacial => 3,
         NewPassType::SixFacial => 6,
     };
