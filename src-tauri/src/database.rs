@@ -194,20 +194,23 @@ pub async fn insert_payment(
         .await
 }
 
-pub async fn delete_pass_permanent(state: &State<'_, AppState>, pass_id: i32) -> Result<()> {
+pub async fn delete_pass_permanent(state: &State<'_, AppState>, pass_id: i32) -> Result<u64> {
     let mut transaction = state.pg_pool.begin().await?;
     let queries = [
         DELETE_PAYMENTS_PASS_ID,
         DELETE_VISITS_PASS_ID,
         DELETE_PASS_PERMANENT,
     ];
+    let mut rows_deleted = 0;
     for query in queries {
-        sqlx::query(query)
+        let res = sqlx::query(query)
             .bind(&pass_id)
             .execute(&mut *transaction)
             .await?;
+        rows_deleted += res.rows_affected();
     }
-    transaction.commit().await
+    transaction.commit().await?;
+    Ok(rows_deleted)
 }
 
 pub async fn set_pass_active(
