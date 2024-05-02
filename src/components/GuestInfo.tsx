@@ -18,7 +18,7 @@ export function GuestInfo() {
   }
 
   return (
-    <div id="guest-info" className="flex-box flex-col">
+    <div id="guest-info" className="flex-col">
       {/* <div>Guest ID: {guestData?.guest_id}</div> */}
       <InputText placeholder="First name" value={guestData?.first_name} />
       <InputText placeholder="Last name" value={guestData?.last_name} />
