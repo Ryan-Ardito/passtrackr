@@ -6,6 +6,7 @@ import { useAppContext } from "../AppContext";
 import { VisitsTable } from "../components/VisitsTable";
 import { PaymentsTable } from "../components/PaymentsTable";
 import { Panel } from "primereact/panel";
+import { ScrollPanel } from "primereact/scrollpanel";
 
 export function ViewGuest() {
   const { setScreen } = useAppContext();
@@ -16,14 +17,16 @@ export function ViewGuest() {
         <VisitsTable />
       </Panel>
       <Panel header="Guest">
-        <GuestInfo />
-        <Button
-          label="Back"
-          onClick={(e) => {
-            e.preventDefault();
-            setScreen(Screen.Dashboard);
-          }}
-        />
+        <ScrollPanel id="guest-info" style={{ display: "grid", maxHeight: "100%" }}>
+          <Button
+            label="Back"
+            onClick={(e) => {
+              e.preventDefault();
+              setScreen(Screen.Dashboard);
+            }}
+          />
+          <GuestInfo />
+          </ScrollPanel>
       </Panel>
       <Panel header="Payments">
         <PaymentsTable />

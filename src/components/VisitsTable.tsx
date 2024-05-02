@@ -27,7 +27,7 @@ export function VisitsTable() {
       value={visits}
       size="small"
       scrollable
-      style={{ height: "100%", display: "grid" }}
+      style={{ display: "grid", maxHeight: "100%" }}
     >
       {/* <Column field="visit_id" header="ID" /> */}
       {/* <Column field="pass_id" header="Pass" /> */}

@@ -1,6 +1,8 @@
 import { useAppContext } from "../AppContext";
 import { useQuery } from "@tanstack/react-query";
 import { getGuest } from "../api/api";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
 
 export function GuestInfo() {
   const { selectedPass } = useAppContext();
@@ -20,13 +22,18 @@ export function GuestInfo() {
   }
 
   return (
-    <div id="guest-info">
+    <div id="guest-info" className="flex-box flex-col">
       <div>Guest ID: {guestData?.guest_id}</div>
-      <div>First name: {guestData?.first_name}</div>
-      <div>Last name: {guestData?.last_name}</div>
-      <div>Town: {guestData?.town}</div>
-      <div>Email: {guestData?.email}</div>
-      <div>Notes: {guestData?.notes}</div>
+      <InputText placeholder="First name" value={guestData?.first_name} />
+      <InputText placeholder="Last name" value={guestData?.last_name} />
+      <InputText placeholder="Town" value={guestData?.town} />
+      <InputText placeholder="Email" value={guestData?.email} />
+      <InputTextarea
+        placeholder="Notes"
+        value={guestData?.notes}
+        autoResize
+        style={{ maxWidth: "100%" }}
+      />
       <div>creator: {guestData?.creator}</div>
       <div>Creation time: {creationTime}</div>
     </div>
