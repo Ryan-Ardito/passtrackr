@@ -27,7 +27,7 @@ export function PaymentsTable() {
       value={visits}
       size="small"
       scrollable
-      style={{ height: "100%" }}
+      style={{ display: "grid", maxHeight: "100%", paddingBottom: "45px" }}
     >
       {/* <Column field="payment_id" header="ID" /> */}
       {/* <Column field="pass_id" header="Pass" /> */}
