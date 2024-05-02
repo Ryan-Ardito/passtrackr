@@ -18,6 +18,8 @@ import { PassData, Screen, blankPass, SidePanel } from "./types";
 import { searchPasses } from "./api/api";
 import { showMessage } from "./utils/toast";
 
+const MIN_SEARCH_LENGTH = 2;
+
 interface AppContextProps {
   screen: Screen;
   setScreen: Dispatch<SetStateAction<Screen>>;
@@ -60,7 +62,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     error: searchError,
   } = useQuery({
     queryKey: ["search", search],
-    queryFn: () => (search.length > 0 ? searchPasses(search) : []),
+    queryFn: () =>
+      search.length >= MIN_SEARCH_LENGTH ? searchPasses(search) : [],
     placeholderData: keepPreviousData,
   });
 

@@ -65,10 +65,10 @@ export const AddVisits = () => {
   const formik = useFormik({
     initialValues: {
       pass_id: selectedPass.pass_id,
-      num_visits: { name: "1x Visits", code: 1 },
+      num_visits: { name: "10x Visits", code: 10 },
       pay_method: { name: "Credit", code: "Credit" },
-      last_four: "",
-      amount_paid: "",
+      last_four: undefined,
+      amount_paid: undefined,
       signature: "",
     },
     validationSchema: validationSchema,
