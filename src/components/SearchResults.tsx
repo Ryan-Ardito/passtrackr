@@ -3,9 +3,9 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useAppContext } from "../AppContext";
 
-const activeBodyTemplate = (rowData: PassData) => {
-  return <i className={rowData.active ? "pi pi-check" : "pi pi-times"} />;
-};
+// const activeBodyTemplate = (rowData: PassData) => {
+//   return <i className={rowData.active ? "pi pi-check" : "pi pi-times"} />;
+// };
 
 const remainingBodyTemplate = (rowData: PassData) => {
   return (
@@ -13,7 +13,7 @@ const remainingBodyTemplate = (rowData: PassData) => {
       {rowData.passtype.code === "Unlimited" && <img src="src/assets/infinity.png" height={"12x"} />}
       {rowData.passtype.code === "Punch" && rowData.remaining_uses}
       {rowData.passtype.code === "Annual" && (rowData.active ? <i className="pi pi-calendar" /> : <i className="pi pi-times" />)}
-      {rowData.passtype.code === "6 Month" && (rowData.active ? <i className="pi pi-check" /> : <i className="pi pi-times" />)}
+      {rowData.passtype.code === "6 Month" && (rowData.active ? <i className="pi pi-calendar" /> : <i className="pi pi-times" />)}
       {rowData.passtype.code === "Free Pass" && (rowData.active ? <i className="pi pi-clock" /> : <i className="pi pi-times" />)}
       {rowData.passtype.code === "Facial" && rowData.remaining_uses}
     </>
@@ -69,12 +69,12 @@ export function SearchResults() {
           body={remainingBodyTemplate}
           style={{ width: "10%" }}
         />
-        <Column
+        {/* <Column
           field="active"
           // header="On"
           body={activeBodyTemplate}
           style={{ width: "10%" }}
-        />
+        /> */}
       </DataTable>
     </div>
   );
