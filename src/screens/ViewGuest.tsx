@@ -10,21 +10,19 @@ export function ViewGuest() {
   const { setScreen } = useAppContext();
 
   return (
-    <div className="viewport-wrapper">
-      <div id="view-guest-screen">
-        <VisitsTable />
-        <div id="edit-guest">
-          <GuestInfo />
-          <Button
-            label="Back"
-            onClick={(e) => {
-              e.preventDefault();
-              setScreen(Screen.Dashboard);
-            }}
-          />
-        </div>
-        <PaymentsTable />
+    <div id="view-guest-screen">
+      <VisitsTable />
+      <div id="edit-guest">
+        <GuestInfo />
+        <Button
+          label="Back"
+          onClick={(e) => {
+            e.preventDefault();
+            setScreen(Screen.Dashboard);
+          }}
+        />
       </div>
+      <PaymentsTable />
     </div>
   );
 }

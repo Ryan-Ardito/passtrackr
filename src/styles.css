@@ -51,6 +51,7 @@ html, body {
 .flex-box {
   display: flex;
   height: 100%;
+  overflow: hidden;
   /* width: 100%; */
   gap: 6px;
 }
@@ -59,16 +60,6 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
-
-#view-guest-screen {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(3, 1fr)
-}
-
-#edit-guest {
-  grid-column: 2;
 }
 
 .flex-1 {
@@ -82,6 +73,16 @@ html, body {
 .form-text-input {
   padding: 8;
   width: 100%;
+}
+
+#view-guest-screen {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: grid;
+  /* grid-auto-flow: column; */
+  grid-auto-rows: minmax(100%, auto);
+  grid-template-columns: 7fr 6fr 8fr;
 }
 
 #searchbar {

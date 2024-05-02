@@ -26,7 +26,7 @@ export function Dashboard() {
     <div className="viewport-wrapper">
       <div id="dashboard" className="flex-box flex-col">
         <SearchBar />
-        <div className="flex-box" style={{ overflow: "hidden" }}>
+        <div className="flex-box">
           {screen === Screen.Dashboard && <SearchInteraction />}
           {screen === Screen.ViewGuest && <ViewGuest />}
         </div>

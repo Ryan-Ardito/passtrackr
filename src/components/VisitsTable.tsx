@@ -22,9 +22,15 @@ export function VisitsTable() {
   });
 
   return (
-    <DataTable value={visits} size="small">
+    <DataTable
+      dataKey="visit_id"
+      value={visits}
+      size="small"
+      scrollable
+      style={{ height: "100%", display: "grid" }}
+    >
       <Column field="visit_id" header="Visit" />
-      <Column field="pass_id" header="Pass ID" />
+      <Column field="pass_id" header="Pass" />
       <Column field="creation_time" header="Date" body={creationTimeTemplate} />
     </DataTable>
   );

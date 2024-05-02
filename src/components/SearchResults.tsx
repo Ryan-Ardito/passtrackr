@@ -31,7 +31,6 @@ export function SearchResults() {
   return (
     <div id="search-results">
       <DataTable
-        // avoid table from running off the screen. kludge
         className="flex-box flex-col"
         size="large"
         // showGridlines
