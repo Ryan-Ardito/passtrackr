@@ -1,9 +1,19 @@
+import * as Yup from "yup";
 import { useAppContext } from "../AppContext";
 import { useQuery } from "@tanstack/react-query";
 import { getGuest } from "../api/api";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import { CrudButton } from "./Buttons";
+
+const validationSchema = Yup.object().shape({
+  guest_id: Yup.number().required(),
+  first_name: Yup.string().max(50, "Invalid"),
+  last_name: Yup.string().max(50, "Invalid"),
+  town: Yup.string().max(50, "Invalid"),
+  email: Yup.string().email("Invalid").max(50, "Invalid"),
+  notes: Yup.string(),
+});
 
 export function GuestInfo() {
   const { selectedPass } = useAppContext();
@@ -12,6 +22,27 @@ export function GuestInfo() {
     queryKey: ["guest", selectedPass.guest_id],
     queryFn: () => getGuest(selectedPass.guest_id),
   });
+
+  // const { mutate: mutateGuestData } = useMutation({
+  //   mutationKey: ["addVisits"],
+  //   mutationFn: addVisits,
+  //   onError: (error) => {
+  //     showMessage(error.name, error.message, toast, "warn");
+  //     formik.setSubmitting(false);
+  //   },
+  //   onSuccess: (remaining_uses) => {
+  //     queryClient.invalidateQueries([
+  //       "search",
+  //       search,
+  //     ] as InvalidateQueryFilters);
+  //     setSelectedPass({
+  //       ...selectedPass,
+  //       remaining_uses,
+  //     });
+  //     showMessage("Add Visits", "Success!", toast, "success");
+  //     setPanel(SidePanel.PassInteraction);
+  //   },
+  // });
 
   let creationTime = undefined;
   if (guestData?.creation_time) {

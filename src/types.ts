@@ -103,6 +103,15 @@ export interface ViewPassData {
   creation_time: number;
 }
 
+export interface EditGuestFormData {
+  guest_id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  town: string;
+  notes: string;
+}
+
 export interface GuestData {
   guest_id: number;
   first_name: string;

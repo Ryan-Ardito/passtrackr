@@ -6,10 +6,7 @@ use tauri::State;
 
 use crate::{
     database::{
-        delete_pass_permanent, get_guest_from_id, get_pass_from_id, get_payments_from_guest_id,
-        get_visits_from_guest_id, increase_remaining_uses, insert_guest, insert_pass, insert_visit,
-        search_all_passes, set_pass_active, use_pass, GetGuestData, GetPassData, NewPassData,
-        PaymentRow, VisitRow,
+        delete_pass_permanent, get_guest_from_id, get_pass_from_id, get_payments_from_guest_id, get_visits_from_guest_id, increase_remaining_uses, insert_guest, insert_pass, insert_visit, search_all_passes, set_pass_active, update_guest, use_pass, EditGuestData, GetGuestData, GetPassData, NewPassData, PaymentRow, VisitRow
     },
     AppState,
 };
@@ -187,6 +184,15 @@ pub async fn log_visit(
         _ => pass.remaining_uses,
     };
     Ok(remaining_uses)
+}
+
+#[tauri::command(async)]
+pub async fn edit_guest(
+    state: State<'_, AppState>,
+    guest_data: EditGuestData,
+) -> Result<(), ToastError> {
+    let _query_result = update_guest(&state, guest_data).await?;
+    Ok(())
 }
 
 #[tauri::command(async)]

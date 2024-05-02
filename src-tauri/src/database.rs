@@ -6,7 +6,7 @@ use time::OffsetDateTime;
 use crate::{
     api::{AddVisitsFormData, PassFormData},
     queries::{
-        DELETE_PASS_PERMANENT, DELETE_PAYMENTS_PASS_ID, DELETE_VISITS_PASS_ID, GET_GUEST, GET_PASS, GET_PAYMENTS_FROM_GUEST_ID, GET_PAYMENTS_FROM_PASS_ID, GET_VISITS_FROM_GUEST_ID, GET_VISITS_FROM_PASS_ID, INCREASE_REMAINING_USES, INSERT_GUEST, INSERT_PASS, INSERT_PAYMENT, INSERT_VISIT, LOG_VISIT, SEARCH_ALL, SET_PASS_ACTIVE
+        DELETE_PASS_PERMANENT, DELETE_PAYMENTS_PASS_ID, DELETE_VISITS_PASS_ID, EDIT_GUEST, GET_GUEST, GET_PASS, GET_PAYMENTS_FROM_GUEST_ID, GET_PAYMENTS_FROM_PASS_ID, GET_VISITS_FROM_GUEST_ID, GET_VISITS_FROM_PASS_ID, INCREASE_REMAINING_USES, INSERT_GUEST, INSERT_PASS, INSERT_PAYMENT, INSERT_VISIT, LOG_VISIT, SEARCH_ALL, SET_PASS_ACTIVE
     },
     AppState,
 };
@@ -94,6 +94,31 @@ pub struct VisitRow {
     pub visit_id: i32,
     pub pass_id: i32,
     pub creation_time: OffsetDateTime,
+}
+
+#[derive(Deserialize, Serialize, Clone, FromRow)]
+pub struct EditGuestData {
+    pub guest_id: i32,
+    pub first_name: String,
+    pub last_name: String,
+    pub town: String,
+    pub email: String,
+    pub notes: String,
+}
+
+pub async fn update_guest(
+    state: &State<'_, AppState>,
+    data: EditGuestData,
+) -> Result<PgQueryResult> {
+    sqlx::query(EDIT_GUEST)
+        .bind(&data.first_name)
+        .bind(&data.last_name)
+        .bind(&data.town)
+        .bind(&data.email)
+        .bind(&data.notes)
+        .bind(&data.guest_id)
+        .execute(&state.pg_pool)
+        .await
 }
 
 pub async fn get_payments_from_guest_id(

@@ -3,12 +3,19 @@ import { invoke } from "@tauri-apps/api/tauri";
 import {
   AddVisitsFormData,
   CreatePassData,
+  EditGuestFormData,
   GuestData,
   PassData,
   PaymentRow,
   ViewPassData,
   VisitsRow,
 } from "../types";
+
+export const editGuest = async (
+  editGuestData: EditGuestFormData
+): Promise<number> => {
+  return invoke("edit_guest", { editGuestData });
+};
 
 export const searchPasses = async (
   searchString: string
@@ -47,7 +54,7 @@ export const getPass = async (
   if (!passId) {
     throw { name: "View pass", message: "No pass ID" };
   }
-  return invoke("get_pass", { guestId: passId });
+  return invoke("get_pass", { passId });
 };
 
 export const logVisit = async (pass: PassData): Promise<number> => {
