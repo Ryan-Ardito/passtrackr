@@ -8,7 +8,7 @@ import { VisistRow } from "../types";
 const creationTimeTemplate = (rowData: VisistRow): string | undefined => {
   let creationTime = undefined;
   if (rowData?.creation_time) {
-    creationTime = new Date(rowData.creation_time * 1000).toDateString();
+    creationTime = new Date(rowData.creation_time * 1000).toLocaleString();
   }
   return creationTime;
 };
@@ -29,8 +29,8 @@ export function VisitsTable() {
       scrollable
       style={{ height: "100%", display: "grid" }}
     >
-      <Column field="visit_id" header="Visit" />
-      <Column field="pass_id" header="Pass" />
+      {/* <Column field="visit_id" header="ID" /> */}
+      {/* <Column field="pass_id" header="Pass" /> */}
       <Column field="creation_time" header="Date" body={creationTimeTemplate} />
     </DataTable>
   );

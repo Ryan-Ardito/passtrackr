@@ -5,14 +5,17 @@ import { GuestInfo } from "../components/GuestInfo";
 import { useAppContext } from "../AppContext";
 import { VisitsTable } from "../components/VisitsTable";
 import { PaymentsTable } from "../components/PaymentsTable";
+import { Panel } from "primereact/panel";
 
 export function ViewGuest() {
   const { setScreen } = useAppContext();
 
   return (
     <div id="view-guest-screen">
-      <VisitsTable />
-      <div id="edit-guest">
+      <Panel header="Visits">
+        <VisitsTable />
+      </Panel>
+      <Panel header="Guest">
         <GuestInfo />
         <Button
           label="Back"
@@ -21,8 +24,10 @@ export function ViewGuest() {
             setScreen(Screen.Dashboard);
           }}
         />
-      </div>
-      <PaymentsTable />
+      </Panel>
+      <Panel header="Payments">
+        <PaymentsTable />
+      </Panel>
     </div>
   );
 }
