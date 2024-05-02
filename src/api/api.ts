@@ -7,7 +7,7 @@ import {
   PassData,
   PaymentRow,
   ViewPassData,
-  VisistRow,
+  VisitsRow,
 } from "../types";
 
 export const searchPasses = async (
@@ -25,7 +25,7 @@ export const getPayments = async (guestId: number | undefined): Promise<PaymentR
   return invoke("get_payments", { guestId });
 };
 
-export const getVisits = async (guestId: number | undefined): Promise<VisistRow[]> => {
+export const getVisits = async (guestId: number | undefined): Promise<VisitsRow[]> => {
   if (!guestId) {
     throw { name: "Error", message: "No pass ID" };
   }

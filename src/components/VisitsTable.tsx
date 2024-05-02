@@ -3,9 +3,9 @@ import { getVisits } from "../api/api";
 import { useAppContext } from "../AppContext";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { VisistRow } from "../types";
+import { VisitsRow } from "../types";
 
-const creationTimeTemplate = (rowData: VisistRow): string | undefined => {
+const creationTimeTemplate = (rowData: VisitsRow): string | undefined => {
   let creationTime = undefined;
   if (rowData?.creation_time) {
     creationTime = new Date(rowData.creation_time * 1000).toLocaleString();

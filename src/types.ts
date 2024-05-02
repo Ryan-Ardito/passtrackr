@@ -50,7 +50,7 @@ export interface AddVisitsFormData {
   signature: string;
 }
 
-export interface VisistRow {
+export interface VisitsRow {
   visit_id: number;
   pass_id: number;
   creation_time: number;
