@@ -28,7 +28,8 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <PrimeReactProvider>
         <AppProvider>
-          <AppContent />
+          {/* <AppContent /> */}
+          <Dashboard />
           <ReactQueryDevtools />
         </AppProvider>
       </PrimeReactProvider>
