@@ -17,16 +17,24 @@ export function ViewGuest() {
         <VisitsTable />
       </Panel>
       <Panel header="Guest">
-        <ScrollPanel id="guest-info" style={{ display: "grid", maxHeight: "100%" }}>
-          <Button
-            label="Back"
-            onClick={(e) => {
-              e.preventDefault();
-              setScreen(Screen.Dashboard);
+        <ScrollPanel style={{ display: "grid", maxHeight: "100%" }}>
+          <div
+            id="guest-info"
+            style={{
+              marginBottom: "20px",
+              paddingBottom: "20px",
             }}
-          />
-          <GuestInfo />
-          </ScrollPanel>
+          >
+            <Button
+              label="Back"
+              onClick={(e) => {
+                e.preventDefault();
+                setScreen(Screen.Dashboard);
+              }}
+            />
+            <GuestInfo />
+          </div>
+        </ScrollPanel>
       </Panel>
       <Panel header="Payments">
         <PaymentsTable />
