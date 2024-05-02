@@ -85,7 +85,7 @@ html, body {
   display: grid;
   /* grid-auto-flow: column; */
   grid-auto-rows: minmax(100%, auto);
-  grid-template-columns: 300px minmax(300px, 1fr) 500px;
+  grid-template-columns: 280px minmax(300px, 1fr) 550px;
 }
 
 #searchbar {
