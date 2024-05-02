@@ -18,18 +18,18 @@ export const searchPasses = async (
   });
 };
 
-export const getPayments = async (passId: number | undefined): Promise<PaymentRow[]> => {
-  if (!passId) {
+export const getPayments = async (guestId: number | undefined): Promise<PaymentRow[]> => {
+  if (!guestId) {
     throw { name: "Error", message: "No pass ID" };
   }
-  return invoke("get_payments", { passId });
+  return invoke("get_payments", { guestId });
 };
 
-export const getVisits = async (passId: number | undefined): Promise<VisistRow[]> => {
-  if (!passId) {
+export const getVisits = async (guestId: number | undefined): Promise<VisistRow[]> => {
+  if (!guestId) {
     throw { name: "Error", message: "No pass ID" };
   }
-  return invoke("get_visits", { passId });
+  return invoke("get_visits", { guestId });
 };
 
 export const getGuest = async (

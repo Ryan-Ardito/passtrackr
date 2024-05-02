@@ -8,8 +8,8 @@ export function PaymentsTable() {
   const { selectedPass } = useAppContext();
 
   const { data: visits } = useQuery({
-    queryKey: ["payments", selectedPass.pass_id],
-    queryFn: () => getPayments(selectedPass.pass_id),
+    queryKey: ["payments", selectedPass.guest_id],
+    queryFn: () => getPayments(selectedPass.guest_id),
   });
 
   return (

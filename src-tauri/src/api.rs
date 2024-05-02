@@ -6,10 +6,7 @@ use tauri::State;
 
 use crate::{
     database::{
-        delete_pass_permanent, get_guest_from_id, get_pass_from_id, get_payments_from_pass_id,
-        get_visits_from_pass_id, increase_remaining_uses, insert_guest, insert_pass, insert_visit,
-        search_all_passes, set_pass_active, use_pass, GetGuestData, GetPassData, NewPassData,
-        PaymentRow, VisitRow,
+        delete_pass_permanent, get_guest_from_id, get_pass_from_id, get_payments_from_guest_id, get_payments_from_pass_id, get_visits_from_guest_id, get_visits_from_pass_id, increase_remaining_uses, insert_guest, insert_pass, insert_visit, search_all_passes, set_pass_active, use_pass, GetGuestData, GetPassData, NewPassData, PaymentRow, VisitRow
     },
     AppState,
 };
@@ -286,9 +283,9 @@ pub async fn delete_pass(state: State<'_, AppState>, pass_id: i32) -> Result<u64
 #[tauri::command(async)]
 pub async fn get_payments(
     state: State<'_, AppState>,
-    pass_id: i32,
+    guest_id: i32,
 ) -> Result<Vec<Payment>, ToastError> {
-    Ok(get_payments_from_pass_id(&state, pass_id).await?.iter().map(|payment| {
+    Ok(get_payments_from_guest_id(&state, guest_id).await?.iter().map(|payment| {
         let PaymentRow { payment_id, pass_id, payment_method,
             amount_paid_cents, creator, creation_time } = payment.clone();
         let amount_paid = amount_paid_cents as f64 / 100.0;
@@ -300,9 +297,9 @@ pub async fn get_payments(
 #[tauri::command(async)]
 pub async fn get_visits(
     state: State<'_, AppState>,
-    pass_id: i32,
+    guest_id: i32,
 ) -> Result<Vec<Visit>, ToastError> {
-    Ok(get_visits_from_pass_id(&state, pass_id).await?.iter().map(|visit| {
+    Ok(get_visits_from_guest_id(&state, guest_id).await?.iter().map(|visit| {
         let VisitRow {
             visit_id,
             pass_id,

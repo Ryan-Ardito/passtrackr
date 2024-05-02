@@ -17,8 +17,8 @@ export function VisitsTable() {
   const { selectedPass } = useAppContext();
 
   const { data: visits } = useQuery({
-    queryKey: ["visits", selectedPass.pass_id],
-    queryFn: () => getVisits(selectedPass.pass_id),
+    queryKey: ["visits", selectedPass.guest_id],
+    queryFn: () => getVisits(selectedPass.guest_id),
   });
 
   return (

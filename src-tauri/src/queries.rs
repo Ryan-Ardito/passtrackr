@@ -2,6 +2,18 @@ pub const GET_GUEST: &str = r#"SELECT * FROM guests WHERE guest_id = $1"#;
 
 pub const GET_PASS: &str = r#"SELECT * FROM passes WHERE pass_id = $1"#;
 
+pub const GET_PAYMENTS_FROM_GUEST_ID: &str = r#" SELECT payments.*
+FROM payments
+JOIN passes ON passes.pass_id = payments.pass_id
+JOIN guests ON guests.guest_id = passes.guest_id
+WHERE guests.guest_id = $1;"#;
+
+pub const GET_VISITS_FROM_GUEST_ID: &str = r#" SELECT visits.*
+FROM visits
+JOIN passes ON passes.pass_id = visits.pass_id
+JOIN guests ON guests.guest_id = passes.guest_id
+WHERE guests.guest_id = $1;"#;
+
 pub const GET_PAYMENTS_FROM_PASS_ID: &str = r#"SELECT * FROM payments WHERE pass_id = $1"#;
 
 pub const GET_VISITS_FROM_PASS_ID: &str = r#"SELECT * FROM visits WHERE pass_id = $1"#;
