@@ -6,7 +6,10 @@ use tauri::State;
 
 use crate::{
     database::{
-        delete_pass_permanent, get_guest_from_id, get_pass_from_id, get_payments_from_guest_id, get_payments_from_pass_id, get_visits_from_guest_id, get_visits_from_pass_id, increase_remaining_uses, insert_guest, insert_pass, insert_visit, search_all_passes, set_pass_active, use_pass, GetGuestData, GetPassData, NewPassData, PaymentRow, VisitRow
+        delete_pass_permanent, get_guest_from_id, get_pass_from_id, get_payments_from_guest_id,
+        get_visits_from_guest_id, increase_remaining_uses, insert_guest, insert_pass, insert_visit,
+        search_all_passes, set_pass_active, use_pass, GetGuestData, GetPassData, NewPassData,
+        PaymentRow, VisitRow,
     },
     AppState,
 };
@@ -159,8 +162,8 @@ pub struct Visit {
 pub struct Payment {
     payment_id: i32,
     pass_id: i32,
-    payment_method: String,
-    amount_paid: f64,
+    payment_method: Option<String>,
+    amount_paid: Option<f64>,
     creator: String,
     creation_time: i64,
 }
@@ -285,13 +288,36 @@ pub async fn get_payments(
     state: State<'_, AppState>,
     guest_id: i32,
 ) -> Result<Vec<Payment>, ToastError> {
-    Ok(get_payments_from_guest_id(&state, guest_id).await?.iter().map(|payment| {
-        let PaymentRow { payment_id, pass_id, payment_method,
-            amount_paid_cents, creator, creation_time } = payment.clone();
-        let amount_paid = amount_paid_cents as f64 / 100.0;
-        let creation_time = creation_time.unix_timestamp();
-        Payment { payment_id, pass_id, payment_method, amount_paid, creator, creation_time }
-    }).collect())
+    Ok(get_payments_from_guest_id(&state, guest_id)
+        .await?
+        .iter()
+        .map(|payment| {
+            let PaymentRow {
+                payment_id,
+                pass_id,
+                payment_method,
+                amount_paid_cents,
+                creator,
+                creation_time,
+            } = payment.clone();
+            // let amount_paid = amount_paid_cents.map(|amount| amount.try_into() / 100.0).;
+            let amount_paid = amount_paid_cents.and_then(|amount| {
+                amount
+                    .try_into()
+                    .map(|amount_float: f64| amount_float / 100.0)
+                    .ok()
+            });
+            let creation_time = creation_time.unix_timestamp();
+            Payment {
+                payment_id,
+                pass_id,
+                payment_method,
+                amount_paid,
+                creator,
+                creation_time,
+            }
+        })
+        .collect())
 }
 
 #[tauri::command(async)]
@@ -299,18 +325,22 @@ pub async fn get_visits(
     state: State<'_, AppState>,
     guest_id: i32,
 ) -> Result<Vec<Visit>, ToastError> {
-    Ok(get_visits_from_guest_id(&state, guest_id).await?.iter().map(|visit| {
-        let VisitRow {
-            visit_id,
-            pass_id,
-            creation_time,
-        } = visit.clone();
-        Visit {
-            visit_id,
-            pass_id,
-            creation_time: creation_time.unix_timestamp(),
-        }
-    }).collect())
+    Ok(get_visits_from_guest_id(&state, guest_id)
+        .await?
+        .iter()
+        .map(|visit| {
+            let VisitRow {
+                visit_id,
+                pass_id,
+                creation_time,
+            } = visit.clone();
+            Visit {
+                visit_id,
+                pass_id,
+                creation_time: creation_time.unix_timestamp(),
+            }
+        })
+        .collect())
 }
 
 #[tauri::command(async)]

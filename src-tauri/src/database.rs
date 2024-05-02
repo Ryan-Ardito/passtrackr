@@ -83,8 +83,8 @@ pub struct PassSearchResponse {
 pub struct PaymentRow {
     pub payment_id: i32,
     pub pass_id: i32,
-    pub payment_method: String,
-    pub amount_paid_cents: i32,
+    pub payment_method: Option<String>,
+    pub amount_paid_cents: Option<i32>,
     pub creator: String,
     pub creation_time: OffsetDateTime,
 }
