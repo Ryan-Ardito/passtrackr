@@ -85,7 +85,7 @@ export const AddPass = () => {
   };
 
   return (
-    <form onSubmit={formik.handleSubmit} className="flex-box flex-col">
+    <form onSubmit={formik.handleSubmit} className="flex-col">
       <Panel
         header={
           formik.values.guest_id
