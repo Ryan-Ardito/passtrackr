@@ -33,7 +33,7 @@ export function PaymentsTable() {
       {/* <Column field="pass_id" header="Pass" /> */}
       <Column field="creation_time" header="Date" body={creationTimeTemplate} />
       <Column field="amount_paid" header="Paid" />
-      <Column field="pay_method" header="Method" />
+      <Column field="payment_method" header="Method" />
       <Column field="creator" header="Creator" />
     </DataTable>
   );

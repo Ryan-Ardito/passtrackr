@@ -20,10 +20,7 @@ export function ViewGuest() {
           <div
             id="guest-info"
             className="flex-col"
-            style={{
-              marginBottom: "20px",
-              paddingBottom: "20px",
-            }}
+            style={{ paddingBottom: "40px" }}
           >
             <CrudButton
               label="Back"
