@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getGuest } from "../api/api";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
+import { CrudButton } from "./Buttons";
 
 export function GuestInfo() {
   const { selectedPass } = useAppContext();
@@ -30,6 +31,7 @@ export function GuestInfo() {
         autoResize
         style={{ maxWidth: "100%" }}
       />
+      <CrudButton label="Save" icon="pi pi-save" />
       <div>Creator: {guestData?.creator}</div>
       <div>Created: {creationTime}</div>
     </div>
