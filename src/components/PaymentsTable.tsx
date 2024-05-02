@@ -14,7 +14,7 @@ export function PaymentsTable() {
 
   return (
     <DataTable value={visits} size="small">
-      <Column field="payment_id" header="Visit ID" />
+      {/* <Column field="payment_id" header="ID" /> */}
       <Column field="pass_id" header="Pass ID" />
       <Column field="pay_method" header="Method" />
       <Column field="amount_paid" header="Amount Paid" />

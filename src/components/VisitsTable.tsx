@@ -14,7 +14,7 @@ export function VisitsTable() {
 
   return (
     <DataTable value={visits} size="small">
-      <Column field="visit_id" header="Visit ID" />
+      <Column field="visit_id" header="Visit" />
       <Column field="pass_id" header="Pass ID" />
       <Column field="creation_time" header="Time" />
     </DataTable>
