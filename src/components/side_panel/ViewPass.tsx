@@ -56,7 +56,7 @@ export const ViewPass = () => {
       <Divider style={{ marginTop: 11, marginBottom: 11 }} />
       <PassInfo selectedPass={selectedPass} />
       <Divider style={{ marginTop: 11, marginBottom: 11 }} />
-      <div className="flex-box">
+      <div style={{ display: "flex", gap: 6 }}>
         <div>Active:</div>
         <InputSwitch
           checked={selectedPass.active}

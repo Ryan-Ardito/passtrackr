@@ -7,7 +7,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 export function GuestInfo() {
   const { selectedPass } = useAppContext();
 
-  const { data: guestData, isFetching: isGuestFetching } = useQuery({
+  const { data: guestData } = useQuery({
     queryKey: ["guest", selectedPass.guest_id],
     queryFn: () => getGuest(selectedPass.guest_id),
   });
@@ -17,13 +17,9 @@ export function GuestInfo() {
     creationTime = new Date(guestData.creation_time).toDateString();
   }
 
-  if (isGuestFetching) {
-    return <>Loading...</>;
-  }
-
   return (
     <div id="guest-info" className="flex-box flex-col">
-      <div>Guest ID: {guestData?.guest_id}</div>
+      {/* <div>Guest ID: {guestData?.guest_id}</div> */}
       <InputText placeholder="First name" value={guestData?.first_name} />
       <InputText placeholder="Last name" value={guestData?.last_name} />
       <InputText placeholder="Town" value={guestData?.town} />
@@ -34,8 +30,8 @@ export function GuestInfo() {
         autoResize
         style={{ maxWidth: "100%" }}
       />
-      <div>creator: {guestData?.creator}</div>
-      <div>Creation time: {creationTime}</div>
+      <div>Creator: {guestData?.creator}</div>
+      <div>Created: {creationTime}</div>
     </div>
   );
 }
