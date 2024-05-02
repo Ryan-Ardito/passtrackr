@@ -5,6 +5,13 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { PaymentRow } from "../types";
 
+const amountPaidTemplate = (rowData: PaymentRow): string | undefined => {
+  return rowData.amount_paid?.toLocaleString("en-US", {
+    // minimumFractionDigits: 2,
+    maximumFractionDigits: 0,
+  });
+};
+
 const creationTimeTemplate = (rowData: PaymentRow): string | undefined => {
   let creationTime = undefined;
   if (rowData?.creation_time) {
@@ -32,7 +39,7 @@ export function PaymentsTable() {
       {/* <Column field="payment_id" header="ID" /> */}
       {/* <Column field="pass_id" header="Pass" /> */}
       <Column field="creation_time" header="Date" body={creationTimeTemplate} />
-      <Column field="amount_paid" header="Paid" />
+      <Column field="amount_paid" header="Paid" body={amountPaidTemplate} />
       <Column field="payment_method" header="Method" />
       <Column field="creator" header="Employee" />
     </DataTable>
