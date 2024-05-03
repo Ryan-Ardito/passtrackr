@@ -27,6 +27,7 @@ export function VisitsTable() {
       value={visits}
       size="small"
       scrollable
+      showGridlines
       style={{ display: "grid", maxHeight: "100%", paddingBottom: "45px" }}
     >
       {/* <Column field="visit_id" header="ID" /> */}
