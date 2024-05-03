@@ -14,8 +14,8 @@ const amountPaidTemplate = (rowData: PaymentRow): string | undefined => {
 
 const creationTimeTemplate = (rowData: PaymentRow): string | undefined => {
   let creationTime = undefined;
-  if (rowData?.creation_time) {
-    creationTime = new Date(rowData.creation_time * 1000).toDateString();
+  if (rowData?.created_at) {
+    creationTime = new Date(rowData.created_at * 1000).toDateString();
   }
   return creationTime;
 };
@@ -39,7 +39,7 @@ export function PaymentsTable() {
     >
       {/* <Column field="payment_id" header="ID" /> */}
       {/* <Column field="pass_id" header="Pass" /> */}
-      <Column field="creation_time" header="Date" body={creationTimeTemplate} />
+      <Column field="created_at" header="Date" body={creationTimeTemplate} />
       <Column field="amount_paid" header="Paid" body={amountPaidTemplate} />
       <Column field="payment_method" header="Method" />
       <Column field="creator" header="Employee" />

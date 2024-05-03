@@ -75,7 +75,8 @@ pub struct SearchPassData {
     pub passtype: PassType,
     pub active: bool,
     pub creator: String,
-    pub creation_time: i64,
+    pub expires_at: Option<i64>,
+    pub created_at: i64,
 }
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
@@ -88,7 +89,8 @@ pub struct ViewPassData {
     pub payment_method: String,
     pub amount_paid_cents: i32,
     pub creator: String,
-    pub creation_time: i64,
+    pub expires_at: Option<i64>,
+    pub created_at: i64,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -123,7 +125,7 @@ pub struct ViewGuestData {
     email: String,
     notes: String,
     creator: String,
-    creation_time: i64,
+    created_at: i64,
 }
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
@@ -155,7 +157,7 @@ impl NewPassType {
 pub struct Visit {
     visit_id: i32,
     pass_id: i32,
-    creation_time: i64,
+    created_at: i64,
 }
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
@@ -165,7 +167,7 @@ pub struct Payment {
     payment_method: Option<String>,
     amount_paid: Option<f64>,
     creator: String,
-    creation_time: i64,
+    created_at: i64,
 }
 
 #[tauri::command(async)]
@@ -277,6 +279,7 @@ pub async fn create_pass(
         active: true,
         payment_method: pass_data.pay_method.map(|method| method.code),
         amount_paid_cents,
+        expires_at: None,
         creator: pass_data.signature,
     };
 
@@ -308,7 +311,7 @@ pub async fn get_payments(
                 payment_method,
                 amount_paid_cents,
                 creator,
-                creation_time,
+                created_at,
             } = payment.clone();
 
             let amount_paid = amount_paid_cents.and_then(|amount| {
@@ -318,7 +321,7 @@ pub async fn get_payments(
                     .ok()
             });
 
-            let creation_time = creation_time.unix_timestamp();
+            let created_at = created_at.unix_timestamp();
 
             Payment {
                 payment_id,
@@ -326,7 +329,7 @@ pub async fn get_payments(
                 payment_method,
                 amount_paid,
                 creator,
-                creation_time,
+                created_at,
             }
         })
         .collect())
@@ -344,12 +347,12 @@ pub async fn get_visits(
             let VisitRow {
                 visit_id,
                 pass_id,
-                creation_time,
+                created_at,
             } = visit.clone();
             Visit {
                 visit_id,
                 pass_id,
-                creation_time: creation_time.unix_timestamp(),
+                created_at: created_at.unix_timestamp(),
             }
         })
         .collect())
@@ -369,7 +372,8 @@ pub async fn get_pass(
         payment_method,
         amount_paid_cents,
         creator,
-        creation_time,
+        expires_at,
+        created_at,
     } = get_pass_from_id(&state, pass_id).await?;
 
     Ok(ViewPassData {
@@ -384,7 +388,8 @@ pub async fn get_pass(
         payment_method,
         amount_paid_cents,
         creator,
-        creation_time: creation_time.unix_timestamp(),
+        expires_at: expires_at.map(|utime| utime.unix_timestamp()),
+        created_at: created_at.unix_timestamp(),
     })
 }
 
@@ -401,7 +406,7 @@ pub async fn get_guest(
         email,
         notes,
         creator,
-        creation_time,
+        created_at,
     } = get_guest_from_id(&state, guest_id).await?;
 
     Ok(ViewGuestData {
@@ -412,7 +417,7 @@ pub async fn get_guest(
         email,
         notes,
         creator,
-        creation_time: creation_time.unix_timestamp() * 1000,
+        created_at: created_at.unix_timestamp() * 1000,
     })
 }
 
@@ -439,7 +444,10 @@ pub async fn search_passes(
                 },
                 active: pass_data.active,
                 creator: pass_data.creator,
-                creation_time: pass_data.creation_time.unix_timestamp() * 1000,
+                expires_at: pass_data
+                    .expires_at
+                    .map(|unix_time| unix_time.unix_timestamp() * 1000),
+                created_at: pass_data.created_at.unix_timestamp() * 1000,
             }
         })
         .collect();

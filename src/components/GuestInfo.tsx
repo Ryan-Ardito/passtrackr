@@ -72,8 +72,8 @@ export function GuestInfo({ guestData }: GuestInfoProps) {
   });
 
   let creationTime = undefined;
-  if (guestData?.creation_time) {
-    creationTime = new Date(guestData.creation_time).toLocaleDateString();
+  if (guestData?.created_at) {
+    creationTime = new Date(guestData.created_at).toLocaleDateString();
   }
 
   const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) => {

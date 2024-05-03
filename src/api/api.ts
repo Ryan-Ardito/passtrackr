@@ -42,7 +42,7 @@ interface ViewPassData {
   passtype: PassType;
   active: boolean;
   creator: string;
-  creation_time: number;
+  created_at: number;
 }
 
 export const editGuest = async (

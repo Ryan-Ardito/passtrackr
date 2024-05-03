@@ -44,7 +44,7 @@ export const passtypes: PassType[] = [
 export interface VisitsRow {
   visit_id: number;
   pass_id: number;
-  creation_time: number;
+  created_at: number;
 }
 
 export interface PaymentRow {
@@ -53,7 +53,7 @@ export interface PaymentRow {
   pay_method: string | undefined;
   amount_paid: number | undefined;
   creator: string;
-  creation_time: number;
+  created_at: number;
 }
 
 export interface PassData {
@@ -66,7 +66,7 @@ export interface PassData {
   passtype: PassType;
   active: boolean;
   creator: string;
-  creation_time: number | undefined;
+  created_at: number | undefined;
 }
 
 export interface GuestData {
@@ -77,7 +77,7 @@ export interface GuestData {
   town: string | undefined;
   notes: string | undefined;
   creator: string;
-  creation_time: number;
+  created_at: number;
 }
 
 export const blankPass: PassData = {
@@ -90,5 +90,5 @@ export const blankPass: PassData = {
   passtype: passtypes[0],
   active: false,
   creator: "",
-  creation_time: undefined,
+  created_at: undefined,
 };

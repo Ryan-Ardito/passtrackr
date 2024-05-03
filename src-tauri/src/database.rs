@@ -22,6 +22,7 @@ pub struct NewPassData {
     pub active: bool,
     pub payment_method: Option<String>,
     pub amount_paid_cents: Option<i32>,
+    pub expires_at: Option<OffsetDateTime>,
     pub creator: String,
 }
 
@@ -45,7 +46,8 @@ pub struct GetPassData {
     pub payment_method: String,
     pub amount_paid_cents: i32,
     pub creator: String,
-    pub creation_time: OffsetDateTime,
+    pub expires_at: Option<OffsetDateTime>,
+    pub created_at: OffsetDateTime,
 }
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
@@ -65,7 +67,7 @@ pub struct GetGuestData {
     pub email: String,
     pub notes: String,
     pub creator: String,
-    pub creation_time: OffsetDateTime,
+    pub created_at: OffsetDateTime,
 }
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
@@ -79,7 +81,8 @@ pub struct PassSearchResponse {
     pub passtype: String,
     pub active: bool,
     pub creator: String,
-    pub creation_time: OffsetDateTime,
+    pub expires_at: Option<OffsetDateTime>,
+    pub created_at: OffsetDateTime,
 }
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
@@ -89,14 +92,14 @@ pub struct PaymentRow {
     pub payment_method: Option<String>,
     pub amount_paid_cents: Option<i32>,
     pub creator: String,
-    pub creation_time: OffsetDateTime,
+    pub created_at: OffsetDateTime,
 }
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
 pub struct VisitRow {
     pub visit_id: i32,
     pub pass_id: i32,
-    pub creation_time: OffsetDateTime,
+    pub created_at: OffsetDateTime,
 }
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
@@ -247,6 +250,7 @@ pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> Res
         .bind(&data.active)
         .bind(&data.payment_method)
         .bind(&data.amount_paid_cents)
+        .bind(&data.expires_at)
         .bind(&data.creator)
         .fetch_one(&mut *transaction)
         .await?;

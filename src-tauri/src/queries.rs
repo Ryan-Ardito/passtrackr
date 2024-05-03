@@ -7,14 +7,14 @@ FROM payments
 JOIN passes ON passes.pass_id = payments.pass_id
 JOIN guests ON guests.guest_id = passes.guest_id
 WHERE guests.guest_id = $1
-ORDER BY payments.creation_time DESC;"#;
+ORDER BY payments.created_at DESC;"#;
 
 pub const GET_VISITS_FROM_GUEST_ID: &str = r#" SELECT visits.*
 FROM visits
 JOIN passes ON passes.pass_id = visits.pass_id
 JOIN guests ON guests.guest_id = passes.guest_id
 WHERE guests.guest_id = $1
-ORDER BY visits.creation_time DESC;"#;
+ORDER BY visits.created_at DESC;"#;
 
 pub const GET_PAYMENTS_FROM_PASS_ID: &str = r#"SELECT * FROM payments WHERE pass_id = $1"#;
 
@@ -34,8 +34,8 @@ VALUES ($1, $2, $3, $4, $5, $6)
 RETURNING guest_id"#;
 
 pub const INSERT_PASS: &str = r#"INSERT
-INTO passes (guest_id, passtype, remaining_uses, active, payment_method, amount_paid_cents, creator)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
+INTO passes (guest_id, passtype, remaining_uses, active, payment_method, amount_paid_cents, expires_at, creator)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 RETURNING pass_id"#;
 
 pub const INSERT_PAYMENT: &str = r#"INSERT
@@ -77,7 +77,8 @@ pub const SEARCH_ALL: &str = r#"SELECT
     p.passtype,
     p.active,
     p.creator,
-    p.creation_time
+    p.expires_at,
+    p.created_at
 FROM 
     passes AS p
 JOIN 
