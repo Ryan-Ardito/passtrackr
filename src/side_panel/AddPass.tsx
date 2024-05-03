@@ -3,17 +3,17 @@ import * as Yup from "yup";
 
 import { Divider } from "primereact/divider";
 
-import { SidePanel, passtypes, payMethods } from "../../types";
-import { FormikDropdown, FormikField } from "../FormInput";
-import { createPass } from "../../api/api";
+import { SidePanel, passtypes, payMethods } from "../types";
+import { FormikDropdown, FormikField } from "../components/FormInput";
+import { createPass } from "../api/api";
 import {
   InvalidateQueryFilters,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { showMessage } from "../../utils/toast";
-import { useAppContext } from "../../AppContext";
-import { CrudButton } from "../Buttons";
+import { showMessage } from "../utils/toast";
+import { useAppContext } from "../AppContext";
+import { CrudButton } from "../components/Buttons";
 import { ChangeEvent } from "react";
 import { Panel } from "primereact/panel";
 

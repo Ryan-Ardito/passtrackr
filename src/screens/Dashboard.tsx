@@ -3,7 +3,7 @@ import { Divider } from "primereact/divider";
 import { SearchBar } from "../components/SearchBar";
 import { SearchResults } from "../components/SearchResults";
 import { useAppContext } from "../AppContext";
-import { RightPanel } from "../components/side_panel/SidePanel";
+import { RightPanel } from "../side_panel/SidePanel";
 import { Screen } from "../types";
 import { ViewGuest } from "./ViewGuest";
 

@@ -4,18 +4,18 @@ import * as Yup from "yup";
 import { ScrollPanel } from "primereact/scrollpanel";
 import { Divider } from "primereact/divider";
 
-import { SidePanel, numAddVisits, payMethods } from "../../types";
-import { FormikDropdown, FormikField } from "../FormInput";
-import { addVisits } from "../../api/api";
+import { SidePanel, numAddVisits, payMethods } from "../types";
+import { FormikDropdown, FormikField } from "../components/FormInput";
+import { addVisits } from "../api/api";
 import {
   InvalidateQueryFilters,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { showMessage } from "../../utils/toast";
-import { useAppContext } from "../../AppContext";
-import { CrudButton } from "../Buttons";
-import { PassInfo } from "../PassInfo";
+import { showMessage } from "../utils/toast";
+import { useAppContext } from "../AppContext";
+import { CrudButton } from "../components/Buttons";
+import { PassInfo } from "../components/PassInfo";
 
 const validationSchema = Yup.object().shape({
   pass_id: Yup.number().required(),

@@ -6,12 +6,12 @@ import {
 
 import { Divider } from "primereact/divider";
 
-import { SidePanel, Screen } from "../../types";
-import { logVisit } from "../../api/api";
-import { showMessage } from "../../utils/toast";
-import { useAppContext } from "../../AppContext";
-import { CrudButton } from "../Buttons";
-import { PassInfo } from "../PassInfo";
+import { SidePanel, Screen } from "../types";
+import { logVisit } from "../api/api";
+import { showMessage } from "../utils/toast";
+import { useAppContext } from "../AppContext";
+import { CrudButton } from "../components/Buttons";
+import { PassInfo } from "../components/PassInfo";
 
 export const PassControl = () => {
   const { selectedPass, setSelectedPass, setScreen, setPanel, toast, search } =

@@ -1,5 +1,5 @@
 import { AddPass } from "./AddPass";
-import { SidePanel } from "../../types";
+import { SidePanel } from "../types";
 import { PassControl } from "./PassInteraction";
 import { AddVisits } from "./AddVisits";
 import { ViewPass } from "./ViewPass";

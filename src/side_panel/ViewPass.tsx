@@ -6,12 +6,12 @@ import {
 
 import { Divider } from "primereact/divider";
 
-import { SidePanel, blankPass } from "../../types";
-import { deletePass, setPassActive } from "../../api/api";
-import { showMessage } from "../../utils/toast";
-import { useAppContext } from "../../AppContext";
-import { CrudButton, DeleteButton } from "../Buttons";
-import { PassInfo } from "../PassInfo";
+import { SidePanel, blankPass } from "../types";
+import { deletePass, setPassActive } from "../api/api";
+import { showMessage } from "../utils/toast";
+import { useAppContext } from "../AppContext";
+import { CrudButton, DeleteButton } from "../components/Buttons";
+import { PassInfo } from "../components/PassInfo";
 import { InputSwitch } from "primereact/inputswitch";
 
 export const ViewPass = () => {
