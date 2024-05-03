@@ -1,15 +1,49 @@
 import { invoke } from "@tauri-apps/api/tauri";
 
-import {
-  AddVisitsFormData,
-  CreatePassData,
-  EditGuestFormData,
-  GuestData,
-  PassData,
-  PaymentRow,
-  ViewPassData,
-  VisitsRow,
-} from "../types";
+import { GuestData, PassData, PaymentRow, VisitsRow, PassType } from "../types";
+
+interface AddVisitsFormData {
+  pass_id: number | undefined;
+  num_visits: { name: string; code: number };
+  pay_method: { name: string; code: string };
+  last_four: string | undefined;
+  amount_paid: string | undefined;
+  signature: string;
+}
+
+interface EditGuestFormData {
+  guest_id: number;
+  first_name: string;
+  last_name: string;
+  email: string | undefined;
+  town: string | undefined;
+  notes: string | undefined;
+}
+
+interface CreatePassData {
+  guest_id: number | undefined;
+  first_name: string;
+  last_name: string;
+  town: string;
+  passtype: PassType;
+  pay_method: { name: string; code: string };
+  last_four: string | undefined;
+  amount_paid: string | undefined;
+  signature: string;
+}
+
+interface ViewPassData {
+  pass_id: number;
+  guest_id: number;
+  first_name: string;
+  last_name: string;
+  town: string;
+  remaining_uses: number;
+  passtype: PassType;
+  active: boolean;
+  creator: string;
+  creation_time: number;
+}
 
 export const editGuest = async (
   guestData: EditGuestFormData
@@ -25,14 +59,18 @@ export const searchPasses = async (
   });
 };
 
-export const getPayments = async (guestId: number | undefined): Promise<PaymentRow[]> => {
+export const getPayments = async (
+  guestId: number | undefined
+): Promise<PaymentRow[]> => {
   if (!guestId) {
     throw { name: "Error", message: "No pass ID" };
   }
   return invoke("get_payments", { guestId });
 };
 
-export const getVisits = async (guestId: number | undefined): Promise<VisitsRow[]> => {
+export const getVisits = async (
+  guestId: number | undefined
+): Promise<VisitsRow[]> => {
   if (!guestId) {
     throw { name: "Error", message: "No pass ID" };
   }

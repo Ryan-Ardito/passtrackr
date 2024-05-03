@@ -41,15 +41,6 @@ export const passtypes: PassType[] = [
   { name: "6x Facial", code: "SixFacial" },
 ];
 
-export interface AddVisitsFormData {
-  pass_id: number | undefined;
-  num_visits: { name: string; code: number };
-  pay_method: { name: string; code: string };
-  last_four: string | undefined;
-  amount_paid: string | undefined;
-  signature: string;
-}
-
 export interface VisitsRow {
   visit_id: number;
   pass_id: number;
@@ -65,18 +56,6 @@ export interface PaymentRow {
   creation_time: number;
 }
 
-export interface CreatePassData {
-  guest_id: number | undefined;
-  first_name: string;
-  last_name: string;
-  town: string;
-  passtype: PassType;
-  pay_method: { name: string; code: string };
-  last_four: string | undefined;
-  amount_paid: string | undefined;
-  signature: string;
-}
-
 export interface PassData {
   pass_id: number | undefined;
   guest_id: number | undefined;
@@ -88,28 +67,6 @@ export interface PassData {
   active: boolean;
   creator: string;
   creation_time: number | undefined;
-}
-
-export interface ViewPassData {
-  pass_id: number;
-  guest_id: number;
-  first_name: string;
-  last_name: string;
-  town: string;
-  remaining_uses: number;
-  passtype: PassType;
-  active: boolean;
-  creator: string;
-  creation_time: number;
-}
-
-export interface EditGuestFormData {
-  guest_id: number;
-  first_name: string;
-  last_name: string;
-  email: string | undefined;
-  town: string | undefined;
-  notes: string | undefined;
 }
 
 export interface GuestData {
