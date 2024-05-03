@@ -14,8 +14,8 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Toast } from "primereact/toast";
 import "primeicons/primeicons.css";
 
-import { PassData, Screen, blankPass, SidePanel } from "./types";
-import { searchPasses } from "./api/api";
+import { PassData, Screen, blankPass, SidePanel, GuestData } from "./types";
+import { getGuest, searchPasses } from "./api/api";
 import { showMessage } from "./utils/toast";
 
 const MIN_SEARCH_LENGTH = 2;
@@ -30,6 +30,7 @@ interface AppContextProps {
   panel: SidePanel;
   setPanel: Dispatch<SetStateAction<SidePanel>>;
   searchData: PassData[];
+  guestData: GuestData | undefined;
   isSearchFetching: boolean;
   searchStatus: "error" | "success" | "pending";
   isSearchSuccess: boolean;
@@ -53,6 +54,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const [search, setSearch] = useState("");
   const [panel, setPanel] = useState(SidePanel.PassInteraction);
+
+  const { data: guestData } = useQuery({
+    queryKey: ["guest", selectedPass.guest_id],
+    queryFn: () => getGuest(selectedPass.guest_id),
+  });
 
   const {
     data: searchData,
@@ -96,6 +102,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     panel,
     setPanel,
     searchData,
+    guestData,
     isSearchFetching,
     searchStatus,
     isSearchSuccess,
