@@ -73,7 +73,7 @@ export function GuestInfo({ guestData }: GuestInfoProps) {
 
   let creationTime = undefined;
   if (guestData?.creation_time) {
-    creationTime = new Date(guestData.creation_time).toDateString();
+    creationTime = new Date(guestData.creation_time).toLocaleDateString();
   }
 
   if (isEditGuestPending) {
@@ -131,8 +131,7 @@ export function GuestInfo({ guestData }: GuestInfoProps) {
         loading={isEditGuestPending}
         disabled={!fieldChange}
       />
-      <div>Creator: {guestData?.creator}</div>
-      <div>Created: {creationTime}</div>
+      <div>Created {creationTime} by {guestData?.creator}</div>
     </form>
   );
 }
