@@ -184,7 +184,7 @@ pub async fn log_visit(
             pass.remaining_uses
         }
         "Punch" | "Facial" => use_pass(&state, pass_id).await?,
-        _ => pass.remaining_uses,
+        _ => return Err(ToastError::new("Log visit", "Invalid pass type")),
     };
     Ok(remaining_uses)
 }
