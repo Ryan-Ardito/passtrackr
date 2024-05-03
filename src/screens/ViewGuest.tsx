@@ -16,7 +16,7 @@ export function ViewGuest() {
         <VisitsTable />
       </Panel>
       <Panel header={`Guest ${guestData?.guest_id}`}>
-        <ScrollPanel style={{ display: "grid", width: "90%" }}>
+        <ScrollPanel style={{ display: "grid" }}>
           <div
             id="guest-info"
             className="flex-col"

@@ -112,8 +112,9 @@ export function GuestInfo({ guestData }: GuestInfoProps) {
         placeholder="Notes"
         name="notes"
         value={formik.values.notes}
-        autoResize
-        style={{ maxWidth: "100%" }}
+        rows={8}
+        // autoResize
+        style={{ maxWidth: "100%", minWidth: "100%" }}
         onChange={(e) => {
           setFieldChange(true);
           formik.handleChange(e);
@@ -127,7 +128,9 @@ export function GuestInfo({ guestData }: GuestInfoProps) {
         loading={isEditGuestPending}
         disabled={!fieldChange}
       />
-      <div>Created {creationTime} by {guestData?.creator}</div>
+      <div>
+        Created {creationTime} by {guestData?.creator}
+      </div>
     </form>
   );
 }
