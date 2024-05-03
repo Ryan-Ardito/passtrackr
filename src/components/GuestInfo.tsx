@@ -71,9 +71,9 @@ export function GuestInfo({ guestData }: GuestInfoProps) {
     onSubmit: (values) => mutateEditGuest(values),
   });
 
-  let creationTime = undefined;
+  let createdAt = undefined;
   if (guestData?.created_at) {
-    creationTime = new Date(guestData.created_at).toLocaleDateString();
+    createdAt = new Date(guestData.created_at).toLocaleDateString();
   }
 
   const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -129,7 +129,7 @@ export function GuestInfo({ guestData }: GuestInfoProps) {
         disabled={!fieldChange}
       />
       <div>
-        Created {creationTime} by {guestData?.creator}
+        Created {createdAt} by {guestData?.creator}
       </div>
     </form>
   );

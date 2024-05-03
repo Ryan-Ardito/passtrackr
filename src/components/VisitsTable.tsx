@@ -5,12 +5,12 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { VisitsRow } from "../types";
 
-const creationTimeTemplate = (rowData: VisitsRow): string | undefined => {
-  let creationTime = undefined;
+const createdAtTemplate = (rowData: VisitsRow): string | undefined => {
+  let createdAt = undefined;
   if (rowData?.created_at) {
-    creationTime = new Date(rowData.created_at * 1000).toLocaleString();
+    createdAt = new Date(rowData.created_at * 1000).toLocaleString();
   }
-  return creationTime;
+  return createdAt;
 };
 
 export function VisitsTable() {
@@ -32,7 +32,7 @@ export function VisitsTable() {
     >
       {/* <Column field="visit_id" header="ID" /> */}
       {/* <Column field="pass_id" header="Pass" /> */}
-      <Column field="created_at" header="Date" body={creationTimeTemplate} />
+      <Column field="created_at" header="Date" body={createdAtTemplate} />
     </DataTable>
   );
 }
