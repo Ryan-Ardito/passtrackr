@@ -88,6 +88,7 @@ export const FormikField: React.FC<FormikFieldProps> = ({
 interface FormikDropdownProps {
   label: string;
   name: string;
+  placeholder?: string;
   options: any[];
   formik: FormikContextType<any>;
 }
@@ -95,6 +96,7 @@ interface FormikDropdownProps {
 export const FormikDropdown: React.FC<FormikDropdownProps> = ({
   label,
   name,
+  placeholder,
   options,
   formik,
 }) => {
@@ -106,6 +108,7 @@ export const FormikDropdown: React.FC<FormikDropdownProps> = ({
       <div style={{ display: "flex", gap: "6px" }}>
         <Dropdown
           optionLabel="name"
+          placeholder={placeholder}
           scrollHeight="400px"
           {...{ options, name }}
           disabled={isSubmitting}

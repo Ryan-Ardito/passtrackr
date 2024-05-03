@@ -98,7 +98,7 @@ pub struct PassFormData {
     pub last_name: String,
     pub town: String,
     pub passtype: PassAmountType,
-    pub pay_method: PayMethod,
+    pub pay_method: Option<PayMethod>,
     pub last_four: Option<String>,
     pub amount_paid: Option<String>,
     pub signature: String,
@@ -279,7 +279,7 @@ pub async fn create_pass(
         passtype: pass_data.passtype.code.pass_type_code().to_string(),
         remaining_uses,
         active: true,
-        payment_method: Some(pass_data.pay_method.code),
+        payment_method: pass_data.pay_method.map(|method| method.code),
         amount_paid_cents,
         creator: pass_data.signature,
     };

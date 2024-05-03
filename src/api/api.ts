@@ -26,7 +26,7 @@ interface CreatePassData {
   last_name: string;
   town: string;
   passtype: PassType;
-  pay_method: { name: string; code: string };
+  pay_method: { name: string; code: string } | undefined;
   last_four: string | undefined;
   amount_paid: string | undefined;
   signature: string;

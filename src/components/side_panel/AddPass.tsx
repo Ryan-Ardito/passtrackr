@@ -66,7 +66,7 @@ export const AddPass = () => {
       last_name: selectedPass.last_name,
       town: selectedPass.town,
       passtype: passtypes[0],
-      pay_method: { name: "Credit", code: "Credit" },
+      pay_method: undefined,
       last_four: undefined,
       amount_paid: undefined,
       signature: "",
@@ -122,6 +122,7 @@ export const AddPass = () => {
         <FormikDropdown
           label="Payment method"
           name="pay_method"
+          placeholder="Pay method"
           options={payMethods}
           {...{ formik }}
         />
