@@ -6,16 +6,23 @@ import { PaymentsTable } from "../components/PaymentsTable";
 import { Panel } from "primereact/panel";
 import { ScrollPanel } from "primereact/scrollpanel";
 import { CrudButton } from "../components/Buttons";
+import { useQuery } from "@tanstack/react-query";
+import { getGuest } from "../api/api";
 
 export function ViewGuest() {
   const { setScreen, selectedPass } = useAppContext();
+
+  const { data: guestData } = useQuery({
+    queryKey: ["guest", selectedPass.guest_id],
+    queryFn: () => getGuest(selectedPass.guest_id),
+  });
 
   return (
     <div id="view-guest-screen">
       <Panel header="Visits">
         <VisitsTable />
       </Panel>
-      <Panel header={`Guest ${selectedPass.guest_id}`}>
+      <Panel header={`Guest ${guestData?.guest_id}`}>
         <ScrollPanel style={{ display: "grid", maxHeight: "100%" }}>
           <div
             id="guest-info"
@@ -30,7 +37,7 @@ export function ViewGuest() {
                 setScreen(Screen.Dashboard);
               }}
             />
-            <GuestInfo />
+            {guestData && <GuestInfo guestData={guestData} />}
           </div>
         </ScrollPanel>
       </Panel>

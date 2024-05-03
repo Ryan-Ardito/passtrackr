@@ -3,35 +3,34 @@ import { useAppContext } from "../AppContext";
 import {
   InvalidateQueryFilters,
   useMutation,
-  useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { editGuest, getGuest } from "../api/api";
+import { editGuest } from "../api/api";
 import { InputTextarea } from "primereact/inputtextarea";
 import { CrudButton } from "./Buttons";
 import { showMessage } from "../utils/toast";
 import { useFormik } from "formik";
 import { FormikField } from "./FormInput";
 import { ChangeEvent, useState } from "react";
+import { GuestData } from "../types";
 
 const validationSchema = Yup.object().shape({
   guest_id: Yup.number().required(),
   first_name: Yup.string().max(50, "Invalid").required(),
   last_name: Yup.string().max(50, "Invalid").required(),
   town: Yup.string().max(50, "Invalid"),
-  email: Yup.string().email("Invalid").max(50, "Invalid"),
+  email: Yup.string().max(50, "Invalid"),
   notes: Yup.string(),
 });
 
-export function GuestInfo() {
-  const [ fieldChange, setFieldChange ] = useState(false);
+interface GuestInfoProps {
+  guestData: GuestData;
+}
+
+export function GuestInfo({ guestData }: GuestInfoProps) {
+  const [fieldChange, setFieldChange] = useState(false);
   const { search, selectedPass, setSelectedPass, toast } = useAppContext();
   const queryClient = useQueryClient();
-
-  const { data: guestData } = useQuery({
-    queryKey: ["guest", selectedPass.guest_id],
-    queryFn: () => getGuest(selectedPass.guest_id),
-  });
 
   const { mutate: mutateEditGuest, isPending: isEditGuestPending } =
     useMutation({
