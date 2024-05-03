@@ -74,7 +74,7 @@ export const ViewPass = () => {
       />
       <DeleteButton
         label="Delete Pass"
-        icon="pi pi-times"
+        icon="pi pi-delete-left"
         severity="danger"
         disabled={!selectedPass.pass_id}
         loading={isDeletePassPending}

@@ -41,7 +41,7 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({
 
   return (
     <>
-      <div style={{ display: "flex", marginTop: "auto", width: "100%" }}>
+      <div style={{ display: "flex", width: "100%" }}>
         {confirm && !disabled ? (
           <>
             <Button
@@ -54,9 +54,7 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({
               severity={severity}
               size={size}
               loading={loading}
-              onBlur={() => {
-                setConfirm(false);
-              }}
+              onBlur={() => setConfirm(false)}
               onClick={(e) => {
                 onClick(e);
                 setConfirm(false);
@@ -71,9 +69,7 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({
               size={size}
               style={style}
               loading={loading}
-              onClick={() => {
-                setConfirm(false);
-              }}
+              onClick={() => setConfirm(false)}
             />
           </>
         ) : (
