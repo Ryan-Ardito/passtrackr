@@ -15,7 +15,7 @@ pub mod queries;
 
 use api::{
     add_visits, async_sleep, create_pass, delete_pass, get_guest, get_payments, get_visits,
-    log_visit, search_passes, toggle_pass_active,
+    log_visit, search_passes, toggle_pass_active, edit_guest
 };
 
 const CONFIG_FILEPATH: &str = "resources/config.json";
@@ -89,6 +89,7 @@ async fn main() {
             toggle_pass_active,
             delete_pass,
             get_guest,
+            edit_guest,
             log_visit,
             add_visits,
             search_passes,

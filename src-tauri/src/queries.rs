@@ -19,10 +19,10 @@ pub const GET_PAYMENTS_FROM_PASS_ID: &str = r#"SELECT * FROM payments WHERE pass
 pub const GET_VISITS_FROM_PASS_ID: &str = r#"SELECT * FROM visits WHERE pass_id = $1"#;
 
 pub const EDIT_GUEST: &str = r#"UPDATE guests
-SET first_name = $1
-    last_name = $2
-    town = $3
-    email = $4
+SET first_name = $1,
+    last_name = $2,
+    town = $3,
+    email = $4,
     notes = $5
 WHERE guest_id = $6"#;
 

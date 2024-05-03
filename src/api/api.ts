@@ -12,9 +12,9 @@ import {
 } from "../types";
 
 export const editGuest = async (
-  editGuestData: EditGuestFormData
+  guestData: EditGuestFormData
 ): Promise<number> => {
-  return invoke("edit_guest", { editGuestData });
+  return invoke("edit_guest", { guestData });
 };
 
 export const searchPasses = async (

@@ -107,18 +107,18 @@ export interface EditGuestFormData {
   guest_id: number;
   first_name: string;
   last_name: string;
-  email: string;
-  town: string;
-  notes: string;
+  email: string | undefined;
+  town: string | undefined;
+  notes: string | undefined;
 }
 
 export interface GuestData {
   guest_id: number;
   first_name: string;
   last_name: string;
-  email: string;
-  town: string;
-  notes: string;
+  email: string | undefined;
+  town: string | undefined;
+  notes: string | undefined;
   creator: string;
   creation_time: number;
 }
