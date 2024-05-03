@@ -220,13 +220,11 @@ pub async fn add_visits(
     state: State<'_, AppState>,
     add_visits_data: AddVisitsFormData,
 ) -> Result<i32, ToastError> {
-    let amount_paid_cents = match &add_visits_data.amount_paid {
-        Some(num_str) => {
-            let amount: f64 = num_str.clone().parse()?;
-            Some((amount * 100.0) as i32)
-        }
-        None => None,
-    };
+    let amount_paid_cents = add_visits_data
+        .clone()
+        .amount_paid
+        .map(|num_str| num_str.clone().parse::<f64>())
+        .and_then(|amount_opt| amount_opt.ok().map(|amount| (amount * 100.0) as i32));
     let remaining_uses =
         increase_remaining_uses(&state, &add_visits_data, amount_paid_cents).await?;
     Ok(remaining_uses)
@@ -256,13 +254,11 @@ pub async fn create_pass(
     // insert new guest if no guest_id provided
     let guest_id = guest_id.unwrap_or(insert_guest(&state, &pass_data).await?);
 
-    let amount_paid_cents = match &pass_data.amount_paid {
-        Some(num_str) => {
-            let amount: f64 = num_str.clone().parse()?;
-            Some((amount * 100.0) as i32)
-        }
-        None => None,
-    };
+    let amount_paid_cents = pass_data
+        .amount_paid
+        .clone()
+        .map(|num_str| num_str.clone().parse::<f64>())
+        .and_then(|amount_opt| amount_opt.ok().map(|amount| (amount * 100.0) as i32));
 
     let remaining_uses = match passtype.code {
         NewPassType::TenPunch => 10,
@@ -314,14 +310,16 @@ pub async fn get_payments(
                 creator,
                 creation_time,
             } = payment.clone();
-            // let amount_paid = amount_paid_cents.map(|amount| amount.try_into() / 100.0).;
+
             let amount_paid = amount_paid_cents.and_then(|amount| {
                 amount
                     .try_into()
                     .map(|amount_float: f64| amount_float / 100.0)
                     .ok()
             });
+
             let creation_time = creation_time.unix_timestamp();
+
             Payment {
                 payment_id,
                 pass_id,
