@@ -126,7 +126,11 @@ export const AddPass = () => {
           options={payMethods}
           {...{ formik }}
         />
-        <FormikField label="Last four" name="last_four" {...{ formik }} />
+        <FormikField
+          label="Last four (credit only)"
+          name="last_four"
+          {...{ formik }}
+        />
         <FormikField label="Amount paid" name="amount_paid" {...{ formik }} />
         <FormikField
           label="Employee signature"

@@ -66,7 +66,7 @@ export const AddVisits = () => {
     initialValues: {
       pass_id: selectedPass.pass_id,
       num_visits: { name: "10x Visits", code: 10 },
-      pay_method: { name: "Credit", code: "Credit" },
+      pay_method: undefined,
       last_four: undefined,
       amount_paid: undefined,
       signature: "",
@@ -87,10 +87,11 @@ export const AddVisits = () => {
         <FormikDropdown
           label="Payment method"
           name="pay_method"
+          placeholder="Pay method"
           options={payMethods}
           {...{ formik }}
         />
-        <FormikField label="Last four" name="last_four" {...{ formik }} />
+        <FormikField label="Last four (credit only)" name="last_four" {...{ formik }} />
         <FormikField label="Amount paid" name="amount_paid" {...{ formik }} />
         <FormikField
           label="Employee signature"

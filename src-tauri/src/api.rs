@@ -108,7 +108,7 @@ pub struct PassFormData {
 pub struct AddVisitsFormData {
     pub pass_id: i32,
     pub num_visits: NumVisits,
-    pub pay_method: PayMethod,
+    pub pay_method: Option<PayMethod>,
     pub last_four: Option<String>,
     pub amount_paid: Option<String>,
     pub signature: String,
