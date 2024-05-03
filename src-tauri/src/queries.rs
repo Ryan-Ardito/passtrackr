@@ -6,13 +6,15 @@ pub const GET_PAYMENTS_FROM_GUEST_ID: &str = r#" SELECT payments.*
 FROM payments
 JOIN passes ON passes.pass_id = payments.pass_id
 JOIN guests ON guests.guest_id = passes.guest_id
-WHERE guests.guest_id = $1;"#;
+WHERE guests.guest_id = $1
+ORDER BY payments.creation_time DESC;"#;
 
 pub const GET_VISITS_FROM_GUEST_ID: &str = r#" SELECT visits.*
 FROM visits
 JOIN passes ON passes.pass_id = visits.pass_id
 JOIN guests ON guests.guest_id = passes.guest_id
-WHERE guests.guest_id = $1;"#;
+WHERE guests.guest_id = $1
+ORDER BY visits.creation_time DESC;"#;
 
 pub const GET_PAYMENTS_FROM_PASS_ID: &str = r#"SELECT * FROM payments WHERE pass_id = $1"#;
 
