@@ -14,7 +14,7 @@ pub mod database;
 pub mod queries;
 
 use api::{
-    add_visits, async_sleep, create_pass, delete_pass, edit_guest, get_config_error, get_guest,
+    add_visits, async_sleep, create_pass, delete_pass, edit_guest, was_config_error, get_guest,
     get_payments, get_visits, log_visit, search_passes, toggle_pass_active, ToastError,
 };
 // use tauri::Manager;
@@ -90,7 +90,7 @@ async fn main() {
     tauri::Builder::default()
         .manage(state)
         .invoke_handler(tauri::generate_handler![
-            get_config_error,
+            was_config_error,
             get_visits,
             get_payments,
             create_pass,

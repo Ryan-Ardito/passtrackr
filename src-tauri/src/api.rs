@@ -288,7 +288,7 @@ pub async fn create_pass(
 }
 
 #[tauri::command]
-pub fn get_config_error(state: State<'_, AppState>) -> bool {
+pub fn was_config_error(state: State<'_, AppState>) -> bool {
     state.config_error
 }
 

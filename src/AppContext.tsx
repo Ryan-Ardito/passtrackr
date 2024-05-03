@@ -78,7 +78,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const toast = useRef<Toast>(null);
 
   useEffect(() => {
-    invoke("get_config_error").then((e) => {
+    invoke("was_config_error").then((e) => {
       if (e) {
         message("Could not read config.json!");
       }
