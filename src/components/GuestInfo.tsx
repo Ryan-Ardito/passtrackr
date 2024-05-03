@@ -12,6 +12,7 @@ import { CrudButton } from "./Buttons";
 import { showMessage } from "../utils/toast";
 import { useFormik } from "formik";
 import { FormikField } from "./FormInput";
+import { ChangeEvent, useState } from "react";
 
 const validationSchema = Yup.object().shape({
   guest_id: Yup.number().required(),
@@ -23,7 +24,8 @@ const validationSchema = Yup.object().shape({
 });
 
 export function GuestInfo() {
-  const { search, selectedPass, toast } = useAppContext();
+  const [ fieldChange, setFieldChange ] = useState(false);
+  const { search, selectedPass, setSelectedPass, toast } = useAppContext();
   const queryClient = useQueryClient();
 
   const { data: guestData } = useQuery({
@@ -44,12 +46,15 @@ export function GuestInfo() {
           "search",
           search,
         ] as InvalidateQueryFilters);
-        // setSelectedPass({
-        //   ...selectedPass,
-        //   remaining_uses,
-        // });
+        setSelectedPass({
+          ...selectedPass,
+          first_name: formik.values.first_name,
+          last_name: formik.values.last_name,
+          town: formik.values.town || "",
+        });
         showMessage("Edit Guest", "Success!", toast, "success");
         // setPanel(SidePanel.PassInteraction);
+        setFieldChange(false);
         formik.setSubmitting(false);
       },
     });
@@ -76,31 +81,36 @@ export function GuestInfo() {
     return <>Loading...</>;
   }
 
+  const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFieldChange(true);
+    formik.handleChange(e);
+  };
+
   return (
     <form id="guest-info" className="flex-col" onSubmit={formik.handleSubmit}>
       {/* <div>Guest ID: {guestData?.guest_id}</div> */}
       <FormikField
         label="First name"
         name="first_name"
-        onChange={formik.handleChange}
+        onChange={handleFieldChange}
         {...{ formik }}
       />
       <FormikField
         label="Last name"
         name="last_name"
-        onChange={formik.handleChange}
+        onChange={handleFieldChange}
         {...{ formik }}
       />
       <FormikField
         label="Town"
         name="town"
-        onChange={formik.handleChange}
+        onChange={handleFieldChange}
         {...{ formik }}
       />
       <FormikField
         label="Email"
         name="email"
-        onChange={formik.handleChange}
+        onChange={handleFieldChange}
         {...{ formik }}
       />
       <InputTextarea
@@ -109,9 +119,19 @@ export function GuestInfo() {
         value={formik.values.notes}
         autoResize
         style={{ maxWidth: "100%" }}
-        onChange={formik.handleChange}
+        onChange={(e) => {
+          setFieldChange(true);
+          formik.handleChange(e);
+        }}
       />
-      <CrudButton label="Save" icon="pi pi-save" type="submit" />
+      <CrudButton
+        label="Save"
+        icon="pi pi-save"
+        type="submit"
+        severity="danger"
+        loading={isEditGuestPending}
+        disabled={!fieldChange}
+      />
       <div>Creator: {guestData?.creator}</div>
       <div>Created: {creationTime}</div>
     </form>
