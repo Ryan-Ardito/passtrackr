@@ -91,7 +91,7 @@ h3 {
   gap: 10px;
   /* grid-auto-flow: column; */
   grid-auto-rows: minmax(100%, auto);
-  grid-template-columns: 280px minmax(300px, 1fr) minmax(500px, 1fr);
+  grid-template-columns: 280px minmax(300px, 5fr) minmax(500px, 4fr);
 }
 
 #searchbar {
