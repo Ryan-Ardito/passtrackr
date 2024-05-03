@@ -12,10 +12,12 @@ export function ViewGuest() {
 
   return (
     <div id="view-guest-screen">
-      <Panel header="Visits">
+      <div className="flex-col" style={{paddingBottom: "12px"}}>
+        <h3>Visits</h3>
         <VisitsTable />
-      </Panel>
+      </div>
       <Panel header={`Guest ${guestData?.guest_id}`}>
+        {/* <h3>{`Guest ${guestData?.guest_id}`}</h3> */}
         <ScrollPanel style={{ display: "grid" }}>
           <div
             id="guest-info"
@@ -34,9 +36,10 @@ export function ViewGuest() {
           </div>
         </ScrollPanel>
       </Panel>
-      <Panel header="Payments">
+      <div className="flex-col" style={{paddingBottom: "12px"}}>
+        <h3>Payments</h3>
         <PaymentsTable />
-      </Panel>
+      </div>
     </div>
   );
 }

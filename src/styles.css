@@ -4,6 +4,10 @@ html, body {
   padding: 0px;
 }
 
+h3 {
+  margin: 6px;
+}
+
 :root {
   font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
   font-synthesis: none;
@@ -84,6 +88,7 @@ html, body {
   width: 100%;
   overflow: hidden;
   display: grid;
+  gap: 10px;
   /* grid-auto-flow: column; */
   grid-auto-rows: minmax(100%, auto);
   grid-template-columns: 280px minmax(300px, 1fr) minmax(500px, 1fr);
