@@ -14,9 +14,10 @@ pub mod database;
 pub mod queries;
 
 use api::{
-    add_visits, async_sleep, create_pass, delete_pass, get_guest, get_payments, get_visits,
-    log_visit, search_passes, toggle_pass_active, edit_guest
+    add_visits, async_sleep, create_pass, delete_pass, edit_guest, get_config_error, get_guest,
+    get_payments, get_visits, log_visit, search_passes, toggle_pass_active, ToastError,
 };
+// use tauri::Manager;
 
 const CONFIG_FILEPATH: &str = "resources/config.json";
 
@@ -33,6 +34,7 @@ const DEFAULT_PORT: u16 = 5432;
 
 pub struct AppState {
     pg_pool: PgPool,
+    config_error: bool,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -44,27 +46,26 @@ struct DatabaseConfig {
     port: u16,
 }
 
-fn connection_options(file_path: &str) -> PgConnectOptions {
-    let default_config = DatabaseConfig {
-        username: DEFAULT_USERNAME.to_string(),
-        password: DEFAULT_PASSWORD.to_string(),
-        host_ip: DEFAULT_HOST_IP.to_string(),
-        db_name: DEFAULT_DB_NAME.to_string(),
-        port: DEFAULT_PORT,
-    };
-    let config = match File::open(file_path) {
-        Ok(file) => {
-            let reader = BufReader::new(file);
-            serde_json::from_reader(reader).unwrap_or(default_config)
-        }
-        Err(_) => default_config,
-    };
+fn default_connection_options() -> PgConnectOptions {
     PgConnectOptions::new()
+        .username(DEFAULT_USERNAME)
+        .password(DEFAULT_PASSWORD)
+        .host(DEFAULT_HOST_IP)
+        .database(DEFAULT_DB_NAME)
+        .port(DEFAULT_PORT)
+}
+
+fn connection_options(file_path: &str) -> Result<PgConnectOptions, ToastError> {
+    let file = File::open(file_path)?;
+    let reader = BufReader::new(file);
+    let config: DatabaseConfig = serde_json::from_reader(reader)?;
+
+    Ok(PgConnectOptions::new()
         .username(&config.username)
         .password(&config.password)
         .host(&config.host_ip)
         .database(&config.db_name)
-        .port(config.port)
+        .port(config.port))
 }
 
 fn create_pool(conn_opts: PgConnectOptions) -> PgPool {
@@ -76,13 +77,20 @@ fn create_pool(conn_opts: PgConnectOptions) -> PgPool {
 
 #[tokio::main]
 async fn main() {
-    let conn_opts = connection_options(CONFIG_FILEPATH);
+    let (conn_opts, config_error) = match connection_options(CONFIG_FILEPATH) {
+        Ok(opts) => (opts, false),
+        Err(_) => (default_connection_options(), true),
+    };
     let pg_pool = create_pool(conn_opts);
-    let state = AppState { pg_pool };
+    let state = AppState {
+        pg_pool,
+        config_error,
+    };
 
     tauri::Builder::default()
         .manage(state)
         .invoke_handler(tauri::generate_handler![
+            get_config_error,
             get_visits,
             get_payments,
             create_pass,

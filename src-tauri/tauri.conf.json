@@ -8,11 +8,14 @@
   },
   "package": {
     "productName": "passtracker",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "tauri": {
     "allowlist": {
       "all": false,
+      "dialog": {
+        "message": true
+      },
       "shell": {
         "all": false,
         "open": true

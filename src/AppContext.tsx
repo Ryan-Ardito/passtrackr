@@ -17,6 +17,8 @@ import "primeicons/primeicons.css";
 import { PassData, Screen, blankPass, SidePanel, GuestData } from "./types";
 import { getGuest, searchPasses } from "./api/api";
 import { showMessage } from "./utils/toast";
+import { message } from "@tauri-apps/api/dialog";
+import { invoke } from "@tauri-apps/api";
 
 const MIN_SEARCH_LENGTH = 2;
 
@@ -76,6 +78,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const toast = useRef<Toast>(null);
 
   useEffect(() => {
+    invoke("get_config_error").then((e) => {
+      if (e) {
+        message("Could not read config.json!");
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     if (searchError && searchStatus === "error") {
       showMessage(searchError.name, searchError.message, toast, "warn");
     }
@@ -91,6 +101,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   listen("dashboard", () => setScreen(Screen.Dashboard));
   listen("settings", () => setScreen(Screen.Settings));
   listen("about", () => setScreen(Screen.About));
+  listen("config", () => message("Error reading config.json"));
 
   const contextValues = {
     screen,
