@@ -76,10 +76,6 @@ export function GuestInfo({ guestData }: GuestInfoProps) {
     creationTime = new Date(guestData.creation_time).toLocaleDateString();
   }
 
-  if (isEditGuestPending) {
-    return <>Loading...</>;
-  }
-
   const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFieldChange(true);
     formik.handleChange(e);

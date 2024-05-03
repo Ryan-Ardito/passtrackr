@@ -11,11 +11,11 @@ const SearchInteraction = () => {
   const { panel } = useAppContext();
 
   return (
-    <>
+    <div className="flex-box">
       <SearchResults />
       <Divider layout="vertical" style={{ margin: 6 }} />
       <RightPanel {...{ panel }} />
-    </>
+    </div>
   );
 };
 
@@ -26,10 +26,8 @@ export function Dashboard() {
     <div className="viewport-wrapper">
       <div id="dashboard" className="flex-box flex-col">
         <SearchBar />
-        <div className="flex-box">
-          {screen === Screen.Dashboard && <SearchInteraction />}
-          {screen === Screen.ViewGuest && <ViewGuest />}
-        </div>
+        {screen === Screen.Dashboard && <SearchInteraction />}
+        {screen === Screen.ViewGuest && <ViewGuest />}
       </div>
     </div>
   );
