@@ -7,8 +7,9 @@ use crate::{
     database::{
         delete_pass_permanent, get_guest_from_id, get_pass_from_id, get_payments_from_guest_id,
         get_visits_from_guest_id, increase_expiration, increase_remaining_uses, insert_guest,
-        insert_pass, insert_visit, search_all_passes, set_pass_active, update_guest, use_pass,
-        EditGuestData, GetGuestData, GetPassData, NewPassData, PaymentRow, VisitRow,
+        insert_pass, insert_visit, search_all_passes, set_pass_active, set_pass_guest_id,
+        update_guest, use_pass, EditGuestData, GetGuestData, GetPassData, NewPassData, PaymentRow,
+        VisitRow,
     },
     AppState,
 };
@@ -204,6 +205,16 @@ pub async fn log_visit(
         _ => return Err(ToastError::new("Log visit", "Invalid pass type")),
     };
     Ok(remaining_uses)
+}
+
+#[tauri::command(async)]
+pub async fn set_pass_owner(
+    state: State<'_, AppState>,
+    pass_id: i32,
+    new_guest_id: i32,
+) -> Result<(), ToastError> {
+    let _query_result = set_pass_guest_id(&state, pass_id, new_guest_id).await?;
+    Ok(())
 }
 
 #[tauri::command(async)]

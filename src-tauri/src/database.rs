@@ -10,7 +10,7 @@ use crate::{
         GET_GUEST, GET_PASS, GET_PAYMENTS_FROM_GUEST_ID, GET_PAYMENTS_FROM_PASS_ID,
         GET_VISITS_FROM_GUEST_ID, GET_VISITS_FROM_PASS_ID, INCREASE_EXPIRATION_TIME,
         INCREASE_REMAINING_USES, INSERT_GUEST, INSERT_PASS, INSERT_PAYMENT, INSERT_VISIT,
-        LOG_VISIT, SEARCH_ALL, SET_PASS_ACTIVE,
+        LOG_VISIT, SEARCH_ALL, SET_PASS_ACTIVE, SET_PASS_OWNER,
     },
     AppState,
 };
@@ -321,6 +321,18 @@ pub async fn set_pass_active(
     sqlx::query(SET_PASS_ACTIVE)
         .bind(&pass_id)
         .bind(&new_state)
+        .execute(&state.pg_pool)
+        .await
+}
+
+pub async fn set_pass_guest_id(
+    state: &State<'_, AppState>,
+    pass_id: i32,
+    new_guest_id: i32,
+) -> Result<PgQueryResult> {
+    sqlx::query(SET_PASS_OWNER)
+        .bind(&pass_id)
+        .bind(&new_guest_id)
         .execute(&state.pg_pool)
         .await
 }

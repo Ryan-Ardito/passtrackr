@@ -56,6 +56,10 @@ pub const SET_PASS_ACTIVE: &str = r#"UPDATE passes
 SET active = $2
 WHERE pass_id = $1;"#;
 
+pub const SET_PASS_OWNER: &str = r#"UPDATE passes
+SET guest_id = $2
+WHERE pass_id = $1;"#;
+
 pub const DELETE_PAYMENTS_PASS_ID: &str = r#"DELETE FROM payments WHERE pass_id = $1;"#;
 
 pub const DELETE_VISITS_PASS_ID: &str = r#"DELETE FROM visits WHERE pass_id = $1;"#;
