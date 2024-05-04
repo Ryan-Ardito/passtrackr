@@ -47,7 +47,7 @@ struct DatabaseConfig {
     port: u16,
 }
 
-fn default_connection_options() -> PgConnectOptions {
+fn get_default_connection_options() -> PgConnectOptions {
     PgConnectOptions::new()
         .username(DEFAULT_USERNAME)
         .password(DEFAULT_PASSWORD)
@@ -56,10 +56,14 @@ fn default_connection_options() -> PgConnectOptions {
         .port(DEFAULT_PORT)
 }
 
-fn connection_options(file_path: &str) -> Result<PgConnectOptions, ToastError> {
+fn get_config(file_path: &str) -> Result<DatabaseConfig, ToastError> {
     let file = File::open(file_path)?;
     let reader = BufReader::new(file);
-    let config: DatabaseConfig = serde_json::from_reader(reader)?;
+    Ok(serde_json::from_reader(reader)?)
+}
+
+fn get_connection_options(file_path: &str) -> Result<PgConnectOptions, ToastError> {
+    let config = get_config(file_path)?;
 
     Ok(PgConnectOptions::new()
         .username(&config.username)
@@ -78,9 +82,9 @@ fn create_pool(conn_opts: PgConnectOptions) -> PgPool {
 
 #[tokio::main]
 async fn main() {
-    let (conn_opts, config_error) = match connection_options(CONFIG_FILEPATH) {
+    let (conn_opts, config_error) = match get_connection_options(CONFIG_FILEPATH) {
         Ok(opts) => (opts, false),
-        Err(_) => (default_connection_options(), true),
+        Err(_) => (get_default_connection_options(), true),
     };
     let pg_pool = create_pool(conn_opts);
     let state = AppState {
