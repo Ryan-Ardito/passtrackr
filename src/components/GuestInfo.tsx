@@ -12,7 +12,7 @@ import { showMessage } from "../utils/toast";
 import { useFormik } from "formik";
 import { FormikField } from "./FormInput";
 import { ChangeEvent, useState } from "react";
-import { GuestData } from "../types";
+import { GuestData, Screen } from "../types";
 
 const validationSchema = Yup.object().shape({
   guest_id: Yup.number().required(),
@@ -29,7 +29,8 @@ interface GuestInfoProps {
 
 export function GuestInfo({ guestData }: GuestInfoProps) {
   const [fieldChange, setFieldChange] = useState(false);
-  const { search, selectedPass, setSelectedPass, toast } = useAppContext();
+  const { search, selectedPass, setSelectedPass, setScreen, toast } =
+    useAppContext();
   const queryClient = useQueryClient();
 
   const { mutate: mutateEditGuest, isPending: isEditGuestPending } =
@@ -83,29 +84,71 @@ export function GuestInfo({ guestData }: GuestInfoProps) {
 
   return (
     <form id="guest-info" className="flex-col" onSubmit={formik.handleSubmit}>
-      {/* <div>Guest ID: {guestData?.guest_id}</div> */}
+      <div
+        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}
+      >
+        <CrudButton
+          label="Back"
+          icon="pi pi-arrow-left"
+          onClick={(e) => {
+            e.preventDefault();
+            setScreen(Screen.Dashboard);
+          }}
+        />
+        <CrudButton
+          label="Revert"
+          icon="pi pi-undo"
+          severity="warning"
+          disabled={!fieldChange}
+          onClick={(e) => {
+            e.preventDefault();
+            formik.resetForm();
+            setFieldChange(false);
+          }}
+        />
+      </div>
       <FormikField
         label="First name"
         name="first_name"
         onChange={handleFieldChange}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+          }
+        }}
         {...{ formik }}
       />
       <FormikField
         label="Last name"
         name="last_name"
         onChange={handleFieldChange}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+          }
+        }}
         {...{ formik }}
       />
       <FormikField
         label="Town"
         name="town"
         onChange={handleFieldChange}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+          }
+        }}
         {...{ formik }}
       />
       <FormikField
         label="Email"
         name="email"
         onChange={handleFieldChange}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+          }
+        }}
         {...{ formik }}
       />
       <InputTextarea
