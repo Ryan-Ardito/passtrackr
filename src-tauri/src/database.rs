@@ -26,16 +26,6 @@ pub struct NewPassData {
     pub creator: String,
 }
 
-#[derive(Deserialize, Serialize, Clone)]
-pub struct NewGuestData {
-    first_name: String,
-    last_name: String,
-    town: String,
-    email: String,
-    notes: String,
-    creator: String,
-}
-
 #[derive(Deserialize, Serialize, Clone, FromRow)]
 pub struct GetPassData {
     pub pass_id: i32,
@@ -43,8 +33,8 @@ pub struct GetPassData {
     pub passtype: String,
     pub remaining_uses: Option<i32>,
     pub active: bool,
-    pub payment_method: String,
-    pub amount_paid_cents: i32,
+    pub payment_method: Option<String>,
+    pub amount_paid_cents: Option<i32>,
     pub creator: String,
     pub expires_at: Option<OffsetDateTime>,
     pub created_at: OffsetDateTime,
@@ -64,8 +54,8 @@ pub struct GetGuestData {
     pub first_name: String,
     pub last_name: String,
     pub town: String,
-    pub email: String,
-    pub notes: String,
+    pub email: Option<String>,
+    pub notes: Option<String>,
     pub creator: String,
     pub created_at: OffsetDateTime,
 }
@@ -108,8 +98,8 @@ pub struct EditGuestData {
     pub first_name: String,
     pub last_name: String,
     pub town: String,
-    pub email: String,
-    pub notes: String,
+    pub email: Option<String>,
+    pub notes: Option<String>,
 }
 
 pub async fn update_guest(
