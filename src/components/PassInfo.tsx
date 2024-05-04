@@ -10,18 +10,19 @@ export const PassInfo = ({ selectedPass }: PassInfoProps) => {
   if (selectedPass?.created_at) {
     createdAt = new Date(selectedPass.created_at).toLocaleDateString();
   }
-  let expiresAt = "never";
+  let expiresAt = undefined;
   if (selectedPass?.expires_at) {
     expiresAt = new Date(selectedPass.expires_at).toLocaleDateString();
   }
 
   return (
     <Panel header={`Pass ${selectedPass.pass_id}`}>
-      <div>{selectedPass.passtype.name}</div>
-      <div>Expires {expiresAt}</div>
-      <div>Uses: {selectedPass.remaining_uses || "unlimited"}</div>
-      <div>Owner ID: {selectedPass.guest_id}</div>
       <div>
+        {selectedPass.remaining_uses && `${selectedPass.remaining_uses}x `}
+        {selectedPass.passtype.name} {expiresAt && `expires ${expiresAt}`}
+      </div>
+      <div>Owner ID: {selectedPass.guest_id}</div>
+      <div style={{ wordWrap: "break-word" }}>
         Created {createdAt} by {selectedPass.creator}
       </div>
     </Panel>

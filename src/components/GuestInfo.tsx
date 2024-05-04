@@ -172,7 +172,7 @@ export function GuestInfo({ guestData }: GuestInfoProps) {
         loading={isEditGuestPending}
         disabled={!fieldChange}
       />
-      <div>
+      <div style={{ wordWrap: "break-word" }}>
         Created {createdAt} by {guestData?.creator}
       </div>
     </form>
