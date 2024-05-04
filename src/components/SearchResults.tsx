@@ -3,18 +3,31 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useAppContext } from "../AppContext";
 
-// const activeBodyTemplate = (rowData: PassData) => {
-//   return <i className={rowData.active ? "pi pi-check" : "pi pi-times"} />;
-// };
-
 const remainingBodyTemplate = (rowData: PassData) => {
   return (
     <>
-      {rowData.passtype.code === "Unlimited" && <img src="src/assets/infinity.png" height={"12x"} />}
+      {rowData.passtype.code === "Unlimited" && (
+        <img src="src/assets/infinity.png" height={"12x"} />
+      )}
       {rowData.passtype.code === "Punch" && rowData.remaining_uses}
-      {rowData.passtype.code === "Annual" && (rowData.active ? <i className="pi pi-calendar" /> : <i className="pi pi-times" />)}
-      {rowData.passtype.code === "6 Month" && (rowData.active ? <i className="pi pi-calendar" /> : <i className="pi pi-times" />)}
-      {rowData.passtype.code === "Free Pass" && (rowData.active ? <i className="pi pi-clock" /> : <i className="pi pi-times" />)}
+      {rowData.passtype.code === "Annual" &&
+        (rowData.active ? (
+          <i className="pi pi-calendar" />
+        ) : (
+          <i className="pi pi-times" />
+        ))}
+      {rowData.passtype.code === "6 Month" &&
+        (rowData.active ? (
+          <i className="pi pi-calendar" />
+        ) : (
+          <i className="pi pi-times" />
+        ))}
+      {rowData.passtype.code === "Free Pass" &&
+        (rowData.active ? (
+          <i className="pi pi-clock" />
+        ) : (
+          <i className="pi pi-times" />
+        ))}
       {rowData.passtype.code === "Facial" && rowData.remaining_uses}
     </>
   );
@@ -48,20 +61,18 @@ export function SearchResults() {
         selection={selectedPass}
         onSelectionChange={(e) => setSelectedPass(e.value || blankPass)}
       >
-        {/* <Column field="first_name" header="First Name" style={{ width: "35%" }} />
-      <Column field="last_name" header="Last Name" style={{ width: "35%" }} /> */}
         <Column
           field="passholder"
           body={passholderTemplate}
           header="Passholder"
           style={{ width: "45%" }}
         />
-        <Column field="town" header="Town" style={{ width: "25%" }} />
+        <Column field="town" header="Town" style={{ width: "30%" }} />
         <Column
           field="passtype"
           body={passtypeTemplate}
           header="Type"
-          style={{ width: "20%" }}
+          style={{ width: "15%" }}
         />
         <Column
           field="remaining_uses"
@@ -69,12 +80,6 @@ export function SearchResults() {
           body={remainingBodyTemplate}
           style={{ width: "10%" }}
         />
-        {/* <Column
-          field="active"
-          // header="On"
-          body={activeBodyTemplate}
-          style={{ width: "10%" }}
-        /> */}
       </DataTable>
     </div>
   );
