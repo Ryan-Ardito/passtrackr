@@ -1,5 +1,7 @@
 import os
 import random
+import time
+import datetime
 from dataclasses import dataclass, asdict
 
 
@@ -63,6 +65,7 @@ class PunchPass:
     active: bool
     payment_method: str
     amount_paid_cents: int
+    expires_at: int
     creator: str
 
     def values_string(self, delimiter: str) -> str:
@@ -109,10 +112,27 @@ def generate_passes(guests: list[Guest], first_names: list[str]) -> list[PunchPa
 
         guest_id = passholder.guest_id
         passtype = random.choice(PASSTYPES)
-        remaining_uses = random.randrange(1, 11)
-        active = random.randint(0, 10) > 0
+
+        remaining_uses = ""
+        if passtype == "Punch":
+            remaining_uses = random.choice((6, 10))
+        if passtype == "Facial":
+            remaining_uses = random.choice((3, 6))
+
+        active = True
         payment_method = random.choice(PAYMENT_METHODS)
-        amount_paid = 350
+        amount_paid = 7000
+
+        expires_at = ""
+        if passtype in ("Annual", "6 Month"):
+            current_datetime = datetime.datetime.now().astimezone()
+            random_days = random.randint(-182, 182)
+            expires_at = (
+                (current_datetime + datetime.timedelta(days=random_days))
+                .replace(microsecond=0)
+                .isoformat()
+            )
+
         creator = f"{random.choice(first_names[:24])}"
         punch_pass = PunchPass(
             guest_id,
@@ -121,6 +141,7 @@ def generate_passes(guests: list[Guest], first_names: list[str]) -> list[PunchPa
             active,
             payment_method,
             amount_paid,
+            expires_at,
             creator,
         )
         passes.append(punch_pass)
