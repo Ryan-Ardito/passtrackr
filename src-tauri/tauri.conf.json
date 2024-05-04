@@ -44,6 +44,7 @@
       {
         "fullscreen": false,
         "resizable": true,
+        "center": true,
         "title": "JoyPass",
         "width": 1280,
         "height": 800
