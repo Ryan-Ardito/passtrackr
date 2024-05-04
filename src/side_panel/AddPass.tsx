@@ -20,7 +20,7 @@ import { Panel } from "primereact/panel";
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().required("Required").max(50, "Invalid"),
   last_name: Yup.string().required("Required").max(50, "Invalid"),
-  town: Yup.string().required("Required").max(50, "Invalid"),
+  town: Yup.string().required("Required").max(24, "Invalid"),
   passtype: Yup.object().shape({
     name: Yup.string().required("Required"),
     code: Yup.string().required("Required"),
@@ -35,7 +35,7 @@ const validationSchema = Yup.object().shape({
     .min(1000, "Invalid")
     .max(9999, "Invalid"),
   amount_paid: Yup.number().typeError("Invalid").min(0, "Invalid"),
-  signature: Yup.string().required("Required").max(50, "Invalid"),
+  signature: Yup.string().required("Required").max(24, "Invalid"),
 });
 
 export const AddPass = () => {

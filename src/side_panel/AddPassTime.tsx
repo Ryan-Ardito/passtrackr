@@ -33,7 +33,7 @@ const validationSchema = Yup.object().shape({
     .min(1000, "Invalid")
     .max(9999, "Invalid"),
   amount_paid: Yup.number().typeError("Invalid").min(0, "Invalid"),
-  signature: Yup.string().required("Required").max(50, "Invalid"),
+  signature: Yup.string().required("Required").max(24, "Invalid"),
 });
 
 export const AddPassTime = () => {
