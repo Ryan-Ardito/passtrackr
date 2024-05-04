@@ -9,7 +9,7 @@ export function About() {
   return (
     <div className="viewport-wrapper">
       <div id="about" className="flex-box flex-col flex-2 center-box">
-        <div>Passtracker is a tracker for passes.</div>
+        <div>JoyPass is a tracker for passes.</div>
         <Button
           label="Back"
           onClick={(e) => {

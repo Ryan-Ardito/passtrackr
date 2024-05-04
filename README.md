@@ -1,4 +1,4 @@
-# Passtracker
+# JoyPass
 
 ## Running the dev environment
 Start the dev database server:
