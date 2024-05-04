@@ -39,7 +39,7 @@ h3 {
 .p-panel-content {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 /* .p-datatable-scrollable {
   padding-bottom: 30px;

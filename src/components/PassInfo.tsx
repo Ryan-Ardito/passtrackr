@@ -1,28 +1,29 @@
+import { Panel } from "primereact/panel";
 import { PassData } from "../types";
 
 interface PassInfoProps {
-  selectedPass: PassData,
+  selectedPass: PassData;
 }
 
 export const PassInfo: React.FC<PassInfoProps> = ({ selectedPass }) => {
   let createdAt = undefined;
   if (selectedPass?.created_at) {
-    createdAt = new Date(selectedPass.created_at).toDateString();
+    createdAt = new Date(selectedPass.created_at).toLocaleDateString();
   }
-  let expiresAt = "Never";
+  let expiresAt = "never";
   if (selectedPass?.expires_at) {
-    expiresAt = new Date(selectedPass.expires_at).toDateString();
+    expiresAt = new Date(selectedPass.expires_at).toLocaleDateString();
   }
 
   return (
-    <div>
-      <div>Pass ID: {selectedPass.pass_id}</div>
-      <div>Guest ID: {selectedPass.guest_id}</div>
-      <div>Remaining: {selectedPass.remaining_uses}</div>
-      <div>Passtype: {selectedPass.passtype.name}</div>
-      <div>Creator: {selectedPass.creator}</div>
-      <div>Expires: {expiresAt}</div>
-      <div>Created: {createdAt}</div>
-    </div>
+    <Panel header={`Pass ${selectedPass.pass_id}`}>
+      <div>{selectedPass.passtype.name}</div>
+      <div>Expires {expiresAt}</div>
+      <div>Uses: {selectedPass.remaining_uses || "unlimited"}</div>
+      <div>Owner ID: {selectedPass.guest_id}</div>
+      <div>
+        Created {createdAt} by {selectedPass.creator}
+      </div>
+    </Panel>
   );
 };
