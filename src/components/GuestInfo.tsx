@@ -24,7 +24,7 @@ const validationSchema = Yup.object().shape({
 });
 
 interface GuestInfoProps {
-  guestData: GuestData;
+  guestData: GuestData | undefined;
 }
 
 export function GuestInfo({ guestData }: GuestInfoProps) {
