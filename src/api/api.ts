@@ -38,7 +38,7 @@ interface ViewPassData {
   first_name: string;
   last_name: string;
   town: string;
-  remaining_uses: number;
+  remaining_uses: number | undefined;
   passtype: PassType;
   active: boolean;
   creator: string;

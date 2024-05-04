@@ -70,7 +70,7 @@ pub struct SearchPassData {
     pub first_name: String,
     pub last_name: String,
     pub town: String,
-    pub remaining_uses: i32,
+    pub remaining_uses: Option<i32>,
     pub passtype: PassType,
     pub active: bool,
     pub creator: String,
@@ -83,7 +83,7 @@ pub struct ViewPassData {
     pub pass_id: i32,
     pub guest_id: i32,
     pub passtype: PassType,
-    pub remaining_uses: i32,
+    pub remaining_uses: Option<i32>,
     pub active: bool,
     pub payment_method: String,
     pub amount_paid_cents: i32,
@@ -173,8 +173,8 @@ pub struct Payment {
 pub async fn log_visit(
     state: State<'_, AppState>,
     pass: SearchPassData,
-) -> Result<i32, ToastError> {
-    if pass.remaining_uses < 1 {
+) -> Result<Option<i32>, ToastError> {
+    if pass.remaining_uses.is_some_and(|num| num < 1) {
         return Err(ToastError::new("Log visit", "No uses left"));
     }
     let pass_id = pass.pass_id;
@@ -184,7 +184,7 @@ pub async fn log_visit(
             insert_visit(&state, pass_id).await?;
             pass.remaining_uses
         }
-        "Punch" | "Facial" => use_pass(&state, pass_id).await?,
+        "Punch" | "Facial" => Some(use_pass(&state, pass_id).await?),
         _ => return Err(ToastError::new("Log visit", "Invalid pass type")),
     };
     Ok(remaining_uses)
@@ -262,13 +262,13 @@ pub async fn create_pass(
         .and_then(|amount_opt| amount_opt.ok().map(|amount| (amount * 100.0) as i32));
 
     let (remaining_uses, num_weeks_valid) = match passtype.code {
-        NewPassType::TenPunch => (10, None),
-        NewPassType::SixPunch => (6, None),
-        NewPassType::Annual => (365, Some(52)),
-        NewPassType::SixMonth => (182, Some(26)),
-        NewPassType::FreePass => (100, None),
-        NewPassType::ThreeFacial => (3, None),
-        NewPassType::SixFacial => (6, None),
+        NewPassType::TenPunch => (Some(10), None),
+        NewPassType::SixPunch => (Some(6), None),
+        NewPassType::Annual => (None, Some(52)),
+        NewPassType::SixMonth => (None, Some(26)),
+        NewPassType::FreePass => (None, None),
+        NewPassType::ThreeFacial => (Some(3), None),
+        NewPassType::SixFacial => (Some(6), None),
     };
 
     let expires_at = num_weeks_valid
