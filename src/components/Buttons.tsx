@@ -41,9 +41,9 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({
 
   return (
     <>
-      <div style={{ display: "flex", width: "100%" }}>
+      <div style={{ display: "grid", width: "100%" }}>
         {confirm && !disabled ? (
-          <>
+        <div style={{ display: "grid", gridTemplateColumns: "50px 1fr" }}>
             <Button
               id="delete-button"
               rounded
@@ -71,7 +71,7 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({
               loading={loading}
               onClick={() => setConfirm(false)}
             />
-          </>
+          </div>
         ) : (
           <Button
             id="delete-button"
