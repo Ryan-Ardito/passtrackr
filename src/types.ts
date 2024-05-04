@@ -1,8 +1,6 @@
 export enum Screen {
   Dashboard,
   ViewGuest,
-  Settings,
-  About,
 }
 
 export enum SidePanel {

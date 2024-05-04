@@ -1,4 +1,3 @@
-import { listen } from "@tauri-apps/api/event";
 import {
   useState,
   createContext,
@@ -80,7 +79,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     invoke("was_config_error").then((e) => {
       if (e) {
-        message("Could not read config.json!");
+        message("Unable to read config.json!");
       }
     });
   }, []);
@@ -96,12 +95,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setScreen(Screen.Dashboard);
     setPanel(SidePanel.PassInteraction);
   }, [search]);
-
-  // Window menu emissions from Tauri
-  listen("dashboard", () => setScreen(Screen.Dashboard));
-  listen("settings", () => setScreen(Screen.Settings));
-  listen("about", () => setScreen(Screen.About));
-  listen("config", () => message("Error reading config.json"));
 
   const contextValues = {
     screen,
