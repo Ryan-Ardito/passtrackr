@@ -1,8 +1,7 @@
-use std::time::Duration;
-
 use serde::{Deserialize, Serialize};
 use sqlx::prelude::FromRow;
 use tauri::State;
+use time::{Duration, OffsetDateTime};
 
 use crate::{
     database::{
@@ -213,7 +212,7 @@ pub async fn toggle_pass_active(
 
 #[tauri::command(async)]
 pub fn async_sleep(millis: u64) -> Result<(), String> {
-    std::thread::sleep(Duration::from_millis(millis));
+    std::thread::sleep(std::time::Duration::from_millis(millis));
     Ok(())
 }
 
@@ -262,15 +261,18 @@ pub async fn create_pass(
         .map(|num_str| num_str.clone().parse::<f64>())
         .and_then(|amount_opt| amount_opt.ok().map(|amount| (amount * 100.0) as i32));
 
-    let remaining_uses = match passtype.code {
-        NewPassType::TenPunch => 10,
-        NewPassType::SixPunch => 6,
-        NewPassType::Annual => 365,
-        NewPassType::SixMonth => 182,
-        NewPassType::FreePass => 100,
-        NewPassType::ThreeFacial => 3,
-        NewPassType::SixFacial => 6,
+    let (remaining_uses, num_weeks_valid) = match passtype.code {
+        NewPassType::TenPunch => (10, None),
+        NewPassType::SixPunch => (6, None),
+        NewPassType::Annual => (365, Some(52)),
+        NewPassType::SixMonth => (182, Some(26)),
+        NewPassType::FreePass => (100, None),
+        NewPassType::ThreeFacial => (3, None),
+        NewPassType::SixFacial => (6, None),
     };
+
+    let expires_at = num_weeks_valid
+        .and_then(|weeks| OffsetDateTime::now_utc().checked_add(Duration::weeks(weeks)));
 
     let data = NewPassData {
         guest_id,
@@ -279,7 +281,7 @@ pub async fn create_pass(
         active: true,
         payment_method: pass_data.pay_method.map(|method| method.code),
         amount_paid_cents,
-        expires_at: None,
+        expires_at,
         creator: pass_data.signature,
     };
 
