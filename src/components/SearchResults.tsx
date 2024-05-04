@@ -31,6 +31,7 @@ export function SearchResults() {
   return (
     <div id="search-results">
       <DataTable
+        dataKey="pass_id"
         className="flex-box flex-col"
         size="large"
         // showGridlines
@@ -46,7 +47,6 @@ export function SearchResults() {
         selectionMode="single"
         selection={selectedPass}
         onSelectionChange={(e) => setSelectedPass(e.value || blankPass)}
-        dataKey="pass_id"
       >
         {/* <Column field="first_name" header="First Name" style={{ width: "35%" }} />
       <Column field="last_name" header="Last Name" style={{ width: "35%" }} /> */}
