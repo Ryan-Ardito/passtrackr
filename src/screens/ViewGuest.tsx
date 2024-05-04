@@ -6,6 +6,7 @@ import { Panel } from "primereact/panel";
 import { ScrollPanel } from "primereact/scrollpanel";
 import { useQuery } from "@tanstack/react-query";
 import { getGuest } from "../api/api";
+import { EditGuestTemplate } from "../components/EditGuestTemplate";
 
 export function ViewGuest() {
   const { selectedPass } = useAppContext();
@@ -21,15 +22,19 @@ export function ViewGuest() {
         <h3>Visits</h3>
         <VisitsTable />
       </div>
-      <Panel header={`Guest ${guestData?.guest_id}`}>
-        {/* <h3>{`Guest ${guestData?.guest_id}`}</h3> */}
+      <Panel header={`Guest ${selectedPass.guest_id}`}>
         <ScrollPanel style={{ display: "grid" }}>
           <div
             id="guest-info"
             className="flex-col"
             style={{ paddingBottom: "40px" }}
           >
-            {guestData && <GuestInfo guestData={guestData} />}
+            {guestData ? (
+              <GuestInfo guestData={guestData} />
+            ) : (
+              // <h3>Loading...</h3>
+              <EditGuestTemplate />
+            )}
           </div>
         </ScrollPanel>
       </Panel>
