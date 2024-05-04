@@ -54,6 +54,7 @@ export function GuestInfo({ guestData }: GuestInfoProps) {
         });
         showMessage("Edit Guest", "Success!", toast, "success");
         // setPanel(SidePanel.PassInteraction);
+        setScreen(Screen.Dashboard);
         setFieldChange(false);
         formik.setSubmitting(false);
       },

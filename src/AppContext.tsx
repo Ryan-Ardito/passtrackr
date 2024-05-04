@@ -14,7 +14,7 @@ import { Toast } from "primereact/toast";
 import "primeicons/primeicons.css";
 
 import { PassData, Screen, blankPass, SidePanel, GuestData } from "./types";
-import { getGuest, searchPasses } from "./api/api";
+import { searchPasses } from "./api/api";
 import { showMessage } from "./utils/toast";
 import { message } from "@tauri-apps/api/dialog";
 import { invoke } from "@tauri-apps/api";
@@ -55,11 +55,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const [search, setSearch] = useState("");
   const [panel, setPanel] = useState(SidePanel.PassInteraction);
-
-  const { data: guestData } = useQuery({
-    queryKey: ["guest", selectedPass.guest_id],
-    queryFn: () => getGuest(selectedPass.guest_id),
-  });
 
   const {
     data: searchData,
@@ -106,7 +101,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     panel,
     setPanel,
     searchData,
-    guestData,
     isSearchFetching,
     searchStatus,
     isSearchSuccess,
@@ -116,7 +110,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AppContext.Provider value={contextValues}>
-      <Toast ref={toast} position="bottom-center" />
+      <Toast ref={toast} position="bottom-right" />
       {children}
     </AppContext.Provider>
   );

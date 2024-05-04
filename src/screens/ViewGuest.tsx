@@ -4,9 +4,16 @@ import { VisitsTable } from "../components/VisitsTable";
 import { PaymentsTable } from "../components/PaymentsTable";
 import { Panel } from "primereact/panel";
 import { ScrollPanel } from "primereact/scrollpanel";
+import { useQuery } from "@tanstack/react-query";
+import { getGuest } from "../api/api";
 
 export function ViewGuest() {
-  const { guestData } = useAppContext();
+  const { selectedPass } = useAppContext();
+
+  const { data: guestData } = useQuery({
+    queryKey: ["guest", selectedPass.guest_id],
+    queryFn: () => getGuest(selectedPass.guest_id),
+  });
 
   return (
     <div id="view-guest-screen">
