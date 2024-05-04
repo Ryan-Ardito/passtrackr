@@ -9,15 +9,20 @@ export const PassInfo: React.FC<PassInfoProps> = ({ selectedPass }) => {
   if (selectedPass?.created_at) {
     createdAt = new Date(selectedPass.created_at).toDateString();
   }
+  let expiresAt = "Never";
+  if (selectedPass?.expires_at) {
+    expiresAt = new Date(selectedPass.expires_at).toDateString();
+  }
 
   return (
     <div>
-      <div>pass_id: {selectedPass.pass_id}</div>
-      <div>guest_id: {selectedPass.guest_id}</div>
-      <div>remaining: {selectedPass.remaining_uses}</div>
-      <div>passtype: {selectedPass.passtype.name}</div>
-      <div>creator: {selectedPass.creator}</div>
-      <div>created_at: {createdAt}</div>
+      <div>Pass ID: {selectedPass.pass_id}</div>
+      <div>Guest ID: {selectedPass.guest_id}</div>
+      <div>Remaining: {selectedPass.remaining_uses}</div>
+      <div>Passtype: {selectedPass.passtype.name}</div>
+      <div>Creator: {selectedPass.creator}</div>
+      <div>Expires: {expiresAt}</div>
+      <div>Created: {createdAt}</div>
     </div>
   );
 };

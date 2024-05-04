@@ -66,6 +66,7 @@ export interface PassData {
   passtype: PassType;
   active: boolean;
   creator: string;
+  expires_at: number | undefined;
   created_at: number | undefined;
 }
 
@@ -90,5 +91,6 @@ export const blankPass: PassData = {
   passtype: passtypes[0],
   active: false,
   creator: "",
+  expires_at: undefined,
   created_at: undefined,
 };
