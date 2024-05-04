@@ -4,12 +4,13 @@ use tauri::State;
 use time::OffsetDateTime;
 
 use crate::{
-    api::{AddVisitsFormData, PassFormData},
+    api::{AddTimeFormData, AddVisitsFormData, PassFormData},
     queries::{
         DELETE_PASS_PERMANENT, DELETE_PAYMENTS_PASS_ID, DELETE_VISITS_PASS_ID, EDIT_GUEST,
         GET_GUEST, GET_PASS, GET_PAYMENTS_FROM_GUEST_ID, GET_PAYMENTS_FROM_PASS_ID,
-        GET_VISITS_FROM_GUEST_ID, GET_VISITS_FROM_PASS_ID, INCREASE_REMAINING_USES, INSERT_GUEST,
-        INSERT_PASS, INSERT_PAYMENT, INSERT_VISIT, LOG_VISIT, SEARCH_ALL, SET_PASS_ACTIVE,
+        GET_VISITS_FROM_GUEST_ID, GET_VISITS_FROM_PASS_ID, INCREASE_EXPIRATION_TIME,
+        INCREASE_REMAINING_USES, INSERT_GUEST, INSERT_PASS, INSERT_PAYMENT, INSERT_VISIT,
+        LOG_VISIT, SEARCH_ALL, SET_PASS_ACTIVE,
     },
     AppState,
 };
@@ -177,6 +178,28 @@ pub async fn increase_remaining_uses(
     let _payment_res = insert_payment(&mut transaction, &pay_data).await?;
     transaction.commit().await?;
     remaining_uses_res.try_get(0)
+}
+
+pub async fn increase_expiration(
+    state: &State<'_, AppState>,
+    data: &AddTimeFormData,
+    amount_paid_cents: Option<i32>,
+) -> Result<OffsetDateTime> {
+    let mut transaction = state.pg_pool.begin().await?;
+    let new_expiration = sqlx::query(INCREASE_EXPIRATION_TIME)
+        .bind(&data.pass_id)
+        .bind(&data.num_weeks.code)
+        .fetch_one(&mut *transaction)
+        .await?;
+    let pay_data = InsertPaymentData {
+        pass_id: data.pass_id,
+        payment_method: data.pay_method.clone().map(|method| method.code),
+        amount_paid_cents,
+        creator: data.signature.clone(),
+    };
+    let _payment_res = insert_payment(&mut transaction, &pay_data).await?;
+    transaction.commit().await?;
+    new_expiration.try_get(0)
 }
 
 pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> Result<i32> {

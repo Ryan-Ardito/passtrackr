@@ -15,11 +15,15 @@ export interface PassType {
   code: string;
 }
 
+export const addPassTimeDropOpts = [
+  { name: "1 Year", code: 52 },
+  { name: "6 Months", code: 26 },
+];
+
 export const numAddVisits = [
   { name: "10x Visits", code: 10 },
-  { name: "5x Visits", code: 5 },
+  { name: "6x Visits", code: 6 },
   { name: "3x Visits", code: 3 },
-  { name: "1x Visits", code: 1 },
 ];
 
 export const payMethods = [

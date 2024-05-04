@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
   first_name: Yup.string().max(50, "Invalid").required(),
   last_name: Yup.string().max(50, "Invalid").required(),
   town: Yup.string().max(50, "Invalid"),
-  email: Yup.string().max(50, "Invalid"),
+  email: Yup.string().email("Invalid").max(50, "Invalid"),
   notes: Yup.string(),
 });
 

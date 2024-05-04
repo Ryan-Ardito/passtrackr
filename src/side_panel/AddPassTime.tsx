@@ -4,9 +4,9 @@ import * as Yup from "yup";
 import { ScrollPanel } from "primereact/scrollpanel";
 import { Divider } from "primereact/divider";
 
-import { SidePanel, numAddVisits, payMethods } from "../types";
+import { SidePanel, addPassTimeDropOpts, payMethods } from "../types";
 import { FormikDropdown, FormikField } from "../components/FormInput";
-import { addVisits } from "../api/api";
+import { addTimeToPass } from "../api/api";
 import {
   InvalidateQueryFilters,
   useMutation,
@@ -36,28 +36,28 @@ const validationSchema = Yup.object().shape({
   signature: Yup.string().required("Required").max(50, "Invalid"),
 });
 
-export const AddVisits = () => {
+export const AddPassTime = () => {
   const { selectedPass, setSelectedPass, setPanel, toast, search } =
     useAppContext();
   const queryClient = useQueryClient();
 
-  const { mutate: mutateAddVisits } = useMutation({
-    mutationKey: ["addVisits"],
-    mutationFn: addVisits,
+  const { mutate: mutateAddPassTime } = useMutation({
+    mutationKey: ["addPassTime"],
+    mutationFn: addTimeToPass,
     onError: (error) => {
       showMessage(error.name, error.message, toast, "warn");
       formik.setSubmitting(false);
     },
-    onSuccess: (remaining_uses) => {
+    onSuccess: (expires_at) => {
       queryClient.invalidateQueries([
         "search",
         search,
       ] as InvalidateQueryFilters);
       setSelectedPass({
         ...selectedPass,
-        remaining_uses,
+        expires_at,
       });
-      showMessage("Add Visits", "Success!", toast, "success");
+      showMessage("Add Time", "Success!", toast, "success");
       setPanel(SidePanel.PassInteraction);
     },
   });
@@ -65,23 +65,23 @@ export const AddVisits = () => {
   const formik = useFormik({
     initialValues: {
       pass_id: selectedPass.pass_id,
-      num_visits: { name: "10x Visits", code: 10 },
+      num_weeks: { name: "1 Year", code: 52 },
       pay_method: undefined,
       last_four: undefined,
       amount_paid: undefined,
       signature: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => mutateAddVisits(values),
+    onSubmit: (values) => mutateAddPassTime(values),
   });
 
   return (
     <ScrollPanel className="flex-1">
       <form onSubmit={formik.handleSubmit} className="flex-box flex-col">
         <FormikDropdown
-          label="Visits"
-          name="num_visits"
-          options={numAddVisits}
+          label="Add Time"
+          name="num_weeks"
+          options={addPassTimeDropOpts}
           {...{ formik }}
         />
         <FormikDropdown
@@ -107,7 +107,7 @@ export const AddVisits = () => {
           <CrudButton
             icon="pi pi-check"
             type="submit"
-            label="Add Visits"
+            label="Add Time"
             loading={formik.isSubmitting}
           />
           <CrudButton

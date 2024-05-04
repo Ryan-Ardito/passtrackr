@@ -6,9 +6,9 @@ use time::{Duration, OffsetDateTime};
 use crate::{
     database::{
         delete_pass_permanent, get_guest_from_id, get_pass_from_id, get_payments_from_guest_id,
-        get_visits_from_guest_id, increase_remaining_uses, insert_guest, insert_pass, insert_visit,
-        search_all_passes, set_pass_active, update_guest, use_pass, EditGuestData, GetGuestData,
-        GetPassData, NewPassData, PaymentRow, VisitRow,
+        get_visits_from_guest_id, increase_expiration, increase_remaining_uses, insert_guest,
+        insert_pass, insert_visit, search_all_passes, set_pass_active, update_guest, use_pass,
+        EditGuestData, GetGuestData, GetPassData, NewPassData, PaymentRow, VisitRow,
     },
     AppState,
 };
@@ -63,6 +63,12 @@ pub struct NumVisits {
     pub code: i32,
 }
 
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct NumWeeks {
+    pub name: String,
+    pub code: i32,
+}
+
 #[derive(Deserialize, Serialize, Clone, FromRow)]
 pub struct SearchPassData {
     pub pass_id: i32,
@@ -109,6 +115,16 @@ pub struct PassFormData {
 pub struct AddVisitsFormData {
     pub pass_id: i32,
     pub num_visits: NumVisits,
+    pub pay_method: Option<PayMethod>,
+    pub last_four: Option<String>,
+    pub amount_paid: Option<String>,
+    pub signature: String,
+}
+
+#[derive(Serialize, Deserialize, Clone)]
+pub struct AddTimeFormData {
+    pub pass_id: i32,
+    pub num_weeks: NumWeeks,
     pub pay_method: Option<PayMethod>,
     pub last_four: Option<String>,
     pub amount_paid: Option<String>,
@@ -229,6 +245,21 @@ pub async fn add_visits(
     let remaining_uses =
         increase_remaining_uses(&state, &add_visits_data, amount_paid_cents).await?;
     Ok(remaining_uses)
+}
+
+#[tauri::command(async)]
+pub async fn add_time(
+    state: State<'_, AppState>,
+    add_time_data: AddTimeFormData,
+) -> Result<i64, ToastError> {
+    let amount_paid_cents = add_time_data
+        .clone()
+        .amount_paid
+        .map(|num_str| num_str.clone().parse::<f64>())
+        .and_then(|amount_opt| amount_opt.ok().map(|amount| (amount * 100.0) as i32));
+    let new_expiration_time =
+        increase_expiration(&state, &add_time_data, amount_paid_cents).await?;
+    Ok(new_expiration_time.unix_timestamp() * 1000)
 }
 
 #[tauri::command(async)]

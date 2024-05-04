@@ -57,7 +57,7 @@ export const PassControl = () => {
       />
       <Divider style={{ marginTop: 11, marginBottom: 11 }} />
       <CrudButton
-        label="Add Visits"
+        label="Renew Pass"
         icon="pi pi-plus"
         disabled={!selectedPass.pass_id}
         onClick={() => setPanel(SidePanel.AddVisits)}

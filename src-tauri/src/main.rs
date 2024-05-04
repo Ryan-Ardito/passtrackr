@@ -14,8 +14,9 @@ pub mod database;
 pub mod queries;
 
 use api::{
-    add_visits, async_sleep, create_pass, delete_pass, edit_guest, was_config_error, get_guest,
-    get_payments, get_visits, log_visit, search_passes, toggle_pass_active, ToastError,
+    add_time, add_visits, async_sleep, create_pass, delete_pass, edit_guest, get_guest,
+    get_payments, get_visits, log_visit, search_passes, toggle_pass_active, was_config_error,
+    ToastError,
 };
 // use tauri::Manager;
 
@@ -100,6 +101,7 @@ async fn main() {
             edit_guest,
             log_visit,
             add_visits,
+            add_time,
             search_passes,
             async_sleep,
         ])

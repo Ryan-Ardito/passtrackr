@@ -6,10 +6,21 @@ import { Column } from "primereact/column";
 import { PaymentRow } from "../types";
 
 const amountPaidTemplate = (rowData: PaymentRow): string | undefined => {
-  return rowData.amount_paid?.toLocaleString("en-US", {
-    // minimumFractionDigits: 2,
-    maximumFractionDigits: 0,
-  });
+  if (!rowData.amount_paid) {
+    return undefined;
+  }
+
+  const amount = rowData.amount_paid;
+  const formattedAmount = Number.isInteger(amount)
+    ? amount.toLocaleString("en-US", {
+        maximumFractionDigits: 0,
+      })
+    : amount.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+
+  return formattedAmount;
 };
 
 const createdAtTemplate = (rowData: PaymentRow): string | undefined => {

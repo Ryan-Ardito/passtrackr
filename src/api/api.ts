@@ -11,6 +11,15 @@ interface AddVisitsFormData {
   signature: string;
 }
 
+interface AddTimeFormData {
+  pass_id: number | undefined;
+  num_weeks: { name: string; code: number };
+  pay_method: { name: string; code: string } | undefined;
+  last_four: string | undefined;
+  amount_paid: string | undefined;
+  signature: string;
+}
+
 interface EditGuestFormData {
   guest_id: number;
   first_name: string;
@@ -106,6 +115,12 @@ export const addVisits = async (
   addVisitsData: AddVisitsFormData
 ): Promise<number> => {
   return invoke("add_visits", { addVisitsData });
+};
+
+export const addTimeToPass = async (
+  addTimeData: AddTimeFormData
+): Promise<number> => {
+  return invoke("add_time", { addTimeData });
 };
 
 export const createPass = async (passData: CreatePassData): Promise<string> => {

@@ -67,6 +67,11 @@ SET remaining_uses = remaining_uses + $2
 WHERE pass_id = $1
 RETURNING remaining_uses;"#;
 
+pub const INCREASE_EXPIRATION_TIME: &str = r#"UPDATE passes
+    SET expires_at = expires_at + ($2 * INTERVAL '1 week')
+    WHERE pass_id = $1
+    RETURNING expires_at;"#;
+
 pub const SEARCH_ALL: &str = r#"SELECT 
     p.pass_id,
     p.guest_id,
