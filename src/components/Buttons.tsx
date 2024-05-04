@@ -22,7 +22,7 @@ interface DeleteButtonProps {
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
-export const DeleteButton: React.FC<DeleteButtonProps> = ({
+export const DeleteButton = ({
   label = "Button",
   icon = "",
   type = undefined,
@@ -32,7 +32,7 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({
   style = {},
   loading = false,
   onClick = () => null,
-}) => {
+}: DeleteButtonProps) => {
   let [confirm, setConfirm] = useState(false);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({
     <>
       <div style={{ display: "grid", width: "100%" }}>
         {confirm && !disabled ? (
-        <div style={{ display: "grid", gridTemplateColumns: "50px 1fr" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "50px 1fr" }}>
             <Button
               id="delete-button"
               rounded
@@ -115,7 +115,7 @@ interface CrudButtonProps {
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
-export const CrudButton: React.FC<CrudButtonProps> = ({
+export const CrudButton = ({
   label = "Button",
   icon = "",
   type = undefined,
@@ -126,7 +126,7 @@ export const CrudButton: React.FC<CrudButtonProps> = ({
   loading = false,
   badge = undefined,
   onClick = () => null,
-}) => {
+}: CrudButtonProps) => {
   return (
     <Button
       id="crud-button"

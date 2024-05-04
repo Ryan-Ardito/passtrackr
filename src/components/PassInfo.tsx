@@ -5,7 +5,7 @@ interface PassInfoProps {
   selectedPass: PassData;
 }
 
-export const PassInfo: React.FC<PassInfoProps> = ({ selectedPass }) => {
+export const PassInfo = ({ selectedPass }: PassInfoProps) => {
   let createdAt = undefined;
   if (selectedPass?.created_at) {
     createdAt = new Date(selectedPass.created_at).toLocaleDateString();

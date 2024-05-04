@@ -11,11 +11,7 @@ interface InputFieldProps {
   onChange: (value: string) => void;
 }
 
-export const InputField: React.FC<InputFieldProps> = ({
-  label,
-  value,
-  onChange,
-}) => {
+export const InputField = ({ label, value, onChange }: InputFieldProps) => {
   return (
     <>
       <div className="form-input-label">{label}</div>
@@ -34,10 +30,7 @@ interface MessageRequiredProps {
   error: string | undefined;
 }
 
-export const MessageRequired: React.FC<MessageRequiredProps> = ({
-  touched,
-  error,
-}) => {
+export const MessageRequired = ({ touched, error }: MessageRequiredProps) => {
   return (
     <>
       {touched && error && (
@@ -55,13 +48,13 @@ interface FormikFieldProps {
   onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
 }
 
-export const FormikField: React.FC<FormikFieldProps> = ({
+export const FormikField = ({
   label,
   name,
   formik,
   onChange = formik.handleChange,
   onKeyDown,
-}) => {
+}: FormikFieldProps) => {
   const { values, touched, errors, isSubmitting } = formik;
 
   return (
@@ -96,13 +89,13 @@ interface FormikDropdownProps {
   formik: FormikContextType<any>;
 }
 
-export const FormikDropdown: React.FC<FormikDropdownProps> = ({
+export const FormikDropdown = ({
   label,
   name,
   placeholder,
   options,
   formik,
-}) => {
+}: FormikDropdownProps) => {
   const { values, touched, errors, isSubmitting, handleChange } = formik;
 
   return (
@@ -136,13 +129,13 @@ interface DropdownProps {
   onChange: (event: DropdownChangeEvent) => void;
 }
 
-export const LabeledDropdown: React.FC<DropdownProps> = ({
+export const LabeledDropdown = ({
   label,
   name,
   value,
   options,
   onChange,
-}) => {
+}: DropdownProps) => {
   return (
     <>
       <div className="form-input-label">{label}</div>
@@ -160,10 +153,7 @@ interface TextInputButtonProps {
   disabled?: boolean;
 }
 
-export const TextInputButton: React.FC<TextInputButtonProps> = ({
-  label,
-  disabled,
-}) => {
+export const TextInputButton = ({ label, disabled }: TextInputButtonProps) => {
   const [addVisits, setAddVisits] = useState(false);
 
   return (

@@ -85,8 +85,14 @@ export const AddPass = () => {
   };
 
   return (
-    <form onSubmit={formik.handleSubmit} className="flex-col" style={{paddingBottom: "12px"}}>
+    <form
+      onSubmit={formik.handleSubmit}
+      className="flex-col"
+      style={{ paddingBottom: "12px" }}
+    >
       <Panel
+        toggleable
+        collapsed={formik.values.guest_id !== undefined}
         header={
           formik.values.guest_id
             ? `Guest ${formik.values.guest_id}`
@@ -112,7 +118,7 @@ export const AddPass = () => {
           {...{ formik }}
         />
       </Panel>
-      <Panel>
+      <Panel header="Payment Info">
         <FormikDropdown
           label="Passtype"
           name="passtype"
