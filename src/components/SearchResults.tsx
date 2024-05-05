@@ -58,8 +58,6 @@ export function SearchResults() {
         paginator
         rows={50}
         alwaysShowPaginator={false}
-        // virtualScrollerOptions={{ lazy: true, itemSize: 46, delay: 500, showLoader: true }}
-        // virtualScrollerOptions={{ itemSize: 46 }}
         value={searchData}
         metaKeySelection={false}
         selectionMode="single"
