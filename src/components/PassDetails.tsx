@@ -4,6 +4,10 @@ import { ViewPassData } from "../api/api";
 import { Panel } from "primereact/panel";
 import { GuestData } from "../types";
 import { InputTextarea } from "primereact/inputtextarea";
+// import { useFormik } from "formik";
+// import { useMutation } from "@tanstack/react-query";
+// import { showMessage } from "../utils/toast";
+// import { useAppContext } from "../AppContext";
 
 interface PassDetailsProps {
   passData: ViewPassData | undefined;
@@ -17,6 +21,30 @@ export function PassDetails({
   prevPage,
 }: PassDetailsProps) {
   let [fieldChange, setFieldChange] = useState(false);
+  // let { toast } = useAppContext();
+
+  // const { mutate: mutateEditGuest, isPending: isEditPassPending } =
+  //   useMutation({
+  //     mutationKey: ["editPassNotes"],
+  //     mutationFn: editPassNotes,
+  //     onError: (error) => {
+  //       showMessage(error.name, error.message, toast, "warn");
+  //       formik.setSubmitting(false);
+  //     },
+  //     onSuccess: () => {
+  //       prevPage();
+  //       showMessage("Edit Pass", "Success!", toast, "success");
+  //       setFieldChange(false);
+  //       formik.setSubmitting(false);
+  //     },
+  //   });
+
+  // const formik = useFormik({
+  //   initialValues: {
+  //     notes: passData?.notes,
+  //   },
+  //   onSubmit: (values) => mutateEditGuest(values),
+  // });
 
   let createdAt = undefined;
   if (passData?.created_at) {
