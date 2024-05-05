@@ -20,14 +20,16 @@ const SearchInteraction = () => {
 };
 
 export function Dashboard() {
-  const { screen } = useAppContext();
+  const { screen, setScreen } = useAppContext();
 
   return (
     <div className="viewport-wrapper">
       <div id="dashboard" className="flex-box flex-col">
         <SearchBar />
         {screen === Screen.Dashboard && <SearchInteraction />}
-        {screen === Screen.ViewGuest && <ViewGuest />}
+        {screen === Screen.ViewGuest && (
+          <ViewGuest prevPage={() => setScreen(Screen.Dashboard)} />
+        )}
       </div>
     </div>
   );

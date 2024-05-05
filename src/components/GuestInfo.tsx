@@ -12,7 +12,7 @@ import { showMessage } from "../utils/toast";
 import { useFormik } from "formik";
 import { FormikField } from "./FormInput";
 import { ChangeEvent, useState } from "react";
-import { GuestData, Screen } from "../types";
+import { GuestData } from "../types";
 
 const validationSchema = Yup.object().shape({
   guest_id: Yup.number().required(),
@@ -25,12 +25,12 @@ const validationSchema = Yup.object().shape({
 
 interface GuestInfoProps {
   guestData: GuestData | undefined;
+  prevPage: () => void;
 }
 
-export function GuestInfo({ guestData }: GuestInfoProps) {
+export function GuestInfo({ guestData, prevPage }: GuestInfoProps) {
   const [fieldChange, setFieldChange] = useState(false);
-  const { search, selectedPass, setSelectedPass, setScreen, toast } =
-    useAppContext();
+  const { search, selectedPass, setSelectedPass, toast } = useAppContext();
   const queryClient = useQueryClient();
 
   const { mutate: mutateEditGuest, isPending: isEditGuestPending } =
@@ -52,9 +52,8 @@ export function GuestInfo({ guestData }: GuestInfoProps) {
           last_name: formik.values.last_name,
           town: formik.values.town || "",
         });
+        prevPage();
         showMessage("Edit Guest", "Success!", toast, "success");
-        // setPanel(SidePanel.PassInteraction);
-        setScreen(Screen.Dashboard);
         setFieldChange(false);
         formik.setSubmitting(false);
       },
@@ -93,7 +92,7 @@ export function GuestInfo({ guestData }: GuestInfoProps) {
           icon="pi pi-arrow-left"
           onClick={(e) => {
             e.preventDefault();
-            setScreen(Screen.Dashboard);
+            prevPage();
           }}
         />
         <CrudButton

@@ -10,7 +10,7 @@ import { EditGuestTemplate } from "../components/EditGuestTemplate";
 import { useEffect } from "react";
 import { showMessage } from "../utils/toast";
 
-export function ViewGuest() {
+export function ViewGuest({ prevPage }: { prevPage: () => void }) {
   const { selectedPass, toast } = useAppContext();
 
   const {
@@ -50,7 +50,7 @@ export function ViewGuest() {
             {isLoading || !guestData ? (
               <EditGuestTemplate />
             ) : (
-              <GuestInfo guestData={guestData} />
+              <GuestInfo {...{ guestData, prevPage }} />
             )}
           </div>
         </ScrollPanel>
