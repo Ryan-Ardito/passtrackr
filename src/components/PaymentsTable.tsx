@@ -26,7 +26,7 @@ const amountPaidTemplate = (rowData: PaymentRow): string | undefined => {
 const createdAtTemplate = (rowData: PaymentRow): string | undefined => {
   let createdAt = undefined;
   if (rowData?.created_at) {
-    createdAt = new Date(rowData.created_at * 1000).toDateString();
+    createdAt = new Date(rowData.created_at).toDateString();
   }
   return createdAt;
 };

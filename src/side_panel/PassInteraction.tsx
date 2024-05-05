@@ -47,7 +47,9 @@ export const PassControl = () => {
         disabled={
           !selectedPass.pass_id ||
           !selectedPass.active ||
-          selectedPass.remaining_uses === 0
+          selectedPass.remaining_uses === 0 ||
+          (selectedPass.expires_at != undefined &&
+            Date.now() > selectedPass.expires_at)
         }
         loading={isLogVisitPending}
         onClick={(e) => {

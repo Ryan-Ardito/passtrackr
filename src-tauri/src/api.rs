@@ -365,7 +365,7 @@ pub async fn get_payments(
                     .ok()
             });
 
-            let created_at = created_at.unix_timestamp();
+            let created_at = created_at.unix_timestamp() * 1000;
 
             Payment {
                 payment_id,
@@ -396,7 +396,7 @@ pub async fn get_visits(
             Visit {
                 visit_id,
                 pass_id,
-                created_at: created_at.unix_timestamp(),
+                created_at: created_at.unix_timestamp() * 1000,
             }
         })
         .collect())
@@ -432,8 +432,8 @@ pub async fn get_pass(
         payment_method,
         amount_paid_cents,
         creator,
-        expires_at: expires_at.map(|utime| utime.unix_timestamp()),
-        created_at: created_at.unix_timestamp(),
+        expires_at: expires_at.map(|utime| utime.unix_timestamp() * 1000),
+        created_at: created_at.unix_timestamp() * 1000,
     })
 }
 

@@ -8,7 +8,7 @@ import { VisitsRow } from "../types";
 const createdAtTemplate = (rowData: VisitsRow): string | undefined => {
   let createdAt = undefined;
   if (rowData?.created_at) {
-    createdAt = new Date(rowData.created_at * 1000).toLocaleString();
+    createdAt = new Date(rowData.created_at).toLocaleString();
   }
   return createdAt;
 };

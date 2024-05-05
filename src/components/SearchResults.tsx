@@ -3,6 +3,16 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useAppContext } from "../AppContext";
 
+const RemainingIcon = ({ expires_at }: { expires_at: number }) => {
+  return Date.now() > expires_at ? (
+    <i className="pi pi-times" />
+  ) : Date.now() + (2629800 * 1000) > expires_at ? (
+    <i className="pi pi-calendar-clock" />
+  ) : (
+    <i className="pi pi-calendar" />
+  );
+};
+
 const remainingBodyTemplate = (rowData: PassData) => {
   return (
     <>
@@ -10,21 +20,15 @@ const remainingBodyTemplate = (rowData: PassData) => {
         <img src="src/assets/infinity.png" height={"12x"} />
       )}
       {rowData.passtype.code === "Punch" && rowData.remaining_uses}
-      {rowData.passtype.code === "Annual" &&
-        (rowData.active ? (
-          <i className="pi pi-calendar" />
-        ) : (
-          <i className="pi pi-times" />
-        ))}
-      {rowData.passtype.code === "6 Month" &&
-        (rowData.active ? (
-          <i className="pi pi-calendar" />
-        ) : (
-          <i className="pi pi-times" />
-        ))}
+      {rowData.passtype.code === "Annual" && rowData.expires_at && (
+        <RemainingIcon expires_at={rowData.expires_at} />
+      )}
+      {rowData.passtype.code === "6 Month" && rowData.expires_at && (
+        <RemainingIcon expires_at={rowData.expires_at} />
+      )}
       {rowData.passtype.code === "Free Pass" &&
         (rowData.active ? (
-          <i className="pi pi-clock" />
+          <i className="pi pi-key" />
         ) : (
           <i className="pi pi-times" />
         ))}

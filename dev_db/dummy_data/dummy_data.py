@@ -20,7 +20,6 @@ PASSTYPES: list[str] = [
     "Punch",
     "Annual",
     "6 Month",
-    "Free Pass",
     "Facial",
 ]
 
@@ -126,7 +125,7 @@ def generate_passes(guests: list[Guest], first_names: list[str]) -> list[PunchPa
         expires_at = ""
         if passtype in ("Annual", "6 Month"):
             current_datetime = datetime.datetime.now().astimezone()
-            random_days = random.randint(-182, 182)
+            random_days = random.randint(-30, 120)
             expires_at = (
                 (current_datetime + datetime.timedelta(days=random_days))
                 .replace(microsecond=0)
