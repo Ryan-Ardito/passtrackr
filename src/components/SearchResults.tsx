@@ -16,23 +16,24 @@ const RemainingIcon = ({ expires_at }: { expires_at: number }) => {
 const remainingBodyTemplate = (rowData: PassData) => {
   return (
     <>
-      {rowData.passtype.code === "Unlimited" && (
-        <img src="src/assets/infinity.png" height={"12x"} />
+      {!rowData.active ? (
+        <i className="pi pi-ban" />
+      ) : (
+        <>
+          {rowData.passtype?.code === "Unlimited" && (
+            <img src="src/assets/infinity.png" height={"12x"} />
+          )}
+          {rowData.passtype?.code === "Punch" && rowData.remaining_uses}
+          {rowData.passtype?.code === "Annual" && rowData.expires_at && (
+            <RemainingIcon expires_at={rowData.expires_at} />
+          )}
+          {rowData.passtype?.code === "6 Month" && rowData.expires_at && (
+            <RemainingIcon expires_at={rowData.expires_at} />
+          )}
+          {rowData.passtype?.code === "Free" && <i className="pi pi-key" />}
+          {rowData.passtype?.code === "Facial" && rowData.remaining_uses}
+        </>
       )}
-      {rowData.passtype.code === "Punch" && rowData.remaining_uses}
-      {rowData.passtype.code === "Annual" && rowData.expires_at && (
-        <RemainingIcon expires_at={rowData.expires_at} />
-      )}
-      {rowData.passtype.code === "6 Month" && rowData.expires_at && (
-        <RemainingIcon expires_at={rowData.expires_at} />
-      )}
-      {rowData.passtype.code === "Free" &&
-        (rowData.active ? (
-          <i className="pi pi-key" />
-        ) : (
-          <i className="pi pi-times" />
-        ))}
-      {rowData.passtype.code === "Facial" && rowData.remaining_uses}
     </>
   );
 };
