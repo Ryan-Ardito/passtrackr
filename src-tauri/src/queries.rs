@@ -16,9 +16,11 @@ JOIN guests ON guests.guest_id = passes.guest_id
 WHERE guests.guest_id = $1
 ORDER BY visits.created_at DESC;"#;
 
-pub const GET_PAYMENTS_FROM_PASS_ID: &str = r#"SELECT * FROM payments WHERE pass_id = $1"#;
+pub const GET_PAYMENTS_FROM_PASS_ID: &str =
+    r#"SELECT * FROM payments WHERE pass_id = $1 ORDER BY created_at DESC;"#;
 
-pub const GET_VISITS_FROM_PASS_ID: &str = r#"SELECT * FROM visits WHERE pass_id = $1"#;
+pub const GET_VISITS_FROM_PASS_ID: &str =
+    r#"SELECT * FROM visits WHERE pass_id = $1 ORDER BY created_at DESC;"#;
 
 pub const EDIT_GUEST: &str = r#"UPDATE guests
 SET first_name = $1,
