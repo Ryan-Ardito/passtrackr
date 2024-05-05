@@ -310,7 +310,7 @@ pub async fn create_pass(
     };
 
     let expires_at = match num_days_valid {
-        Some(days) => OffsetDateTime::now_local()?.checked_add(Duration::days(days)),
+        Some(days) => OffsetDateTime::now_utc().checked_add(Duration::days(days)),
         None => None,
     };
 
