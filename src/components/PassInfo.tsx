@@ -16,10 +16,12 @@ export const PassInfo = ({ selectedPass }: PassInfoProps) => {
   }
 
   return (
-    <Panel header={`Pass ${selectedPass.pass_id}`}>
+    <Panel
+      header={`${selectedPass.passtype.name} Pass ${selectedPass.pass_id}`}
+    >
       <div>
-        {selectedPass.remaining_uses && `${selectedPass.remaining_uses}x `}
-        {selectedPass.passtype.name} {expiresAt && `expires ${expiresAt}`}
+        {selectedPass.remaining_uses && `${selectedPass.remaining_uses}x remaining`}
+        {expiresAt && `Expires ${expiresAt}`}
       </div>
       <div>Owner ID: {selectedPass.guest_id}</div>
       <div style={{ wordWrap: "break-word" }}>
