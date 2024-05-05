@@ -51,6 +51,7 @@ export interface ViewPassData {
   passtype: PassType;
   active: boolean;
   creator: string;
+  expires_at: number | undefined;
   created_at: number;
 }
 

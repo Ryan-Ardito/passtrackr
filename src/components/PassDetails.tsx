@@ -27,6 +27,7 @@ export function PassDetails({ passData, prevPage }: PassDetailsProps) {
           setFieldChange(false);
         }}
       />
+      {passData?.expires_at && <div>{`Expires ${passData?.expires_at}`}</div>}
       <PassInfo {...{ selectedPass }} />
     </form>
   );
