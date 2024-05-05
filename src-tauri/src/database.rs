@@ -188,7 +188,7 @@ pub async fn increase_expiration(
     let mut transaction = state.pg_pool.begin().await?;
     let new_expiration = sqlx::query(INCREASE_EXPIRATION_TIME)
         .bind(&data.pass_id)
-        .bind(&data.num_weeks.code)
+        .bind(&data.num_days.code)
         .fetch_one(&mut *transaction)
         .await?;
     let pay_data = InsertPaymentData {

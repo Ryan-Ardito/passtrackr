@@ -65,7 +65,7 @@ pub struct NumVisits {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct NumWeeks {
+pub struct NumDays {
     pub name: String,
     pub code: i32,
 }
@@ -125,7 +125,7 @@ pub struct AddVisitsFormData {
 #[derive(Serialize, Deserialize, Clone)]
 pub struct AddTimeFormData {
     pub pass_id: i32,
-    pub num_weeks: NumWeeks,
+    pub num_days: NumDays,
     pub pay_method: Option<PayMethod>,
     pub last_four: Option<String>,
     pub amount_paid: Option<String>,
@@ -303,7 +303,7 @@ pub async fn create_pass(
         .map(|num_str| num_str.clone().parse::<f64>())
         .and_then(|amount_opt| amount_opt.ok().map(|amount| (amount * 100.0) as i32));
 
-    let (remaining_uses, num_weeks_valid) = match passtype.code {
+    let (remaining_uses, num_days_valid) = match passtype.code {
         NewPassType::TenPunch => (Some(10), None),
         NewPassType::SixPunch => (Some(6), None),
         NewPassType::Annual => (None, Some(52)),
@@ -313,8 +313,8 @@ pub async fn create_pass(
         NewPassType::SixFacial => (Some(6), None),
     };
 
-    let expires_at = match num_weeks_valid {
-        Some(weeks) => OffsetDateTime::now_local()?.checked_add(Duration::weeks(weeks)),
+    let expires_at = match num_days_valid {
+        Some(days) => OffsetDateTime::now_local()?.checked_add(Duration::days(days)),
         None => None,
     };
 

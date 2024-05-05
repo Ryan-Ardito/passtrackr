@@ -13,7 +13,7 @@ interface AddVisitsFormData {
 
 interface AddTimeFormData {
   pass_id: number | undefined;
-  num_weeks: { name: string; code: number };
+  num_days: { name: string; code: number };
   pay_method: { name: string; code: string } | undefined;
   last_four: string | undefined;
   amount_paid: string | undefined;

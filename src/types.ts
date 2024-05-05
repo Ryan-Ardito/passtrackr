@@ -16,8 +16,8 @@ export interface PassType {
 }
 
 export const addPassTimeDropOpts = [
-  { name: "1 Year", code: 52 },
-  { name: "6 Months", code: 26 },
+  { name: "1 Year", code: 365 },
+  { name: "6 Months", code: 182 },
 ];
 
 export const numAddVisits = [

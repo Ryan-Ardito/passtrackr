@@ -65,7 +65,7 @@ export const AddPassTime = () => {
   const formik = useFormik({
     initialValues: {
       pass_id: selectedPass.pass_id,
-      num_weeks: { name: "1 Year", code: 52 },
+      num_days: { name: "1 Year", code: 365 },
       pay_method: undefined,
       last_four: undefined,
       amount_paid: undefined,
@@ -80,7 +80,7 @@ export const AddPassTime = () => {
       <form onSubmit={formik.handleSubmit} className="flex-box flex-col">
         <FormikDropdown
           label="Add Time"
-          name="num_weeks"
+          name="num_days"
           options={addPassTimeDropOpts}
           {...{ formik }}
         />
