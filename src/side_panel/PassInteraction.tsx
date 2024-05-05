@@ -64,12 +64,12 @@ export const PassControl = () => {
         disabled={!selectedPass.pass_id}
         onClick={() => setPanel(SidePanel.AddVisits)}
       />
-      <CrudButton
+      {/* <CrudButton
         label="View Pass"
         icon="pi pi-bars"
         disabled={!selectedPass.pass_id}
         onClick={() => setPanel(SidePanel.ViewPass)}
-      />
+      /> */}
       <CrudButton
         label="View Guest"
         icon="pi pi-user"
