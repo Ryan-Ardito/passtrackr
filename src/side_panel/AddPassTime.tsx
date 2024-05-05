@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { ScrollPanel } from "primereact/scrollpanel";
 import { Divider } from "primereact/divider";
 
-import { SidePanel, addPassTimeDropOpts, payMethods } from "../types";
+import { PassData, SidePanel, addPassTimeDropOpts, payMethods } from "../types";
 import { FormikDropdown, FormikField } from "../components/FormInput";
 import { addTimeToPass } from "../api/api";
 import {
@@ -36,9 +36,8 @@ const validationSchema = Yup.object().shape({
   signature: Yup.string().required("Required").max(24, "Invalid"),
 });
 
-export const AddPassTime = () => {
-  const { selectedPass, setSelectedPass, setPanel, toast, search } =
-    useAppContext();
+export const AddPassTime = ({ passData }: { passData: PassData }) => {
+  const { setSelectedPass, setPanel, toast, search } = useAppContext();
   const queryClient = useQueryClient();
 
   const { mutate: mutateAddPassTime } = useMutation({
@@ -54,7 +53,7 @@ export const AddPassTime = () => {
         search,
       ] as InvalidateQueryFilters);
       setSelectedPass({
-        ...selectedPass,
+        ...passData,
         expires_at,
       });
       showMessage("Add Time", "Success!", toast, "success");
@@ -64,7 +63,7 @@ export const AddPassTime = () => {
 
   const formik = useFormik({
     initialValues: {
-      pass_id: selectedPass.pass_id,
+      pass_id: passData.pass_id,
       num_days: { name: "1 Year", code: 365 },
       pay_method: undefined,
       last_four: undefined,
@@ -118,7 +117,7 @@ export const AddPassTime = () => {
           />
         </div>
         <Divider style={{ margin: 6 }} />
-        {selectedPass.pass_id && <PassInfo selectedPass={selectedPass} />}
+        {passData.pass_id && <PassInfo selectedPass={passData} />}
       </form>
     </ScrollPanel>
   );

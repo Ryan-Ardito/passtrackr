@@ -88,6 +88,10 @@ export const AddPass = () => {
     <form
       onSubmit={formik.handleSubmit}
       className="flex-col"
+      onKeyDown={(e) => {
+        e.preventDefault();
+        formik.submitForm();
+      }}
       style={{ paddingBottom: "12px" }}
     >
       <Panel

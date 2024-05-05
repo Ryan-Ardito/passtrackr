@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { ScrollPanel } from "primereact/scrollpanel";
 import { Divider } from "primereact/divider";
 
-import { SidePanel, numAddVisits, payMethods } from "../types";
+import { PassData, SidePanel, numAddVisits, payMethods } from "../types";
 import { FormikDropdown, FormikField } from "../components/FormInput";
 import { addVisits } from "../api/api";
 import {
@@ -38,9 +38,8 @@ const validationSchema = Yup.object().shape({
   signature: Yup.string().required("Required").max(24, "Invalid"),
 });
 
-export const AddVisits = () => {
-  const { selectedPass, setSelectedPass, setPanel, toast, search } =
-    useAppContext();
+export const AddVisits = ({ passData }: { passData: PassData }) => {
+  const { setSelectedPass, setPanel, toast, search } = useAppContext();
   const queryClient = useQueryClient();
 
   const { mutate: mutateAddVisits } = useMutation({
@@ -56,7 +55,7 @@ export const AddVisits = () => {
         search,
       ] as InvalidateQueryFilters);
       setSelectedPass({
-        ...selectedPass,
+        ...passData,
         remaining_uses,
       });
       showMessage("Add Visits", "Success!", toast, "success");
@@ -66,7 +65,7 @@ export const AddVisits = () => {
 
   const formik = useFormik({
     initialValues: {
-      pass_id: selectedPass.pass_id,
+      pass_id: passData.pass_id,
       num_visits: undefined,
       pay_method: undefined,
       last_four: undefined,
@@ -122,7 +121,7 @@ export const AddVisits = () => {
         </div>
         <Divider style={{ margin: 6 }} />
       </form>
-      {selectedPass.pass_id && <PassInfo selectedPass={selectedPass} />}
+      {passData.pass_id && <PassInfo selectedPass={passData} />}
     </ScrollPanel>
   );
 };
