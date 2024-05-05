@@ -56,10 +56,22 @@ export interface ViewPassData {
   created_at: number;
 }
 
+interface EditPassNotesData {
+  notes: string | undefined;
+  passId: number | undefined;
+}
+
 export const editGuest = async (
   guestData: EditGuestFormData
 ): Promise<number> => {
   return invoke("edit_guest", { guestData });
+};
+
+export const editPassNotes = async (data: EditPassNotesData): Promise<void> => {
+  if (!data.passId) {
+    throw { name: "Edit pass", message: "No pass ID" };
+  }
+  return invoke("edit_pass_notes", { notes: data.notes, passId: data.passId });
 };
 
 export const searchPasses = async (

@@ -35,7 +35,7 @@ export function GuestInfo({ guestData, prevPage }: GuestInfoProps) {
 
   const { mutate: mutateEditGuest, isPending: isEditGuestPending } =
     useMutation({
-      mutationKey: ["editGuest"],
+      mutationKey: ["editGuest", guestData?.guest_id],
       mutationFn: editGuest,
       onError: (error) => {
         showMessage(error.name, error.message, toast, "warn");

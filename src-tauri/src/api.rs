@@ -8,8 +8,8 @@ use crate::{
         delete_pass_permanent, get_guest_from_id, get_pass_from_id, get_payments_from_guest_id,
         get_payments_from_pass_id, get_visits_from_guest_id, get_visits_from_pass_id,
         increase_expiration, increase_remaining_uses, insert_guest, insert_pass, insert_visit,
-        search_all_passes, set_pass_active, set_pass_guest_id, update_guest, use_pass,
-        EditGuestData, GetGuestData, GetPassData, NewPassData, PaymentRow, VisitRow,
+        search_all_passes, set_pass_active, set_pass_guest_id, update_guest, update_pass_notes,
+        use_pass, EditGuestData, GetGuestData, GetPassData, NewPassData, PaymentRow, VisitRow,
     },
     AppState,
 };
@@ -227,6 +227,16 @@ pub async fn edit_guest(
     guest_data: EditGuestData,
 ) -> Result<(), ToastError> {
     let _query_result = update_guest(&state, guest_data).await?;
+    Ok(())
+}
+
+#[tauri::command(async)]
+pub async fn edit_pass_notes(
+    state: State<'_, AppState>,
+    notes: Option<String>,
+    pass_id: i32,
+) -> Result<(), ToastError> {
+    let _query_result = update_pass_notes(&state, notes, pass_id).await?;
     Ok(())
 }
 

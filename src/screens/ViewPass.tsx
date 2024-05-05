@@ -27,18 +27,18 @@ export function ViewPass({ prevPage }: { prevPage: () => void }) {
   });
 
   const { data: guestData } = useQuery({
-    queryKey: ["guest", selectedPass.guest_id],
-    queryFn: () => getGuest(selectedPass.guest_id),
+    queryKey: ["guest", passData?.guest_id],
+    queryFn: () => getGuest(passData?.guest_id),
   });
 
   const { data: visits } = useQuery({
-    queryKey: ["visitsPassId", selectedPass.pass_id],
-    queryFn: () => getVisitsFromPassId(selectedPass.pass_id),
+    queryKey: ["visitsPassId", passData?.pass_id],
+    queryFn: () => getVisitsFromPassId(passData?.pass_id),
   });
 
   const { data: payments } = useQuery({
-    queryKey: ["paymentsPassId", selectedPass.pass_id],
-    queryFn: () => getPaymentsFromPassId(selectedPass.pass_id),
+    queryKey: ["paymentsPassId", passData?.pass_id],
+    queryFn: () => getPaymentsFromPassId(passData?.pass_id),
   });
 
   useEffect(() => {
@@ -66,7 +66,9 @@ export function ViewPass({ prevPage }: { prevPage: () => void }) {
             className="flex-col"
             style={{ paddingBottom: "40px" }}
           >
-            <PassDetails {...{ passData, guestData, prevPage }} />
+            {passData && guestData && (
+              <PassDetails {...{ passData, guestData, prevPage }} />
+            )}
           </div>
         </ScrollPanel>
       </Panel>

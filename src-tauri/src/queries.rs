@@ -30,6 +30,10 @@ SET first_name = $1,
     notes = $5
 WHERE guest_id = $6"#;
 
+pub const EDIT_PASS_NOTES: &str = r#"UPDATE passes
+SET notes = $2
+WHERE pass_id = $1"#;
+
 pub const INSERT_GUEST: &str = r#"INSERT
 INTO guests (first_name, last_name, town, email, notes, creator)
 VALUES ($1, $2, $3, $4, $5, $6)

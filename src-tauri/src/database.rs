@@ -7,10 +7,10 @@ use crate::{
     api::{AddTimeFormData, AddVisitsFormData, PassFormData},
     queries::{
         DELETE_PASS_PERMANENT, DELETE_PAYMENTS_PASS_ID, DELETE_VISITS_PASS_ID, EDIT_GUEST,
-        GET_GUEST, GET_PASS, GET_PAYMENTS_FROM_GUEST_ID, GET_PAYMENTS_FROM_PASS_ID,
-        GET_VISITS_FROM_GUEST_ID, GET_VISITS_FROM_PASS_ID, INCREASE_EXPIRATION_TIME,
-        INCREASE_REMAINING_USES, INSERT_GUEST, INSERT_PASS, INSERT_PAYMENT, INSERT_VISIT,
-        LOG_VISIT, SEARCH_ALL, SET_PASS_ACTIVE, SET_PASS_OWNER,
+        EDIT_PASS_NOTES, GET_GUEST, GET_PASS, GET_PAYMENTS_FROM_GUEST_ID,
+        GET_PAYMENTS_FROM_PASS_ID, GET_VISITS_FROM_GUEST_ID, GET_VISITS_FROM_PASS_ID,
+        INCREASE_EXPIRATION_TIME, INCREASE_REMAINING_USES, INSERT_GUEST, INSERT_PASS,
+        INSERT_PAYMENT, INSERT_VISIT, LOG_VISIT, SEARCH_ALL, SET_PASS_ACTIVE, SET_PASS_OWNER,
     },
     AppState,
 };
@@ -115,6 +115,18 @@ pub async fn update_guest(
         .bind(&data.email)
         .bind(&data.notes)
         .bind(&data.guest_id)
+        .execute(&state.pg_pool)
+        .await
+}
+
+pub async fn update_pass_notes(
+    state: &State<'_, AppState>,
+    notes: Option<String>,
+    pass_id: i32,
+) -> Result<PgQueryResult> {
+    sqlx::query(EDIT_PASS_NOTES)
+        .bind(&pass_id)
+        .bind(&notes)
         .execute(&state.pg_pool)
         .await
 }
