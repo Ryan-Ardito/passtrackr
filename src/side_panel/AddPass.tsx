@@ -118,7 +118,7 @@ export const AddPass = () => {
           {...{ formik }}
         />
       </Panel>
-      <Panel header="Payment Info">
+      <Panel>
         <FormikDropdown
           label="Passtype"
           name="passtype"

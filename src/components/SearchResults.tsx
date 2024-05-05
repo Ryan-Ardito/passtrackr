@@ -6,7 +6,7 @@ import { useAppContext } from "../AppContext";
 const RemainingIcon = ({ expires_at }: { expires_at: number }) => {
   return Date.now() > expires_at ? (
     <i className="pi pi-times" />
-  ) : Date.now() + (2629800 * 1000) > expires_at ? (
+  ) : Date.now() + 2629800 * 1000 > expires_at ? (
     <i className="pi pi-calendar-clock" />
   ) : (
     <i className="pi pi-calendar" />
@@ -69,14 +69,14 @@ export function SearchResults() {
           field="passholder"
           body={passholderTemplate}
           header="Passholder"
-          style={{ width: "45%" }}
+          style={{ width: "40%" }}
         />
         <Column field="town" header="Town" style={{ width: "30%" }} />
         <Column
           field="passtype"
           body={passtypeTemplate}
           header="Type"
-          style={{ width: "15%" }}
+          style={{ width: "20%" }}
         />
         <Column
           field="remaining_uses"
