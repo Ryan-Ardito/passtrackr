@@ -2,6 +2,43 @@ import { Button, ButtonProps } from "primereact/button";
 import { IconType } from "primereact/utils";
 import { CSSProperties, MouseEventHandler, useEffect, useState } from "react";
 
+interface BackRevertProps {
+  fieldChange?: boolean;
+  prevPage: () => void;
+  onRevert?: () => void;
+}
+
+export const BackRevert = ({
+  fieldChange = false,
+  prevPage,
+  onRevert = () => undefined,
+}: BackRevertProps) => {
+  return (
+    <div
+      style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}
+    >
+      <CrudButton
+        label="Back"
+        icon="pi pi-arrow-left"
+        onClick={(e) => {
+          e.preventDefault();
+          prevPage();
+        }}
+      />
+      <CrudButton
+        label="Revert"
+        icon="pi pi-undo"
+        severity="warning"
+        disabled={!fieldChange}
+        onClick={(e) => {
+          e.preventDefault();
+          onRevert();
+        }}
+      />
+    </div>
+  );
+};
+
 interface DeleteButtonProps {
   label?: string | undefined;
   icon?: IconType<ButtonProps>;

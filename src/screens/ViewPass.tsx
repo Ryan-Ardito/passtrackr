@@ -22,7 +22,7 @@ export function ViewPass({ prevPage }: { prevPage: () => void }) {
     error,
   } = useQuery({
     queryKey: ["pass", selectedPass.pass_id],
-    queryFn: () => getPass(selectedPass.guest_id),
+    queryFn: () => getPass(selectedPass.pass_id),
   });
 
   const { data: visits } = useQuery({
@@ -46,7 +46,7 @@ export function ViewPass({ prevPage }: { prevPage: () => void }) {
         <VisitsTable {...{ visits }} />
       </div>
       <Panel
-        header={`Pass ${
+        header={`${passData?.passtype.name} Pass ${
           isLoading
             ? "loading..."
             : error

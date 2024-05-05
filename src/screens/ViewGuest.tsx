@@ -58,7 +58,7 @@ export function ViewGuest({ prevPage }: { prevPage: () => void }) {
             style={{ paddingBottom: "40px" }}
           >
             {isLoading || !guestData ? (
-              <EditGuestTemplate />
+              <EditGuestTemplate {...{ prevPage }} />
             ) : (
               <GuestInfo {...{ guestData, prevPage }} />
             )}

@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { CrudButton } from "./Buttons";
+import { BackRevert } from "./Buttons";
 import { ViewPassData } from "../api/api";
+import { PassInfo } from "./PassInfo";
+import { useAppContext } from "../AppContext";
 
 interface PassDetailsProps {
   passData: ViewPassData | undefined;
@@ -8,6 +10,7 @@ interface PassDetailsProps {
 }
 
 export function PassDetails({ passData, prevPage }: PassDetailsProps) {
+  let { selectedPass } = useAppContext();
   let [fieldChange, setFieldChange] = useState(false);
 
   let createdAt = undefined;
@@ -17,33 +20,14 @@ export function PassDetails({ passData, prevPage }: PassDetailsProps) {
 
   return (
     <form id="pass-details" className="flex-col">
-      <div
-        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}
-      >
-        <CrudButton
-          label="Back"
-          icon="pi pi-arrow-left"
-          onClick={(e) => {
-            e.preventDefault();
-            prevPage();
-          }}
-        />
-        <CrudButton
-          label="Revert"
-          icon="pi pi-undo"
-          severity="warning"
-          disabled={!fieldChange}
-          onClick={(e) => {
-            e.preventDefault();
-            // formik.resetForm();
-            setFieldChange(false);
-          }}
-        />
-        <div></div>
-        <div style={{ wordWrap: "break-word" }}>
-          Created {createdAt} by {passData?.creator}
-        </div>
-      </div>
+      <BackRevert
+        {...{ fieldChange, prevPage }}
+        onRevert={() => {
+          // formik.resetForm();
+          setFieldChange(false);
+        }}
+      />
+      <PassInfo {...{ selectedPass }} />
     </form>
   );
 }

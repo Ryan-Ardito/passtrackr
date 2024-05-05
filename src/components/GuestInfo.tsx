@@ -7,7 +7,7 @@ import {
 } from "@tanstack/react-query";
 import { editGuest } from "../api/api";
 import { InputTextarea } from "primereact/inputtextarea";
-import { CrudButton } from "./Buttons";
+import { BackRevert, CrudButton } from "./Buttons";
 import { showMessage } from "../utils/toast";
 import { useFormik } from "formik";
 import { FormikField } from "./FormInput";
@@ -84,72 +84,56 @@ export function GuestInfo({ guestData, prevPage }: GuestInfoProps) {
 
   return (
     <form id="guest-info" className="flex-col" onSubmit={formik.handleSubmit}>
-      <div
-        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}
-      >
-        <CrudButton
-          label="Back"
-          icon="pi pi-arrow-left"
-          onClick={(e) => {
-            e.preventDefault();
-            prevPage();
-          }}
-        />
-        <CrudButton
-          label="Revert"
-          icon="pi pi-undo"
-          severity="warning"
-          disabled={!fieldChange}
-          onClick={(e) => {
-            e.preventDefault();
-            formik.resetForm();
-            setFieldChange(false);
-          }}
-        />
-      </div>
+      <BackRevert
+        {...{ fieldChange, prevPage }}
+        onRevert={() => {
+          formik.resetForm();
+          setFieldChange(false);
+        }}
+      />
       <FormikField
         label="First name"
         name="first_name"
         onChange={handleFieldChange}
+        {...{ formik }}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             e.preventDefault();
           }
         }}
-        {...{ formik }}
       />
       <FormikField
         label="Last name"
         name="last_name"
         onChange={handleFieldChange}
+        {...{ formik }}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             e.preventDefault();
           }
         }}
-        {...{ formik }}
       />
       <FormikField
         label="Town"
         name="town"
         onChange={handleFieldChange}
+        {...{ formik }}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             e.preventDefault();
           }
         }}
-        {...{ formik }}
       />
       <FormikField
         label="Email"
         name="email"
         onChange={handleFieldChange}
+        {...{ formik }}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             e.preventDefault();
           }
         }}
-        {...{ formik }}
       />
       <InputTextarea
         placeholder="Notes"

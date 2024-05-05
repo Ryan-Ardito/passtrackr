@@ -1,32 +1,11 @@
 import { InputTextarea } from "primereact/inputtextarea";
-import { CrudButton } from "./Buttons";
+import { BackRevert, CrudButton } from "./Buttons";
 import { InputText } from "primereact/inputtext";
-import { useAppContext } from "../AppContext";
-import { Screen } from "../types";
 
-export function EditGuestTemplate() {
-  const {setScreen } = useAppContext();
-
+export function EditGuestTemplate({ prevPage }: { prevPage: () => void }) {
   return (
     <form id="guest-info" className="flex-col">
-      <div
-        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}
-      >
-        <CrudButton
-          label="Back"
-          icon="pi pi-arrow-left"
-          onClick={(e) => {
-            e.preventDefault();
-            setScreen(Screen.Dashboard);
-          }}
-        />
-        <CrudButton
-          label="Revert"
-          icon="pi pi-undo"
-          severity="warning"
-          disabled
-        />
-      </div>
+      <BackRevert {...{ prevPage }} />
       <InputText
         className="form-text-input p-inputtext-lg"
         placeholder="First name"
