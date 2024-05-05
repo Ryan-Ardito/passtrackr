@@ -20,8 +20,16 @@ export const PassInfo = ({ selectedPass }: PassInfoProps) => {
       header={`${selectedPass.passtype.name} Pass ${selectedPass.pass_id}`}
     >
       <div>
-        {selectedPass.remaining_uses && `${selectedPass.remaining_uses}x remaining`}
-        {expiresAt && `Expires ${expiresAt}`}
+        {selectedPass.remaining_uses &&
+          `${selectedPass.remaining_uses}x remaining`}
+        {selectedPass.expires_at &&
+          (Date.now() > selectedPass.expires_at ? (
+            <>
+              <b style={{ color: "red" }}>Expired</b> {expiresAt}
+            </>
+          ) : (
+            `Expires ${expiresAt}`
+          ))}
       </div>
       <div>Owner ID: {selectedPass.guest_id}</div>
       <div style={{ wordWrap: "break-word" }}>
