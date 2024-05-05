@@ -89,8 +89,10 @@ export const AddPass = () => {
       onSubmit={formik.handleSubmit}
       className="flex-col"
       onKeyDown={(e) => {
-        e.preventDefault();
-        formik.submitForm();
+        if (e.key === "Enter") {
+          e.preventDefault();
+          formik.submitForm();
+        }
       }}
       style={{ paddingBottom: "12px" }}
     >

@@ -1,3 +1,6 @@
+const ONE_YEAR_IN_DAYS: number = 365;
+const SIX_MONTHS_IN_DAYS: number = 182;
+
 export enum Screen {
   Dashboard,
   ViewGuest,
@@ -17,8 +20,8 @@ export interface PassType {
 }
 
 export const addPassTimeDropOpts = [
-  { name: "1 Year", code: 365 },
-  { name: "6 Months", code: 182 },
+  { name: "1 Year", code: ONE_YEAR_IN_DAYS },
+  { name: "6 Months", code: SIX_MONTHS_IN_DAYS },
 ];
 
 export const numAddVisits = [

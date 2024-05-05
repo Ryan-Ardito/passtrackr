@@ -5,10 +5,17 @@ use time::{Duration, OffsetDateTime};
 
 use crate::{
     database::{
-        delete_pass_permanent, get_guest_from_id, get_pass_from_id, get_payments_from_guest_id, get_payments_from_pass_id, get_visits_from_guest_id, get_visits_from_pass_id, increase_expiration, increase_remaining_uses, insert_guest, insert_pass, insert_visit, search_all_passes, set_pass_active, set_pass_guest_id, update_guest, use_pass, EditGuestData, GetGuestData, GetPassData, NewPassData, PaymentRow, VisitRow
+        delete_pass_permanent, get_guest_from_id, get_pass_from_id, get_payments_from_guest_id,
+        get_payments_from_pass_id, get_visits_from_guest_id, get_visits_from_pass_id,
+        increase_expiration, increase_remaining_uses, insert_guest, insert_pass, insert_visit,
+        search_all_passes, set_pass_active, set_pass_guest_id, update_guest, use_pass,
+        EditGuestData, GetGuestData, GetPassData, NewPassData, PaymentRow, VisitRow,
     },
     AppState,
 };
+
+const ONE_YEAR_IN_DAYS: i64 = 365;
+const SIX_MONTHS_IN_DAYS: i64 = 182;
 
 #[derive(Debug, Serialize, Clone)]
 pub struct ToastError {
@@ -302,8 +309,8 @@ pub async fn create_pass(
     let (remaining_uses, num_days_valid) = match passtype.code {
         NewPassType::TenPunch => (Some(10), None),
         NewPassType::SixPunch => (Some(6), None),
-        NewPassType::Annual => (None, Some(52)),
-        NewPassType::SixMonth => (None, Some(26)),
+        NewPassType::Annual => (None, Some(ONE_YEAR_IN_DAYS)),
+        NewPassType::SixMonth => (None, Some(SIX_MONTHS_IN_DAYS)),
         NewPassType::FreePass => (None, None),
         NewPassType::ThreeFacial => (Some(3), None),
         NewPassType::SixFacial => (Some(6), None),
@@ -438,7 +445,6 @@ pub async fn get_payments_from_pass(
         })
         .collect())
 }
-
 
 #[tauri::command(async)]
 pub async fn get_visits(
