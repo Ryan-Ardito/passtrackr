@@ -83,7 +83,7 @@ export const AddVisits = () => {
         <FormikDropdown
           label="Visits"
           name="num_visits"
-          placeholder="Pass type"
+          placeholder="x Visits"
           options={numAddVisits}
           {...{ formik }}
         />

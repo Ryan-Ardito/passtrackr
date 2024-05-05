@@ -21,7 +21,7 @@ export const PassInfo = ({ selectedPass }: PassInfoProps) => {
     >
       <div>
         {selectedPass.remaining_uses &&
-          `${selectedPass.remaining_uses}x remaining`}
+          `${selectedPass.remaining_uses} uses remaining`}
         {selectedPass.expires_at &&
           (Date.now() > selectedPass.expires_at ? (
             <>
