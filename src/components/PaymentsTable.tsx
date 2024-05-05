@@ -1,6 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-import { getPayments } from "../api/api";
-import { useAppContext } from "../AppContext";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { PaymentRow } from "../types";
@@ -31,18 +28,15 @@ const createdAtTemplate = (rowData: PaymentRow): string | undefined => {
   return createdAt;
 };
 
-export function PaymentsTable() {
-  const { selectedPass } = useAppContext();
+interface PaymentsTableProps {
+  payments: PaymentRow[] | undefined;
+}
 
-  const { data: visits } = useQuery({
-    queryKey: ["payments", selectedPass.guest_id],
-    queryFn: () => getPayments(selectedPass.guest_id),
-  });
-
+export function PaymentsTable({ payments }: PaymentsTableProps) {
   return (
     <DataTable
       dataKey="payment_id"
-      value={visits}
+      value={payments}
       size="small"
       scrollable
       showGridlines

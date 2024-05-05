@@ -1,6 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-import { getVisits } from "../api/api";
-import { useAppContext } from "../AppContext";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { VisitsRow } from "../types";
@@ -13,14 +10,7 @@ const createdAtTemplate = (rowData: VisitsRow): string | undefined => {
   return createdAt;
 };
 
-export function VisitsTable() {
-  const { selectedPass } = useAppContext();
-
-  const { data: visits } = useQuery({
-    queryKey: ["visits", selectedPass.guest_id],
-    queryFn: () => getVisits(selectedPass.guest_id),
-  });
-
+export function VisitsTable({ visits }: { visits: VisitsRow[] | undefined }) {
   return (
     <DataTable
       dataKey="visit_id"

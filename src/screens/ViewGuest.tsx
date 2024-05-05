@@ -5,7 +5,7 @@ import { PaymentsTable } from "../components/PaymentsTable";
 import { Panel } from "primereact/panel";
 import { ScrollPanel } from "primereact/scrollpanel";
 import { useQuery } from "@tanstack/react-query";
-import { getGuest } from "../api/api";
+import { getGuest, getPayments, getVisits } from "../api/api";
 import { EditGuestTemplate } from "../components/EditGuestTemplate";
 import { useEffect } from "react";
 import { showMessage } from "../utils/toast";
@@ -22,6 +22,16 @@ export function ViewGuest({ prevPage }: { prevPage: () => void }) {
     queryFn: () => getGuest(selectedPass.guest_id),
   });
 
+  const { data: visits } = useQuery({
+    queryKey: ["visitsGuestId", selectedPass.guest_id],
+    queryFn: () => getVisits(selectedPass.guest_id),
+  });
+
+  const { data: payments } = useQuery({
+    queryKey: ["paymentsGuestId", selectedPass.guest_id],
+    queryFn: () => getPayments(selectedPass.guest_id),
+  });
+
   useEffect(() => {
     error && showMessage(error.name, error.message, toast, "warn");
   }, [error]);
@@ -30,7 +40,7 @@ export function ViewGuest({ prevPage }: { prevPage: () => void }) {
     <div id="view-guest-screen">
       <div className="flex-col" style={{ paddingBottom: "12px" }}>
         <h3>Visits</h3>
-        <VisitsTable />
+        <VisitsTable {...{ visits }} />
       </div>
       <Panel
         header={`Guest ${
@@ -57,7 +67,7 @@ export function ViewGuest({ prevPage }: { prevPage: () => void }) {
       </Panel>
       <div className="flex-col" style={{ paddingBottom: "12px" }}>
         <h3>Payments</h3>
-        <PaymentsTable />
+        <PaymentsTable {...{ payments }} />
       </div>
     </div>
   );

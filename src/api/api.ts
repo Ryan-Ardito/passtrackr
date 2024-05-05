@@ -72,18 +72,36 @@ export const getPayments = async (
   guestId: number | undefined
 ): Promise<PaymentRow[]> => {
   if (!guestId) {
-    throw { name: "Error", message: "No pass ID" };
+    throw { name: "Error", message: "No guest ID" };
   }
   return invoke("get_payments", { guestId });
+};
+
+export const getPaymentsFromPassId = async (
+  passId: number | undefined
+): Promise<PaymentRow[]> => {
+  if (!passId) {
+    throw { name: "Error", message: "No pass ID" };
+  }
+  return invoke("get_payments_from_pass", { passId });
 };
 
 export const getVisits = async (
   guestId: number | undefined
 ): Promise<VisitsRow[]> => {
   if (!guestId) {
-    throw { name: "Error", message: "No pass ID" };
+    throw { name: "Error", message: "No guest ID" };
   }
   return invoke("get_visits", { guestId });
+};
+
+export const getVisitsFromPassId = async (
+  passId: number | undefined
+): Promise<VisitsRow[]> => {
+  if (!passId) {
+    throw { name: "Error", message: "No pass ID" };
+  }
+  return invoke("get_visits_from_pass", { passId });
 };
 
 export const getGuest = async (
