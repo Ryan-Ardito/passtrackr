@@ -41,7 +41,7 @@ interface CreatePassData {
   signature: string;
 }
 
-interface ViewPassData {
+export interface ViewPassData {
   pass_id: number;
   guest_id: number;
   first_name: string;

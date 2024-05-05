@@ -14,7 +14,7 @@ pub mod database;
 pub mod queries;
 
 use api::{
-    add_time, add_visits, async_sleep, create_pass, delete_pass, edit_guest, get_guest,
+    add_time, add_visits, async_sleep, create_pass, delete_pass, edit_guest, get_guest, get_pass,
     get_payments, get_visits, get_visits_from_pass, get_payments_from_pass, log_visit, search_passes, set_pass_owner, toggle_pass_active,
     was_config_error, ToastError,
 };
@@ -105,6 +105,7 @@ async fn main() {
             toggle_pass_active,
             delete_pass,
             get_guest,
+            get_pass,
             edit_guest,
             log_visit,
             add_visits,

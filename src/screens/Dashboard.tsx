@@ -6,6 +6,7 @@ import { useAppContext } from "../AppContext";
 import { RightPanel } from "../side_panel/SidePanel";
 import { Screen } from "../types";
 import { ViewGuest } from "./ViewGuest";
+import { ViewPass } from "./ViewPass";
 
 const SearchInteraction = () => {
   const { panel } = useAppContext();
@@ -29,6 +30,9 @@ export function Dashboard() {
         {screen === Screen.Dashboard && <SearchInteraction />}
         {screen === Screen.ViewGuest && (
           <ViewGuest prevPage={() => setScreen(Screen.Dashboard)} />
+        )}
+        {screen === Screen.ViewPass && (
+          <ViewPass prevPage={() => setScreen(Screen.Dashboard)} />
         )}
       </div>
     </div>
