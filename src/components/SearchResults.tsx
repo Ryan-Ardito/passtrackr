@@ -26,7 +26,7 @@ const remainingBodyTemplate = (rowData: PassData) => {
       {rowData.passtype.code === "6 Month" && rowData.expires_at && (
         <RemainingIcon expires_at={rowData.expires_at} />
       )}
-      {rowData.passtype.code === "Free Pass" &&
+      {rowData.passtype.code === "Free" &&
         (rowData.active ? (
           <i className="pi pi-key" />
         ) : (

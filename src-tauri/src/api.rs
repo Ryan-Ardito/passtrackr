@@ -162,7 +162,7 @@ impl NewPassType {
             Self::SixPunch => "Punch",
             Self::Annual => "Annual",
             Self::SixMonth => "6 Month",
-            Self::FreePass => "Free Pass",
+            Self::FreePass => "Free",
             Self::ThreeFacial => "Facial",
             Self::SixFacial => "Facial",
         }
@@ -197,7 +197,7 @@ pub async fn log_visit(
     let pass_id = pass.pass_id;
     let remaining_uses = match pass.passtype.code.as_str() {
         // rewrite this as a parsed enum
-        "Annual" | "Free Pass" | "6 Month" => {
+        "Annual" | "Free" | "6 Month" => {
             insert_visit(&state, pass_id).await?;
             pass.remaining_uses
         }

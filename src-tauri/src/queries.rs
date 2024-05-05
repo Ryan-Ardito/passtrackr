@@ -72,9 +72,9 @@ WHERE pass_id = $1
 RETURNING remaining_uses;"#;
 
 pub const INCREASE_EXPIRATION_TIME: &str = r#"UPDATE passes
-    SET expires_at = GREATEST(expires_at, CURRENT_TIMESTAMP) + ($2 * INTERVAL '1 day')
-    WHERE pass_id = $1
-    RETURNING expires_at;"#;
+SET expires_at = GREATEST(expires_at, CURRENT_TIMESTAMP) + ($2 * INTERVAL '1 day')
+WHERE pass_id = $1
+RETURNING expires_at;"#;
 
 pub const SEARCH_ALL: &str = r#"SELECT 
     p.pass_id,

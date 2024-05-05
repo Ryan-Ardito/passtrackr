@@ -6,7 +6,7 @@ export const RenewPass = () => {
   const { selectedPass } = useAppContext();
   return (
     <>
-      {["Annual", "6 Month", "Free Pass"].includes(
+      {["Annual", "6 Month", "Free"].includes(
         selectedPass.passtype.code
       ) ? (
         <AddPassTime />
