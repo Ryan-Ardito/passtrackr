@@ -64,6 +64,7 @@ class PunchPass:
     active: bool
     payment_method: str
     amount_paid_cents: int
+    notes: str
     expires_at: int
     creator: str
 
@@ -121,6 +122,7 @@ def generate_passes(guests: list[Guest], first_names: list[str]) -> list[PunchPa
         active = True
         payment_method = random.choice(PAYMENT_METHODS)
         amount_paid = 7000
+        notes = NOTES
 
         expires_at = ""
         if passtype in ("Annual", "6 Month"):
@@ -140,6 +142,7 @@ def generate_passes(guests: list[Guest], first_names: list[str]) -> list[PunchPa
             active,
             payment_method,
             amount_paid,
+            notes,
             expires_at,
             creator,
         )

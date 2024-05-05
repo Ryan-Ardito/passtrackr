@@ -36,6 +36,7 @@ pub struct GetPassData {
     pub active: bool,
     pub payment_method: Option<String>,
     pub amount_paid_cents: Option<i32>,
+    pub notes: Option<String>,
     pub creator: String,
     pub expires_at: Option<OffsetDateTime>,
     pub created_at: OffsetDateTime,

@@ -50,6 +50,7 @@ export interface ViewPassData {
   remaining_uses: number | undefined;
   passtype: PassType;
   active: boolean;
+  notes: string | undefined;
   creator: string;
   expires_at: number | undefined;
   created_at: number;

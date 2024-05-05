@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS passes (
     active BOOLEAN,
     payment_method VARCHAR(50),
     amount_paid_cents INT,
+    notes TEXT,
     creator VARCHAR(50),
     expires_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -45,5 +46,5 @@ CREATE TABLE IF NOT EXISTS visits (
 COPY guests (guest_id, first_name, last_name, email, town, notes, creator)
 FROM '/app/dummy_guests.csv' DELIMITER ',' CSV;
 
-COPY passes (guest_id, passtype, remaining_uses, active, payment_method, amount_paid_cents, expires_at, creator)
+COPY passes (guest_id, passtype, remaining_uses, active, payment_method, amount_paid_cents, notes, expires_at, creator)
 FROM '/app/dummy_passes.csv' DELIMITER ',' CSV;
