@@ -113,7 +113,7 @@ export const FormikDropdown = ({
         />
         <MessageRequired
           label={label}
-          error={errors[name]?.toString()}
+          error={errors[name] && "Required"}
           touched={touched[name]?.valueOf()}
         />
       </div>

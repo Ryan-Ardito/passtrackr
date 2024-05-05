@@ -4,7 +4,7 @@ import { GuestData, PassData, PaymentRow, VisitsRow, PassType } from "../types";
 
 interface AddVisitsFormData {
   pass_id: number | undefined;
-  num_visits: { name: string; code: number };
+  num_visits: { name: string; code: number } | undefined;
   pay_method: { name: string; code: string } | undefined;
   last_four: string | undefined;
   amount_paid: string | undefined;
@@ -34,7 +34,7 @@ interface CreatePassData {
   first_name: string;
   last_name: string;
   town: string;
-  passtype: PassType;
+  passtype: PassType | undefined;
   pay_method: { name: string; code: string } | undefined;
   last_four: string | undefined;
   amount_paid: string | undefined;

@@ -65,7 +65,7 @@ export interface PassData {
   last_name: string;
   town: string;
   remaining_uses: number | undefined;
-  passtype: PassType;
+  passtype: PassType | undefined;
   active: boolean;
   creator: string;
   expires_at: number | undefined;
@@ -90,7 +90,7 @@ export const blankPass: PassData = {
   last_name: "",
   town: "",
   remaining_uses: undefined,
-  passtype: passtypes[0],
+  passtype: undefined,
   active: false,
   creator: "",
   expires_at: undefined,

@@ -11,7 +11,7 @@ interface PanelProps {
 
 export const RightPanel = ({ panel }: PanelProps) => {
   let flex = 1;
-  if (panel === SidePanel.AddPass) {
+  if (panel === SidePanel.AddPass || panel === SidePanel.AddVisits) {
     flex = 2;
   }
   return (

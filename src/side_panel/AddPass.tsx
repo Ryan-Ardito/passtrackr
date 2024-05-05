@@ -65,7 +65,7 @@ export const AddPass = () => {
       first_name: selectedPass.first_name,
       last_name: selectedPass.last_name,
       town: selectedPass.town,
-      passtype: passtypes[0],
+      passtype: undefined,
       pay_method: undefined,
       last_four: undefined,
       amount_paid: undefined,
@@ -122,6 +122,7 @@ export const AddPass = () => {
         <FormikDropdown
           label="Passtype"
           name="passtype"
+          placeholder="Pass type"
           options={passtypes}
           {...{ formik }}
         />

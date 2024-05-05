@@ -17,7 +17,7 @@ export const PassInfo = ({ selectedPass }: PassInfoProps) => {
 
   return (
     <Panel
-      header={`${selectedPass.passtype.name} Pass ${selectedPass.pass_id}`}
+      header={`${selectedPass.passtype?.name} Pass ${selectedPass.pass_id}`}
     >
       <div>
         {selectedPass.remaining_uses &&
