@@ -1,16 +1,20 @@
 import { useState } from "react";
 import { BackRevert } from "./Buttons";
 import { ViewPassData } from "../api/api";
-import { PassInfo } from "./PassInfo";
-import { useAppContext } from "../AppContext";
+import { Panel } from "primereact/panel";
+import { GuestData } from "../types";
 
 interface PassDetailsProps {
   passData: ViewPassData | undefined;
+  guestData: GuestData | undefined;
   prevPage: () => void;
 }
 
-export function PassDetails({ passData, prevPage }: PassDetailsProps) {
-  let { selectedPass } = useAppContext();
+export function PassDetails({
+  passData,
+  guestData,
+  prevPage,
+}: PassDetailsProps) {
   let [fieldChange, setFieldChange] = useState(false);
 
   let createdAt = undefined;
@@ -27,8 +31,20 @@ export function PassDetails({ passData, prevPage }: PassDetailsProps) {
           setFieldChange(false);
         }}
       />
-      {passData?.expires_at && <div>{`Expires ${passData?.expires_at}`}</div>}
-      <PassInfo {...{ selectedPass }} />
+      <Panel>
+        {passData?.expires_at && (
+          <div>{`Expires ${new Date(
+            passData?.expires_at
+          ).toLocaleDateString()}`}</div>
+        )}
+        <div style={{ wordWrap: "break-word" }}>
+          Created {createdAt} by {passData?.creator}
+        </div>
+      </Panel>
+      <Panel header={`Owner ${guestData?.guest_id}`}>
+        <div>{`${guestData?.first_name} ${guestData?.last_name}`}</div>
+        {<div>{`Town: ${guestData?.town}`}</div>}
+      </Panel>
     </form>
   );
 }

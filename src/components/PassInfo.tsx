@@ -3,6 +3,8 @@ import { PassData } from "../types";
 
 interface PassInfoProps {
   selectedPass: PassData;
+  // isLoading: boolean;
+  // error: Error | null;
 }
 
 export const PassInfo = ({ selectedPass }: PassInfoProps) => {
@@ -20,7 +22,7 @@ export const PassInfo = ({ selectedPass }: PassInfoProps) => {
       header={`${selectedPass.passtype?.name} Pass ${selectedPass.pass_id}`}
     >
       <div>
-        {selectedPass.remaining_uses &&
+        {selectedPass.remaining_uses != undefined &&
           `${selectedPass.remaining_uses} uses remaining`}
         {selectedPass.expires_at &&
           (Date.now() > selectedPass.expires_at ? (

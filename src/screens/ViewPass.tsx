@@ -5,6 +5,7 @@ import { Panel } from "primereact/panel";
 import { ScrollPanel } from "primereact/scrollpanel";
 import { useQuery } from "@tanstack/react-query";
 import {
+  getGuest,
   getPass,
   getPaymentsFromPassId,
   getVisitsFromPassId,
@@ -23,6 +24,11 @@ export function ViewPass({ prevPage }: { prevPage: () => void }) {
   } = useQuery({
     queryKey: ["pass", selectedPass.pass_id],
     queryFn: () => getPass(selectedPass.pass_id),
+  });
+
+  const { data: guestData } = useQuery({
+    queryKey: ["guest", selectedPass.guest_id],
+    queryFn: () => getGuest(selectedPass.guest_id),
   });
 
   const { data: visits } = useQuery({
@@ -60,7 +66,7 @@ export function ViewPass({ prevPage }: { prevPage: () => void }) {
             className="flex-col"
             style={{ paddingBottom: "40px" }}
           >
-            <PassDetails {...{ passData, prevPage }} />
+            <PassDetails {...{ passData, guestData, prevPage }} />
           </div>
         </ScrollPanel>
       </Panel>
