@@ -313,8 +313,10 @@ pub async fn create_pass(
         NewPassType::SixFacial => (Some(6), None),
     };
 
-    let expires_at = num_weeks_valid
-        .and_then(|weeks| OffsetDateTime::now_utc().checked_add(Duration::weeks(weeks)));
+    let expires_at = match num_weeks_valid {
+        Some(weeks) => OffsetDateTime::now_local()?.checked_add(Duration::weeks(weeks)),
+        None => None,
+    };
 
     let data = NewPassData {
         guest_id,
