@@ -13,7 +13,7 @@ interface AddVisitsFormData {
 
 interface AddTimeFormData {
   pass_id: number | undefined;
-  num_days: { name: string; code: number };
+  num_days: { name: string; code: number } | undefined;
   pay_method: { name: string; code: string } | undefined;
   last_four: string | undefined;
   amount_paid: string | undefined;
@@ -133,12 +133,18 @@ export const logVisit = async (pass: PassData): Promise<number> => {
 export const addVisits = async (
   addVisitsData: AddVisitsFormData
 ): Promise<number> => {
+  if (!addVisitsData.num_visits) {
+    throw { name: "Add visit", message: "No visits selected" };
+  }
   return invoke("add_visits", { addVisitsData });
 };
 
 export const addTimeToPass = async (
   addTimeData: AddTimeFormData
 ): Promise<number> => {
+  if (!addTimeData.num_days) {
+    throw { name: "Add time", message: "No time selected" };
+  }
   return invoke("add_time", { addTimeData });
 };
 

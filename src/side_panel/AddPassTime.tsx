@@ -19,9 +19,9 @@ import { PassInfo } from "../components/PassInfo";
 
 const validationSchema = Yup.object().shape({
   pass_id: Yup.number().required(),
-  num_visits: Yup.object().shape({
-    name: Yup.string(),
-    code: Yup.string(),
+  num_days: Yup.object().shape({
+    name: Yup.string().required("Required"),
+    code: Yup.string().required("Required"),
   }),
   pay_method: Yup.object().shape({
     name: Yup.string(),
@@ -64,7 +64,7 @@ export const AddPassTime = ({ passData }: { passData: PassData }) => {
   const formik = useFormik({
     initialValues: {
       pass_id: passData.pass_id,
-      num_days: { name: "1 Year", code: 365 },
+      num_days: undefined,
       pay_method: undefined,
       last_four: undefined,
       amount_paid: undefined,
@@ -80,6 +80,7 @@ export const AddPassTime = ({ passData }: { passData: PassData }) => {
         <FormikDropdown
           label="Add Time"
           name="num_days"
+          placeholder="Add time"
           options={addPassTimeDropOpts}
           {...{ formik }}
         />

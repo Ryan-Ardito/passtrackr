@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { BackRevert } from "./Buttons";
+import { BackRevert, CrudButton } from "./Buttons";
 import { ViewPassData } from "../api/api";
 import { Panel } from "primereact/panel";
 import { GuestData } from "../types";
+import { InputTextarea } from "primereact/inputtextarea";
 
 interface PassDetailsProps {
   passData: ViewPassData | undefined;
@@ -30,6 +31,26 @@ export function PassDetails({
           // formik.resetForm();
           setFieldChange(false);
         }}
+      />
+      <InputTextarea
+        placeholder="Notes"
+        name="notes"
+        // value={formik.values.notes}
+        rows={8}
+        // autoResize
+        style={{ maxWidth: "100%", minWidth: "100%" }}
+        // onChange={(e) => {
+        //   setFieldChange(true);
+        //   formik.handleChange(e);
+        // }}
+      />
+      <CrudButton
+        label="Save"
+        icon="pi pi-save"
+        type="submit"
+        severity="danger"
+        // loading={isEditGuestPending}
+        disabled={!fieldChange}
       />
       <Panel>
         {passData?.expires_at && (
