@@ -62,8 +62,6 @@ class PunchPass:
     passtype: str
     remaining_uses: int
     active: bool
-    payment_method: str
-    amount_paid_cents: int
     notes: str
     expires_at: int
     creator: str
@@ -120,8 +118,6 @@ def generate_passes(guests: list[Guest], first_names: list[str]) -> list[PunchPa
             remaining_uses = random.choice((3, 6))
 
         active = True
-        payment_method = random.choice(PAYMENT_METHODS)
-        amount_paid = 7000
         notes = NOTES
 
         expires_at = ""
@@ -140,8 +136,6 @@ def generate_passes(guests: list[Guest], first_names: list[str]) -> list[PunchPa
             passtype,
             remaining_uses,
             active,
-            payment_method,
-            amount_paid,
             notes,
             expires_at,
             creator,

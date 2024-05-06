@@ -40,8 +40,8 @@ VALUES ($1, $2, $3, $4, $5, $6)
 RETURNING guest_id"#;
 
 pub const INSERT_PASS: &str = r#"INSERT
-INTO passes (guest_id, passtype, remaining_uses, active, payment_method, amount_paid_cents, expires_at, creator)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+INTO passes (guest_id, passtype, remaining_uses, active, expires_at, creator)
+VALUES ($1, $2, $3, $4, $5, $6)
 RETURNING pass_id"#;
 
 pub const INSERT_PAYMENT: &str = r#"INSERT

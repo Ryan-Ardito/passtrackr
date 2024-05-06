@@ -36,8 +36,6 @@ pub struct GetPassData {
     pub passtype: String,
     pub remaining_uses: Option<i32>,
     pub active: bool,
-    pub payment_method: Option<String>,
-    pub amount_paid_cents: Option<i32>,
     pub notes: Option<String>,
     pub creator: String,
     pub expires_at: Option<OffsetDateTime>,
@@ -132,8 +130,6 @@ pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> sql
         .bind(&data.passtype)
         .bind(data.remaining_uses)
         .bind(data.active)
-        .bind(&data.payment_method)
-        .bind(data.amount_paid_cents)
         .bind(data.expires_at)
         .bind(&data.creator)
         .fetch_one(&mut *transaction)
