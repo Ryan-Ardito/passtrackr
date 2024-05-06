@@ -10,7 +10,7 @@ use sqlx::{
 };
 
 pub mod api;
-pub mod database;
+mod database;
 
 use api::{
     add_time, add_visits, async_sleep, create_pass, delete_pass, edit_guest, edit_pass_notes,

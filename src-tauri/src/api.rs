@@ -5,11 +5,17 @@ use time::{Duration, OffsetDateTime};
 
 use crate::{
     database::{
-        guest::{get_guest_from_id, insert_guest, update_guest, EditGuestData, GetGuestData}, pass::{
+        guest::{get_guest_from_id, insert_guest, update_guest, EditGuestData, GetGuestData},
+        pass::{
             delete_pass_permanent, get_pass_from_id, increase_expiration, increase_remaining_uses,
             insert_pass, set_pass_active, set_pass_guest_id, update_pass_notes, use_pass,
             GetPassData, NewPassData,
-        }, pay_visit::{get_payments_from_guest_id, get_payments_from_pass_id, get_visits_from_guest_id, get_visits_from_pass_id, insert_visit, PaymentRow, VisitRow}, search::search_all_passes
+        },
+        pay_visit::{
+            get_payments_from_guest_id, get_payments_from_pass_id, get_visits_from_guest_id,
+            get_visits_from_pass_id, insert_visit, PaymentRow, VisitRow,
+        },
+        search::search_all_passes,
     },
     AppState,
 };
@@ -327,10 +333,8 @@ pub async fn create_pass(
         NewPassType::SixFacial => (Some(6), None),
     };
 
-    let expires_at = match num_days_valid {
-        Some(days) => OffsetDateTime::now_utc().checked_add(Duration::days(days)),
-        None => None,
-    };
+    let expires_at =
+        num_days_valid.and_then(|days| OffsetDateTime::now_utc().checked_add(Duration::days(days)));
 
     let data = NewPassData {
         guest_id,
