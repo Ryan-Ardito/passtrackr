@@ -23,7 +23,6 @@ export function EditPassTemplate({
         name="notes"
         rows={8}
         disabled
-        // autoResize
         style={{ maxWidth: "100%", minWidth: "100%" }}
       />
       <CrudButton

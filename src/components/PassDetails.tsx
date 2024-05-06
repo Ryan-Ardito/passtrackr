@@ -87,7 +87,6 @@ export function PassDetails({
         name="notes"
         value={formik.values.notes}
         rows={8}
-        // autoResize
         style={{ maxWidth: "100%", minWidth: "100%" }}
         onChange={(e) => {
           setFieldChange(true);
