@@ -21,7 +21,7 @@ use crate::{
 };
 
 const ONE_YEAR_IN_DAYS: i64 = 365;
-const SIX_MONTHS_IN_DAYS: i64 = 182;
+const SIX_MONTHS_IN_DAYS: i64 = 183;
 
 #[derive(Debug, Serialize, Clone)]
 pub struct ToastError {

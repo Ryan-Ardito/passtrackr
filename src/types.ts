@@ -1,5 +1,5 @@
 const ONE_YEAR_IN_DAYS: number = 365;
-const SIX_MONTHS_IN_DAYS: number = 182;
+const SIX_MONTHS_IN_DAYS: number = 183;
 
 export enum Screen {
   Dashboard,
