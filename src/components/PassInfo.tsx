@@ -2,6 +2,8 @@ import { Panel } from "primereact/panel";
 import { PassData } from "../types";
 import { Divider } from "primereact/divider";
 
+const MONTH_IN_SECONDS = 2629800;
+
 interface PassInfoProps {
   selectedPass: PassData;
   // isLoading: boolean;
@@ -24,21 +26,30 @@ export const PassInfo = ({ selectedPass }: PassInfoProps) => {
     >
       <div>
         {selectedPass.remaining_uses != undefined &&
-          <b>{`${selectedPass.remaining_uses} uses remaining`}</b>}
+          (selectedPass.remaining_uses === 0 ? (
+            <b
+              style={{ color: "red" }}
+            >{`${selectedPass.remaining_uses} uses remaining`}</b>
+          ) : (
+            <b
+              style={{ color: "green" }}
+            >{`${selectedPass.remaining_uses} uses remaining`}</b>
+          ))}
         {selectedPass.expires_at &&
           (Date.now() > selectedPass.expires_at ? (
             <>
               <b style={{ color: "red" }}>Expired {expiresAt}</b>
             </>
-          ) : Date.now() + 2629800 * 1000 > selectedPass.expires_at ? (
+          ) : (Date.now() + MONTH_IN_SECONDS) * 1000 >
+            selectedPass.expires_at ? (
             <>
-              <b style={{ color: "blue" }}>Expires {expiresAt}</b>
+              <b style={{ color: "darkgoldenrod" }}>Expires {expiresAt}</b>
             </>
           ) : (
-            <b>{`Expires ${expiresAt}`}</b>
+            <b style={{ color: "green" }}>{`Expires ${expiresAt}`}</b>
           ))}
       </div>
-      <Divider style={{margin: "12px"}} />
+      <Divider style={{ margin: "12px" }} />
       <div>Owner ID: {selectedPass.guest_id}</div>
       <div style={{ wordWrap: "break-word" }}>
         Created {createdAt} by {selectedPass.creator}
