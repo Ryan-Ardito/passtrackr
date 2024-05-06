@@ -5,11 +5,11 @@ use time::{Duration, OffsetDateTime};
 
 use crate::{
     database::{
-        delete_pass_permanent, get_guest_from_id, get_pass_from_id, get_payments_from_guest_id,
-        get_payments_from_pass_id, get_visits_from_guest_id, get_visits_from_pass_id,
-        increase_expiration, increase_remaining_uses, insert_guest, insert_pass, insert_visit,
-        search_all_passes, set_pass_active, set_pass_guest_id, update_guest, update_pass_notes,
-        use_pass, EditGuestData, GetGuestData, GetPassData, NewPassData, PaymentRow, VisitRow,
+        guest::{get_guest_from_id, insert_guest, update_guest, EditGuestData, GetGuestData}, pass::{
+            delete_pass_permanent, get_pass_from_id, increase_expiration, increase_remaining_uses,
+            insert_pass, set_pass_active, set_pass_guest_id, update_pass_notes, use_pass,
+            GetPassData, NewPassData,
+        }, pay_visit::{get_payments_from_guest_id, get_payments_from_pass_id, get_visits_from_guest_id, get_visits_from_pass_id, insert_visit, PaymentRow, VisitRow}, search::search_all_passes
     },
     AppState,
 };
