@@ -117,8 +117,8 @@ export function PassDetails({
         </div>
       </Panel>
       <Panel header={`Owner ${guestData?.guest_id}`}>
-        <div>{`${guestData?.first_name} ${guestData?.last_name}`}</div>
-        {<div>{`Town: ${guestData?.town}`}</div>}
+        <div>{guestData?.first_name} {guestData?.last_name}</div>
+        {<div>{guestData?.town}</div>}
       </Panel>
     </form>
   );

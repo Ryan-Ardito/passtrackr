@@ -53,13 +53,16 @@ export function ViewPass({ prevPage }: { prevPage: () => void }) {
         <VisitsTable {...{ visits }} />
       </div>
       <Panel
-        header={`${passData?.passtype.name || ""} Pass ${
-          isPassLoading
-            ? "loading..."
-            : error
-            ? "error"
-            : passData && passData.pass_id
-        }`}
+        header={
+          <>
+            {passData?.passtype.name || ""} Pass{" "}
+            {isPassLoading
+              ? "loading..."
+              : error
+              ? "fetch failed"
+              : passData && passData.pass_id}
+          </>
+        }
       >
         <ScrollPanel style={{ display: "grid" }}>
           <div
