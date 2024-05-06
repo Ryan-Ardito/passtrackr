@@ -4,6 +4,48 @@ import { Divider } from "primereact/divider";
 
 const MONTH_IN_SECONDS = 2629800;
 
+interface RemainingUsesTextProps {
+  remaining_uses: number;
+}
+
+const RemainingUsesText = ({ remaining_uses }: RemainingUsesTextProps) => {
+  const color =
+    remaining_uses === 0
+      ? "red"
+      : remaining_uses < 3
+      ? "darkgoldenrod"
+      : "green";
+  const useUses = remaining_uses === 1 ? "use" : "uses";
+  return (
+    <b style={{ color }}>
+      {remaining_uses} {useUses} remaining
+    </b>
+  );
+};
+
+interface ExpirationTextProps {
+  expires_at: number;
+}
+
+const ExpirationText = ({ expires_at }: ExpirationTextProps) => {
+  const expiresAt = new Date(expires_at).toLocaleDateString();
+  const color =
+    Date.now() + MONTH_IN_SECONDS * 1000 > expires_at
+      ? "darkgoldenrod"
+      : "green";
+  return (
+    <>
+      {Date.now() > expires_at ? (
+        <>
+          <b style={{ color: "red" }}>Expired {expiresAt}</b>
+        </>
+      ) : (
+        <b style={{ color }}>Expires {expiresAt}</b>
+      )}
+    </>
+  );
+};
+
 interface PassInfoProps {
   selectedPass: PassData;
   // isLoading: boolean;
@@ -25,29 +67,12 @@ export const PassInfo = ({ selectedPass }: PassInfoProps) => {
       header={`${selectedPass.passtype?.name} Pass ${selectedPass.pass_id}`}
     >
       <div>
-        {selectedPass.remaining_uses != undefined &&
-          (selectedPass.remaining_uses === 0 ? (
-            <b
-              style={{ color: "red" }}
-            >{`${selectedPass.remaining_uses} uses remaining`}</b>
-          ) : (
-            <b
-              style={{ color: "green" }}
-            >{`${selectedPass.remaining_uses} uses remaining`}</b>
-          ))}
-        {selectedPass.expires_at &&
-          (Date.now() > selectedPass.expires_at ? (
-            <>
-              <b style={{ color: "red" }}>Expired {expiresAt}</b>
-            </>
-          ) : (Date.now() + MONTH_IN_SECONDS) * 1000 >
-            selectedPass.expires_at ? (
-            <>
-              <b style={{ color: "darkgoldenrod" }}>Expires {expiresAt}</b>
-            </>
-          ) : (
-            <b style={{ color: "green" }}>{`Expires ${expiresAt}`}</b>
-          ))}
+        {selectedPass.remaining_uses != undefined && (
+          <RemainingUsesText remaining_uses={selectedPass.remaining_uses} />
+        )}
+        {selectedPass.expires_at && (
+          <ExpirationText expires_at={selectedPass.expires_at} />
+        )}
       </div>
       <Divider style={{ margin: "12px" }} />
       <div>Owner ID: {selectedPass.guest_id}</div>
