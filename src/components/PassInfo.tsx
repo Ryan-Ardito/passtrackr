@@ -29,6 +29,10 @@ export const PassInfo = ({ selectedPass }: PassInfoProps) => {
             <>
               <b style={{ color: "red" }}>Expired</b> {expiresAt}
             </>
+          ) : Date.now() + 2629800 * 1000 > selectedPass.expires_at ? (
+            <>
+              <span style={{ color: "orange" }}>Expires</span> {expiresAt}
+            </>
           ) : (
             `Expires ${expiresAt}`
           ))}
