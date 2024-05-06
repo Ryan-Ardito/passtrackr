@@ -36,6 +36,7 @@ export function EditGuestTemplate({ prevPage }: { prevPage: () => void }) {
       />
       <InputTextarea
         placeholder="Notes"
+        value=""
         name="notes"
         rows={8}
         disabled

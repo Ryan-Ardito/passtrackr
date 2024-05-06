@@ -14,6 +14,7 @@ export function EditPassTemplate({ prevPage }: EditPassTemplateProps) {
       <InputTextarea
         placeholder="Notes"
         name="notes"
+        value=""
         rows={8}
         disabled
         style={{ maxWidth: "100%", minWidth: "100%" }}
