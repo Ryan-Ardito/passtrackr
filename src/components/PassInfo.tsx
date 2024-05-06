@@ -1,5 +1,6 @@
 import { Panel } from "primereact/panel";
 import { PassData } from "../types";
+import { Divider } from "primereact/divider";
 
 interface PassInfoProps {
   selectedPass: PassData;
@@ -23,20 +24,21 @@ export const PassInfo = ({ selectedPass }: PassInfoProps) => {
     >
       <div>
         {selectedPass.remaining_uses != undefined &&
-          `${selectedPass.remaining_uses} uses remaining`}
+          <b>{`${selectedPass.remaining_uses} uses remaining`}</b>}
         {selectedPass.expires_at &&
           (Date.now() > selectedPass.expires_at ? (
             <>
-              <b style={{ color: "red" }}>Expired</b> {expiresAt}
+              <b style={{ color: "red" }}>Expired {expiresAt}</b>
             </>
           ) : Date.now() + 2629800 * 1000 > selectedPass.expires_at ? (
             <>
-              <span style={{ color: "orange" }}>Expires</span> {expiresAt}
+              <b style={{ color: "blue" }}>Expires {expiresAt}</b>
             </>
           ) : (
-            `Expires ${expiresAt}`
+            <b>{`Expires ${expiresAt}`}</b>
           ))}
       </div>
+      <Divider style={{margin: "12px"}} />
       <div>Owner ID: {selectedPass.guest_id}</div>
       <div style={{ wordWrap: "break-word" }}>
         Created {createdAt} by {selectedPass.creator}
