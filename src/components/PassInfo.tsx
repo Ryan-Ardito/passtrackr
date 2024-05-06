@@ -12,7 +12,7 @@ const RemainingUsesText = ({ remaining_uses }: RemainingUsesTextProps) => {
   const color =
     remaining_uses === 0
       ? "red"
-      : remaining_uses < 3
+      : remaining_uses < 2
       ? "darkgoldenrod"
       : "green";
   const useUses = remaining_uses === 1 ? "use" : "uses";
