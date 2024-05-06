@@ -103,4 +103,5 @@ WHERE
     OR
     g.last_name ILIKE $1
 ORDER BY 
-    g.last_name, g.first_name, g.guest_id, p.pass_id;"#;
+    g.last_name, g.first_name, g.guest_id, p.pass_id
+LIMIT $2;"#;

@@ -15,6 +15,8 @@ use crate::{
     AppState,
 };
 
+const SEARCH_RESPONSE_LIMIT: i32 = 500;
+
 #[derive(Deserialize, Serialize, Clone, FromRow)]
 pub struct NewPassData {
     pub guest_id: i32,
@@ -356,6 +358,7 @@ pub async fn search_all_passes(
 ) -> Result<Vec<PassSearchResponse>> {
     sqlx::query_as(SEARCH_ALL)
         .bind(format!("{search_term}%"))
+        .bind(SEARCH_RESPONSE_LIMIT)
         .fetch_all(&state.pg_pool)
         .await
 }
