@@ -119,8 +119,7 @@ pub async fn use_pass(state: &State<'_, AppState>, pass_id: i32) -> sqlx::Result
         .execute(&mut *transaction)
         .await?;
     transaction.commit().await?;
-    let remaining_uses = use_pass_res.try_get(0)?;
-    Ok(remaining_uses)
+    use_pass_res.try_get(0)
 }
 
 pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> sqlx::Result<i32> {
