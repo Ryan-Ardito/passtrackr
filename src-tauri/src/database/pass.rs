@@ -8,11 +8,14 @@ use crate::{
     AppState,
 };
 
-use super::{pay_visit::{insert_payment, InsertPaymentData}, queries::{
-    DELETE_PASS_PERMANENT, DELETE_PAYMENTS_PASS_ID, DELETE_VISITS_PASS_ID, EDIT_PASS_NOTES,
-    GET_PASS, INCREASE_EXPIRATION_TIME, INCREASE_REMAINING_USES, INSERT_PASS, INSERT_VISIT,
-    LOG_VISIT, SET_PASS_ACTIVE, SET_PASS_OWNER,
-}};
+use super::{
+    pay_visit::{insert_payment, InsertPaymentData},
+    queries::{
+        DELETE_PASS_PERMANENT, DELETE_PAYMENTS_PASS_ID, DELETE_VISITS_PASS_ID, EDIT_PASS_NOTES,
+        GET_PASS, INCREASE_EXPIRATION_TIME, INCREASE_REMAINING_USES, INSERT_PASS, INSERT_VISIT,
+        LOG_VISIT, SET_PASS_ACTIVE, SET_PASS_OWNER,
+    },
+};
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
 pub struct NewPassData {
@@ -57,7 +60,7 @@ pub async fn update_pass_notes(
     pass_id: i32,
 ) -> sqlx::Result<PgQueryResult> {
     sqlx::query(EDIT_PASS_NOTES)
-        .bind(&pass_id)
+        .bind(pass_id)
         .bind(&notes)
         .execute(&state.pg_pool)
         .await
@@ -70,8 +73,8 @@ pub async fn increase_remaining_uses(
 ) -> sqlx::Result<i32> {
     let mut transaction = state.pg_pool.begin().await?;
     let remaining_uses_res = sqlx::query(INCREASE_REMAINING_USES)
-        .bind(&data.pass_id)
-        .bind(&data.num_visits.code)
+        .bind(data.pass_id)
+        .bind(data.num_visits.code)
         .fetch_one(&mut *transaction)
         .await?;
     let pay_data = InsertPaymentData {
@@ -92,8 +95,8 @@ pub async fn increase_expiration(
 ) -> sqlx::Result<OffsetDateTime> {
     let mut transaction = state.pg_pool.begin().await?;
     let new_expiration = sqlx::query(INCREASE_EXPIRATION_TIME)
-        .bind(&data.pass_id)
-        .bind(&data.num_days.code)
+        .bind(data.pass_id)
+        .bind(data.num_days.code)
         .fetch_one(&mut *transaction)
         .await?;
     let pay_data = InsertPaymentData {
@@ -110,11 +113,11 @@ pub async fn increase_expiration(
 pub async fn use_pass(state: &State<'_, AppState>, pass_id: i32) -> sqlx::Result<i32> {
     let mut transaction = state.pg_pool.begin().await?;
     let use_pass_res = sqlx::query(LOG_VISIT)
-        .bind(&pass_id)
+        .bind(pass_id)
         .fetch_one(&mut *transaction)
         .await?;
     let _insert_visit_res = sqlx::query(INSERT_VISIT)
-        .bind(&pass_id)
+        .bind(pass_id)
         .execute(&mut *transaction)
         .await?;
     transaction.commit().await?;
@@ -125,13 +128,13 @@ pub async fn use_pass(state: &State<'_, AppState>, pass_id: i32) -> sqlx::Result
 pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> sqlx::Result<i32> {
     let mut transaction = state.pg_pool.begin().await?;
     let row = sqlx::query(INSERT_PASS)
-        .bind(&data.guest_id)
+        .bind(data.guest_id)
         .bind(&data.passtype)
-        .bind(&data.remaining_uses)
-        .bind(&data.active)
+        .bind(data.remaining_uses)
+        .bind(data.active)
         .bind(&data.payment_method)
-        .bind(&data.amount_paid_cents)
-        .bind(&data.expires_at)
+        .bind(data.amount_paid_cents)
+        .bind(data.expires_at)
         .bind(&data.creator)
         .fetch_one(&mut *transaction)
         .await?;
@@ -159,7 +162,7 @@ pub async fn delete_pass_permanent(state: &State<'_, AppState>, pass_id: i32) ->
     let mut rows_deleted = 0;
     for query in queries {
         let res = sqlx::query(query)
-            .bind(&pass_id)
+            .bind(pass_id)
             .execute(&mut *transaction)
             .await?;
         rows_deleted += res.rows_affected();
@@ -174,8 +177,8 @@ pub async fn set_pass_active(
     new_state: bool,
 ) -> sqlx::Result<PgQueryResult> {
     sqlx::query(SET_PASS_ACTIVE)
-        .bind(&pass_id)
-        .bind(&new_state)
+        .bind(pass_id)
+        .bind(new_state)
         .execute(&state.pg_pool)
         .await
 }
@@ -186,8 +189,8 @@ pub async fn set_pass_guest_id(
     new_guest_id: i32,
 ) -> sqlx::Result<PgQueryResult> {
     sqlx::query(SET_PASS_OWNER)
-        .bind(&pass_id)
-        .bind(&new_guest_id)
+        .bind(pass_id)
+        .bind(new_guest_id)
         .execute(&state.pg_pool)
         .await
 }

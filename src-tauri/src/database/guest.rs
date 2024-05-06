@@ -34,17 +34,19 @@ pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> s
         .bind(&data.first_name)
         .bind(&data.last_name)
         .bind(&data.town)
-        .bind(&"")
-        .bind(&"")
+        .bind("")
+        .bind("")
         .bind(&data.signature)
         .fetch_one(&state.pg_pool)
         .await?;
 
-    let new_guest_id = new_guest.try_get(0);
-    new_guest_id
+    new_guest.try_get(0)
 }
 
-pub async fn get_guest_from_id(state: &State<'_, AppState>, guest_id: i32) -> sqlx::Result<GetGuestData> {
+pub async fn get_guest_from_id(
+    state: &State<'_, AppState>,
+    guest_id: i32,
+) -> sqlx::Result<GetGuestData> {
     sqlx::query_as(GET_GUEST)
         .bind(guest_id)
         .fetch_one(&state.pg_pool)
@@ -61,7 +63,7 @@ pub async fn update_guest(
         .bind(&data.town)
         .bind(&data.email)
         .bind(&data.notes)
-        .bind(&data.guest_id)
+        .bind(data.guest_id)
         .execute(&state.pg_pool)
         .await
 }
