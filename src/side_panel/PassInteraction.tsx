@@ -61,7 +61,9 @@ export const PassControl = () => {
       <CrudButton
         label="Renew Pass"
         icon="pi pi-plus"
-        disabled={!selectedPass.pass_id}
+        disabled={
+          !selectedPass.pass_id || selectedPass.passtype?.code == "Free"
+        }
         onClick={() => setPanel(SidePanel.AddVisits)}
       />
       <CrudButton

@@ -55,6 +55,7 @@ export const AddPassTime = ({ passData }: { passData: PassData }) => {
           toast,
           "error"
         );
+        formik.setSubmitting(false);
         return;
       }
       queryClient.invalidateQueries([

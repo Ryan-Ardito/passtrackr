@@ -81,7 +81,7 @@ export const PassInfo = ({ selectedPass }: PassInfoProps) => {
       </div>
       <Divider style={{ margin: "12px" }} />
       <div>
-        Held by {selectedPass.first_name} {selectedPass.last_name}{" "}
+        {selectedPass.first_name} {selectedPass.last_name}{" "}
         {selectedPass.guest_id}
       </div>
       <div style={{ wordWrap: "break-word" }}>
