@@ -52,7 +52,7 @@ WHERE
     g.last_name ILIKE $1
 ORDER BY 
     g.last_name, g.first_name, g.guest_id, p.pass_id
-LIMIT $2;"#,
+LIMIT $2"#,
         format!("{search_term}%"),
         SEARCH_RESPONSE_LIMIT,
     )

@@ -41,7 +41,7 @@ FROM payments
 JOIN passes ON passes.pass_id = payments.pass_id
 JOIN guests ON guests.guest_id = passes.guest_id
 WHERE guests.guest_id = $1
-ORDER BY payments.created_at DESC;"#,
+ORDER BY payments.created_at DESC"#,
         guest_id,
     )
     .fetch_all(&state.pg_pool)
@@ -59,7 +59,7 @@ FROM visits
 JOIN passes ON passes.pass_id = visits.pass_id
 JOIN guests ON guests.guest_id = passes.guest_id
 WHERE guests.guest_id = $1
-ORDER BY visits.created_at DESC;"#,
+ORDER BY visits.created_at DESC"#,
         guest_id,
     )
     .fetch_all(&state.pg_pool)
@@ -72,7 +72,7 @@ pub async fn get_payments_from_pass_id(
 ) -> sqlx::Result<Vec<PaymentRow>> {
     sqlx::query_as!(
         PaymentRow,
-        r#"SELECT * FROM payments WHERE pass_id = $1 ORDER BY created_at DESC;"#,
+        r#"SELECT * FROM payments WHERE pass_id = $1 ORDER BY created_at DESC"#,
         pass_id,
     )
     .fetch_all(&state.pg_pool)
@@ -85,7 +85,7 @@ pub async fn get_visits_from_pass_id(
 ) -> sqlx::Result<Vec<VisitRow>> {
     sqlx::query_as!(
         VisitRow,
-        r#"SELECT * FROM visits WHERE pass_id = $1 ORDER BY created_at DESC;"#,
+        r#"SELECT * FROM visits WHERE pass_id = $1 ORDER BY created_at DESC"#,
         pass_id,
     )
     .fetch_all(&state.pg_pool)

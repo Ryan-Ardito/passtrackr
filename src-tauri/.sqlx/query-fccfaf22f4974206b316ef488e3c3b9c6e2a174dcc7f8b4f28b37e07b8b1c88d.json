@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "DELETE FROM passes WHERE pass_id = $1;",
+  "query": "DELETE FROM payments WHERE pass_id = $1",
   "describe": {
     "columns": [],
     "parameters": {
@@ -10,5 +10,5 @@
     },
     "nullable": []
   },
-  "hash": "490e07dc7117645af3cb3859ade26b41aac97c42ba5cbb86d7e92b088df6c1e3"
+  "hash": "fccfaf22f4974206b316ef488e3c3b9c6e2a174dcc7f8b4f28b37e07b8b1c88d"
 }

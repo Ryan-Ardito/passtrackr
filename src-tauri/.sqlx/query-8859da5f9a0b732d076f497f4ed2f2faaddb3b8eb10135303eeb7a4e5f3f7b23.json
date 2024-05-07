@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "UPDATE passes\nSET guest_id = $2\nWHERE pass_id = $1;",
+  "query": "UPDATE passes\nSET guest_id = $2\nWHERE pass_id = $1",
   "describe": {
     "columns": [],
     "parameters": {
@@ -11,5 +11,5 @@
     },
     "nullable": []
   },
-  "hash": "d0e15d48dd8cbfbd79dc0981f49fce24007e86e333e7f6d849e20d1c0bcae6b8"
+  "hash": "8859da5f9a0b732d076f497f4ed2f2faaddb3b8eb10135303eeb7a4e5f3f7b23"
 }

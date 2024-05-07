@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT * FROM visits WHERE pass_id = $1 ORDER BY created_at DESC;",
+  "query": " SELECT visits.*\nFROM visits\nJOIN passes ON passes.pass_id = visits.pass_id\nJOIN guests ON guests.guest_id = passes.guest_id\nWHERE guests.guest_id = $1\nORDER BY visits.created_at DESC",
   "describe": {
     "columns": [
       {
@@ -30,5 +30,5 @@
       false
     ]
   },
-  "hash": "890e84cb447edc174eee6e02526a1ed27c854103ff0d3a29c8c34060c28f3af7"
+  "hash": "ba27df26d47e07119290c45cc61bcdcaa4c5d62c70fbe5de7d25faf7bef630d5"
 }

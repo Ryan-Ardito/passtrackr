@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "UPDATE passes\nSET remaining_uses = remaining_uses + $2\nWHERE pass_id = $1\nRETURNING *;",
+  "query": "UPDATE passes\nSET remaining_uses = CASE\n    WHEN remaining_uses > 0 THEN remaining_uses - 1\nEND\nWHERE pass_id = $1\nRETURNING *",
   "describe": {
     "columns": [
       {
@@ -56,7 +56,6 @@
     ],
     "parameters": {
       "Left": [
-        "Int4",
         "Int4"
       ]
     },
@@ -73,5 +72,5 @@
       false
     ]
   },
-  "hash": "ec480dafbfe91e7332b1244f522e0054c7ee9c9305c48aff2e0ffea89e2c78cb"
+  "hash": "64ac6e4b86b44bf1acf38d01084bc3f635aa989f52eb4cf40c9414e64a518f9b"
 }

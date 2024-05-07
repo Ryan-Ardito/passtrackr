@@ -75,7 +75,7 @@ pub async fn increase_remaining_uses(
         r#"UPDATE passes
 SET remaining_uses = remaining_uses + $2
 WHERE pass_id = $1
-RETURNING *;"#,
+RETURNING *"#,
         data.pass_id,
         data.num_visits.code,
     )
@@ -106,7 +106,7 @@ SET expires_at = CASE
     THEN GREATEST(expires_at, CURRENT_TIMESTAMP) + ($2 * INTERVAL '1 day')
 END
 WHERE pass_id = $1
-RETURNING *;"#,
+RETURNING *"#,
         data.pass_id,
         data.num_days.code as f64,
     )
@@ -132,7 +132,7 @@ SET remaining_uses = CASE
     WHEN remaining_uses > 0 THEN remaining_uses - 1
 END
 WHERE pass_id = $1
-RETURNING *;"#,
+RETURNING *"#,
         pass_id,
     )
     .fetch_one(&mut *transaction)
@@ -176,13 +176,13 @@ RETURNING *"#,
 
 pub async fn delete_pass_permanent(state: &State<'_, AppState>, pass_id: i32) -> sqlx::Result<()> {
     let mut transaction = state.pg_pool.begin().await?;
-    sqlx::query!(r#"DELETE FROM payments WHERE pass_id = $1;"#, pass_id,)
+    sqlx::query!(r#"DELETE FROM payments WHERE pass_id = $1"#, pass_id,)
         .execute(&mut *transaction)
         .await?;
-    sqlx::query!(r#"DELETE FROM visits WHERE pass_id = $1;"#, pass_id,)
+    sqlx::query!(r#"DELETE FROM visits WHERE pass_id = $1"#, pass_id,)
         .execute(&mut *transaction)
         .await?;
-    sqlx::query!(r#"DELETE FROM passes WHERE pass_id = $1;"#, pass_id,)
+    sqlx::query!(r#"DELETE FROM passes WHERE pass_id = $1"#, pass_id,)
         .execute(&mut *transaction)
         .await?;
     transaction.commit().await
@@ -196,7 +196,7 @@ pub async fn set_pass_active(
     sqlx::query!(
         r#"UPDATE passes
 SET active = $2
-WHERE pass_id = $1;"#,
+WHERE pass_id = $1"#,
         pass_id,
         new_state,
     )
@@ -212,7 +212,7 @@ pub async fn set_pass_guest_id(
     sqlx::query!(
         r#"UPDATE passes
 SET guest_id = $2
-WHERE pass_id = $1;"#,
+WHERE pass_id = $1"#,
         pass_id,
         new_guest_id,
     )
