@@ -154,7 +154,7 @@ export const addVisits = async (
 
 export const addTimeToPass = async (
   addTimeData: AddTimeFormData
-): Promise<number> => {
+): Promise<number | undefined> => {
   if (!addTimeData.num_days) {
     throw { name: "Add time", message: "No time selected" };
   }
@@ -176,9 +176,7 @@ export const setPassOwner = async (
   return invoke("set_pass_owner", { passId, newGuestId });
 };
 
-export const deletePass = async (
-  passId: number | undefined
-): Promise<number> => {
+export const deletePass = async (passId: number | undefined): Promise<void> => {
   if (!passId) {
     throw { name: "Delete Pass", message: "Pass not found" };
   }

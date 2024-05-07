@@ -48,6 +48,15 @@ export const AddPassTime = ({ passData }: { passData: PassData }) => {
       formik.setSubmitting(false);
     },
     onSuccess: (expires_at) => {
+      if (expires_at == undefined) {
+        showMessage(
+          "Database error",
+          "Corrupted pass; no expiration",
+          toast,
+          "error"
+        );
+        return;
+      }
       queryClient.invalidateQueries([
         "search",
         search,

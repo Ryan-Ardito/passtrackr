@@ -8,14 +8,7 @@ use crate::{
     AppState,
 };
 
-use super::{
-    pay_visit::{insert_payment, InsertPaymentData},
-    queries::{
-        DELETE_PASS_PERMANENT, DELETE_PAYMENTS_PASS_ID, DELETE_VISITS_PASS_ID, EDIT_PASS_NOTES,
-        GET_PASS, INCREASE_EXPIRATION_TIME, INCREASE_REMAINING_USES, INSERT_PASS, INSERT_VISIT,
-        LOG_VISIT, SET_PASS_ACTIVE, SET_PASS_OWNER,
-    },
-};
+use super::pay_visit::{insert_payment, InsertPaymentData};
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
 pub struct NewPassData {
@@ -46,10 +39,13 @@ pub async fn get_pass_from_id(
     state: &State<'_, AppState>,
     pass_id: i32,
 ) -> sqlx::Result<GetPassData> {
-    sqlx::query_as(GET_PASS)
-        .bind(pass_id)
-        .fetch_one(&state.pg_pool)
-        .await
+    sqlx::query_as!(
+        GetPassData,
+        r#"SELECT * FROM passes WHERE pass_id = $1"#,
+        pass_id,
+    )
+    .fetch_one(&state.pg_pool)
+    .await
 }
 
 pub async fn update_pass_notes(
@@ -57,11 +53,15 @@ pub async fn update_pass_notes(
     notes: Option<String>,
     pass_id: i32,
 ) -> sqlx::Result<PgQueryResult> {
-    sqlx::query(EDIT_PASS_NOTES)
-        .bind(pass_id)
-        .bind(&notes)
-        .execute(&state.pg_pool)
-        .await
+    sqlx::query!(
+        r#"UPDATE passes
+SET notes = $2
+WHERE pass_id = $1"#,
+        pass_id,
+        notes,
+    )
+    .execute(&state.pg_pool)
+    .await
 }
 
 pub async fn increase_remaining_uses(
@@ -70,11 +70,17 @@ pub async fn increase_remaining_uses(
     amount_paid_cents: Option<i32>,
 ) -> sqlx::Result<i32> {
     let mut transaction = state.pg_pool.begin().await?;
-    let remaining_uses_res = sqlx::query(INCREASE_REMAINING_USES)
-        .bind(data.pass_id)
-        .bind(data.num_visits.code)
-        .fetch_one(&mut *transaction)
-        .await?;
+    let remaining_uses_res = sqlx::query_as!(
+        GetPassData,
+        r#"UPDATE passes
+SET remaining_uses = remaining_uses + $2
+WHERE pass_id = $1
+RETURNING *;"#,
+        data.pass_id,
+        data.num_visits.code,
+    )
+    .fetch_one(&mut *transaction)
+    .await?;
     let pay_data = InsertPaymentData {
         pass_id: data.pass_id,
         payment_method: data.pay_method.clone().map(|method| method.code),
@@ -83,20 +89,29 @@ pub async fn increase_remaining_uses(
     };
     let _payment_res = insert_payment(&mut transaction, &pay_data).await?;
     transaction.commit().await?;
-    remaining_uses_res.try_get(0)
+    Ok(remaining_uses_res.remaining_uses.unwrap())
 }
 
 pub async fn increase_expiration(
     state: &State<'_, AppState>,
     data: &AddTimeFormData,
     amount_paid_cents: Option<i32>,
-) -> sqlx::Result<OffsetDateTime> {
+) -> sqlx::Result<Option<OffsetDateTime>> {
     let mut transaction = state.pg_pool.begin().await?;
-    let new_expiration = sqlx::query(INCREASE_EXPIRATION_TIME)
-        .bind(data.pass_id)
-        .bind(data.num_days.code)
-        .fetch_one(&mut *transaction)
-        .await?;
+    let pass_res = sqlx::query_as!(
+        GetPassData,
+        r#"UPDATE passes
+SET expires_at = CASE 
+    WHEN expires_at IS NOT NULL
+    THEN GREATEST(expires_at, CURRENT_TIMESTAMP) + ($2 * INTERVAL '1 day')
+END
+WHERE pass_id = $1
+RETURNING *;"#,
+        data.pass_id,
+        data.num_days.code as f64,
+    )
+    .fetch_one(&mut *transaction)
+    .await?;
     let pay_data = InsertPaymentData {
         pass_id: data.pass_id,
         payment_method: data.pay_method.clone().map(|method| method.code),
@@ -105,36 +120,49 @@ pub async fn increase_expiration(
     };
     let _payment_res = insert_payment(&mut transaction, &pay_data).await?;
     transaction.commit().await?;
-    new_expiration.try_get(0)
+    Ok(pass_res.expires_at)
 }
 
-pub async fn use_pass(state: &State<'_, AppState>, pass_id: i32) -> sqlx::Result<i32> {
+pub async fn use_pass(state: &State<'_, AppState>, pass_id: i32) -> sqlx::Result<Option<i32>> {
     let mut transaction = state.pg_pool.begin().await?;
-    let use_pass_res = sqlx::query(LOG_VISIT)
-        .bind(pass_id)
-        .fetch_one(&mut *transaction)
-        .await?;
-    let _insert_visit_res = sqlx::query(INSERT_VISIT)
-        .bind(pass_id)
+    let use_pass_res = sqlx::query_as!(
+        GetPassData,
+        r#"UPDATE passes
+SET remaining_uses = CASE
+    WHEN remaining_uses > 0 THEN remaining_uses - 1
+END
+WHERE pass_id = $1
+RETURNING *;"#,
+        pass_id,
+    )
+    .fetch_one(&mut *transaction)
+    .await?;
+    let _insert_visit_res = sqlx::query!(r#"INSERT INTO visits (pass_id) VALUES ($1)"#, pass_id)
         .execute(&mut *transaction)
         .await?;
     transaction.commit().await?;
-    use_pass_res.try_get(0)
+    Ok(use_pass_res.remaining_uses)
 }
 
 pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> sqlx::Result<i32> {
     let mut transaction = state.pg_pool.begin().await?;
-    let row = sqlx::query(INSERT_PASS)
-        .bind(data.guest_id)
-        .bind(&data.passtype)
-        .bind(data.remaining_uses)
-        .bind(data.active)
-        .bind(data.expires_at)
-        .bind(&data.creator)
-        .fetch_one(&mut *transaction)
-        .await?;
+    let row = sqlx::query_as!(
+        GetPassData,
+        r#"INSERT
+INTO passes (guest_id, passtype, remaining_uses, active, expires_at, creator)
+VALUES ($1, $2, $3, $4, $5, $6)
+RETURNING *"#,
+        data.guest_id,
+        data.passtype,
+        data.remaining_uses,
+        data.active,
+        data.expires_at,
+        data.creator,
+    )
+    .fetch_one(&mut *transaction)
+    .await?;
 
-    let new_pass_id = row.try_get(0)?;
+    let new_pass_id = row.pass_id;
     let pay_data = InsertPaymentData {
         pass_id: new_pass_id,
         payment_method: data.payment_method.clone(),
@@ -147,23 +175,18 @@ pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> sql
     Ok(new_pass_id)
 }
 
-pub async fn delete_pass_permanent(state: &State<'_, AppState>, pass_id: i32) -> sqlx::Result<u64> {
+pub async fn delete_pass_permanent(state: &State<'_, AppState>, pass_id: i32) -> sqlx::Result<()> {
     let mut transaction = state.pg_pool.begin().await?;
-    let queries = [
-        DELETE_PAYMENTS_PASS_ID,
-        DELETE_VISITS_PASS_ID,
-        DELETE_PASS_PERMANENT,
-    ];
-    let mut rows_deleted = 0;
-    for query in queries {
-        let res = sqlx::query(query)
-            .bind(pass_id)
-            .execute(&mut *transaction)
-            .await?;
-        rows_deleted += res.rows_affected();
-    }
-    transaction.commit().await?;
-    Ok(rows_deleted)
+    sqlx::query!(r#"DELETE FROM payments WHERE pass_id = $1;"#, pass_id,)
+        .execute(&mut *transaction)
+        .await?;
+    sqlx::query!(r#"DELETE FROM visits WHERE pass_id = $1;"#, pass_id,)
+        .execute(&mut *transaction)
+        .await?;
+    sqlx::query!(r#"DELETE FROM passes WHERE pass_id = $1;"#, pass_id,)
+        .execute(&mut *transaction)
+        .await?;
+    transaction.commit().await
 }
 
 pub async fn set_pass_active(
@@ -171,11 +194,15 @@ pub async fn set_pass_active(
     pass_id: i32,
     new_state: bool,
 ) -> sqlx::Result<PgQueryResult> {
-    sqlx::query(SET_PASS_ACTIVE)
-        .bind(pass_id)
-        .bind(new_state)
-        .execute(&state.pg_pool)
-        .await
+    sqlx::query!(
+        r#"UPDATE passes
+SET active = $2
+WHERE pass_id = $1;"#,
+        pass_id,
+        new_state,
+    )
+    .execute(&state.pg_pool)
+    .await
 }
 
 pub async fn set_pass_guest_id(
@@ -183,9 +210,13 @@ pub async fn set_pass_guest_id(
     pass_id: i32,
     new_guest_id: i32,
 ) -> sqlx::Result<PgQueryResult> {
-    sqlx::query(SET_PASS_OWNER)
-        .bind(pass_id)
-        .bind(new_guest_id)
-        .execute(&state.pg_pool)
-        .await
+    sqlx::query!(
+        r#"UPDATE passes
+SET guest_id = $2
+WHERE pass_id = $1;"#,
+        pass_id,
+        new_guest_id,
+    )
+    .execute(&state.pg_pool)
+    .await
 }

@@ -209,7 +209,7 @@ pub async fn log_visit(
             insert_visit(&state, pass_id).await?;
             pass.remaining_uses
         }
-        "Punch" | "Facial" => Some(use_pass(&state, pass_id).await?),
+        "Punch" | "Facial" => use_pass(&state, pass_id).await?,
         _ => return Err(ToastError::new("Log visit", "Invalid pass type")),
     };
     Ok(remaining_uses)
@@ -280,7 +280,7 @@ pub async fn add_visits(
 pub async fn add_time(
     state: State<'_, AppState>,
     add_time_data: AddTimeFormData,
-) -> Result<i64, ToastError> {
+) -> Result<Option<i64>, ToastError> {
     let amount_paid_cents = add_time_data
         .clone()
         .amount_paid
@@ -288,7 +288,7 @@ pub async fn add_time(
         .and_then(|amount_opt| amount_opt.ok().map(|amount| (amount * 100.0) as i32));
     let new_expiration_time =
         increase_expiration(&state, &add_time_data, amount_paid_cents).await?;
-    Ok(new_expiration_time.unix_timestamp() * 1000)
+    Ok(new_expiration_time.map(|utime| utime.unix_timestamp() * 1000))
 }
 
 #[tauri::command(async)]
@@ -354,7 +354,7 @@ pub fn was_config_error(state: State<'_, AppState>) -> bool {
 }
 
 #[tauri::command(async)]
-pub async fn delete_pass(state: State<'_, AppState>, pass_id: i32) -> Result<u64, ToastError> {
+pub async fn delete_pass(state: State<'_, AppState>, pass_id: i32) -> Result<(), ToastError> {
     Ok(delete_pass_permanent(&state, pass_id).await?)
 }
 
