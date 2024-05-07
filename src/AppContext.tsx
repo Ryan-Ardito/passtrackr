@@ -13,7 +13,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Toast } from "primereact/toast";
 import "primeicons/primeicons.css";
 
-import { PassData, Screen, blankPass, SidePanel, GuestData } from "./types";
+import { SearchPassData, Screen, blankPass, SidePanel, GuestData } from "./types";
 import { searchPasses } from "./api/api";
 import { showMessage } from "./utils/toast";
 import { message } from "@tauri-apps/api/dialog";
@@ -24,13 +24,13 @@ const MIN_SEARCH_LENGTH = 2;
 interface AppContextProps {
   screen: Screen;
   setScreen: Dispatch<SetStateAction<Screen>>;
-  selectedPass: PassData;
-  setSelectedPass: Dispatch<SetStateAction<PassData>>;
+  selectedPass: SearchPassData;
+  setSelectedPass: Dispatch<SetStateAction<SearchPassData>>;
   search: string;
   setSearch: Dispatch<SetStateAction<string>>;
   panel: SidePanel;
   setPanel: Dispatch<SetStateAction<SidePanel>>;
-  searchData: PassData[];
+  searchData: SearchPassData[];
   guestData: GuestData | undefined;
   isSearchFetching: boolean;
   searchStatus: "error" | "success" | "pending";

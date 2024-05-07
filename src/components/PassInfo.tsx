@@ -1,5 +1,5 @@
 import { Panel } from "primereact/panel";
-import { PassData } from "../types";
+import { SearchPassData } from "../types";
 import { Divider } from "primereact/divider";
 
 const MONTH_IN_SECONDS = 2629800;
@@ -51,7 +51,7 @@ const FreePassText = () => {
 };
 
 interface PassInfoProps {
-  selectedPass: PassData;
+  selectedPass: SearchPassData;
   // isLoading: boolean;
   // error: Error | null;
 }

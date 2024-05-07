@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { ScrollPanel } from "primereact/scrollpanel";
 import { Divider } from "primereact/divider";
 
-import { PassData, SidePanel, addPassTimeDropOpts, payMethods } from "../types";
+import { SearchPassData, SidePanel, addPassTimeDropOpts, payMethods } from "../types";
 import { FormikDropdown, FormikField } from "../components/FormInput";
 import { addTimeToPass } from "../api/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -32,7 +32,7 @@ const validationSchema = Yup.object().shape({
   signature: Yup.string().required("Required").max(24, "Invalid"),
 });
 
-export const AddPassTime = ({ passData }: { passData: PassData }) => {
+export const AddPassTime = ({ passData }: { passData: SearchPassData }) => {
   const { setSelectedPass, setPanel, toast, search } = useAppContext();
   const queryClient = useQueryClient();
 

@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { ScrollPanel } from "primereact/scrollpanel";
 import { Divider } from "primereact/divider";
 
-import { PassData, SidePanel, numAddVisits, payMethods } from "../types";
+import { SearchPassData, SidePanel, numAddVisits, payMethods } from "../types";
 import { FormikDropdown, FormikField } from "../components/FormInput";
 import { addVisits } from "../api/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -34,7 +34,7 @@ const validationSchema = Yup.object().shape({
   signature: Yup.string().required("Required").max(24, "Invalid"),
 });
 
-export const AddVisits = ({ passData }: { passData: PassData }) => {
+export const AddVisits = ({ passData }: { passData: SearchPassData }) => {
   const { setSelectedPass, setPanel, toast, search } = useAppContext();
   const queryClient = useQueryClient();
 

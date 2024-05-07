@@ -1,4 +1,4 @@
-import { PassData, blankPass } from "../types";
+import { SearchPassData, blankPass } from "../types";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useAppContext } from "../AppContext";
@@ -13,7 +13,7 @@ const RemainingIcon = ({ expires_at }: { expires_at: number }) => {
   );
 };
 
-const remainingBodyTemplate = (rowData: PassData) => {
+const remainingBodyTemplate = (rowData: SearchPassData) => {
   return (
     <>
       {!rowData.active ? (
@@ -38,9 +38,9 @@ const remainingBodyTemplate = (rowData: PassData) => {
   );
 };
 
-const passtypeTemplate = (rowData: PassData) => rowData?.passtype?.name;
+const passtypeTemplate = (rowData: SearchPassData) => rowData?.passtype?.name;
 
-const passholderTemplate = (rowData: PassData) => {
+const passholderTemplate = (rowData: SearchPassData) => {
   return `${rowData?.first_name} ${rowData?.last_name}`;
 };
 

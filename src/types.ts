@@ -62,7 +62,7 @@ export interface PaymentRow {
   created_at: number;
 }
 
-export interface PassData {
+export interface SearchPassData {
   pass_id: number | undefined;
   guest_id: number | undefined;
   first_name: string;
@@ -71,6 +71,7 @@ export interface PassData {
   remaining_uses: number | undefined;
   passtype: PassType | undefined;
   active: boolean;
+  favorite: boolean;
   creator: string;
   expires_at: number | undefined;
   created_at: number | undefined;
@@ -87,7 +88,7 @@ export interface GuestData {
   created_at: number;
 }
 
-export const blankPass: PassData = {
+export const blankPass: SearchPassData = {
   pass_id: undefined,
   guest_id: undefined,
   first_name: "",
@@ -96,6 +97,7 @@ export const blankPass: PassData = {
   remaining_uses: undefined,
   passtype: undefined,
   active: false,
+  favorite: false,
   creator: "",
   expires_at: undefined,
   created_at: undefined,
