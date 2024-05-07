@@ -1,6 +1,12 @@
 import { invoke } from "@tauri-apps/api/tauri";
 
-import { GuestData, SearchPassData, PaymentRow, VisitsRow, PassType } from "../types";
+import {
+  GuestData,
+  SearchPassData,
+  PaymentRow,
+  VisitsRow,
+  PassType,
+} from "../types";
 
 interface AddVisitsFormData {
   pass_id: number | undefined;
@@ -62,6 +68,11 @@ interface EditPassNotesData {
   passId: number | undefined;
 }
 
+interface SetPassFavoriteData {
+  favorite: boolean;
+  passId: number;
+}
+
 export const editGuest = async (
   guestData: EditGuestFormData
 ): Promise<number> => {
@@ -73,6 +84,19 @@ export const editPassNotes = async (data: EditPassNotesData): Promise<void> => {
     throw { name: "Edit pass", message: "No pass ID" };
   }
   return invoke("edit_pass_notes", { notes: data.notes, passId: data.passId });
+};
+
+export const setPassFavorite = async (
+  data: SetPassFavoriteData
+): Promise<void> => {
+  return invoke("set_pass_favorite", {
+    favorite: data.favorite,
+    passId: data.passId,
+  });
+};
+
+export const getFavoritePasses = async (): Promise<SearchPassData[]> => {
+  return invoke("favorite_passes", {});
 };
 
 export const searchPasses = async (
@@ -166,7 +190,9 @@ export const createPass = async (passData: CreatePassData): Promise<string> => {
   return invoke("create_pass", { passData });
 };
 
-export const setPassActive = async (passData: SearchPassData): Promise<string> => {
+export const setPassActive = async (
+  passData: SearchPassData
+): Promise<string> => {
   return invoke("toggle_pass_active", { passData });
 };
 

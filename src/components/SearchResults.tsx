@@ -41,7 +41,12 @@ const remainingBodyTemplate = (rowData: SearchPassData) => {
 const passtypeTemplate = (rowData: SearchPassData) => rowData?.passtype?.name;
 
 const passholderTemplate = (rowData: SearchPassData) => {
-  return `${rowData?.first_name} ${rowData?.last_name}`;
+  return (
+    <>
+      {rowData.favorite && <i className="pi pi-sparkles" />} {rowData?.first_name}{" "}
+      {rowData?.last_name}
+    </>
+  );
 };
 
 export function SearchResults() {

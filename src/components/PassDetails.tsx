@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BackRevert, CrudButton } from "./Buttons";
-import { ViewPassData, editPassNotes } from "../api/api";
+import { ViewPassData, editPassNotes, setPassFavorite } from "../api/api";
 import { Panel } from "primereact/panel";
 import { GuestData } from "../types";
 import { InputTextarea } from "primereact/inputtextarea";
@@ -29,7 +29,7 @@ export function PassDetails({
   prevPage,
 }: PassDetailsProps) {
   const [fieldChange, setFieldChange] = useState(false);
-  const { toast } = useAppContext();
+  const { search, toast } = useAppContext();
   const queryClient = useQueryClient();
 
   const { mutate: mutateEditPassNotes, isPending: isEditPassPending } =
@@ -48,6 +48,23 @@ export function PassDetails({
         showMessage("Edit Pass", "Success!", toast, "success");
         setFieldChange(false);
         formik.setSubmitting(false);
+      },
+    });
+
+  const { mutate: mutateSetPassFavorite, isPending: isSetPassFavoritePending } =
+    useMutation({
+      mutationKey: ["setPassFavorite", passData?.pass_id],
+      mutationFn: setPassFavorite,
+      onError: (error) => {
+        showMessage(error.name, error.message, toast, "warn");
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["pass", passData?.pass_id],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["search", search],
+        });
       },
     });
 
@@ -99,17 +116,30 @@ export function PassDetails({
         disabled={!fieldChange}
       />
       <Panel>
-        <div>
+        {passData && (
           <div>
-            <Checkbox checked /> <b>Favorite</b>
+            <div>
+              <Checkbox
+                checked={passData.favorite}
+                disabled={isSetPassFavoritePending}
+                onClick={(e) => {
+                  e.preventDefault();
+                  mutateSetPassFavorite({
+                    favorite: !passData.favorite,
+                    passId: passData.pass_id,
+                  });
+                }}
+              />{" "}
+              <b>Favorite</b>
+            </div>
+            {passData.remaining_uses != undefined && (
+              <RemainingUsesText remaining_uses={passData.remaining_uses} />
+            )}
+            {passData.expires_at && (
+              <ExpirationText expires_at={passData.expires_at} />
+            )}
           </div>
-          {passData?.remaining_uses != undefined && (
-            <RemainingUsesText remaining_uses={passData.remaining_uses} />
-          )}
-          {passData?.expires_at && (
-            <ExpirationText expires_at={passData.expires_at} />
-          )}
-        </div>
+        )}
         <div style={{ wordWrap: "break-word" }}>
           Created {createdAt} by {passData?.creator}
         </div>
