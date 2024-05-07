@@ -70,12 +70,12 @@ export function ViewPass({ prevPage }: { prevPage: () => void }) {
             className="flex-col"
             style={{ paddingBottom: "40px" }}
           >
-            {passData && guestData ? (
-              <PassDetails {...{ passData, guestData, prevPage }} />
-            ) : (
+            {isPassLoading || isGuestLoading || !passData ? (
               <EditPassTemplate
                 {...{ isPassLoading, isGuestLoading, prevPage }}
               />
+            ) : (
+              <PassDetails {...{ passData, guestData, prevPage }} />
             )}
           </div>
         </ScrollPanel>

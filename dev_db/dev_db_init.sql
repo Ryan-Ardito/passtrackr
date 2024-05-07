@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS passes (
     guest_id INT NOT NULL REFERENCES guests(guest_id),
     passtype VARCHAR(50) NOT NULL,
     remaining_uses INT DEFAULT NULL CHECK (remaining_uses IS NULL OR remaining_uses >= 0),
-    active BOOLEAN NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
     notes TEXT,
     creator VARCHAR(50) NOT NULL,
     expires_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
@@ -44,5 +44,5 @@ CREATE TABLE IF NOT EXISTS visits (
 COPY guests (guest_id, first_name, last_name, email, town, notes, creator)
 FROM '/app/dummy_guests.csv' DELIMITER ',' CSV;
 
-COPY passes (guest_id, passtype, remaining_uses, active, notes, expires_at, creator)
+COPY passes (guest_id, passtype, remaining_uses, notes, expires_at, creator)
 FROM '/app/dummy_passes.csv' DELIMITER ',' CSV;

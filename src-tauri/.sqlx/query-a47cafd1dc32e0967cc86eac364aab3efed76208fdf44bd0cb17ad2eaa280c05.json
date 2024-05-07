@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "INSERT\nINTO passes (guest_id, passtype, remaining_uses, active, expires_at, creator)\nVALUES ($1, $2, $3, $4, $5, $6)\nRETURNING *",
+  "query": "INSERT\nINTO passes (guest_id, passtype, remaining_uses, expires_at, creator)\nVALUES ($1, $2, $3, $4, $5)\nRETURNING *",
   "describe": {
     "columns": [
       {
@@ -54,7 +54,6 @@
         "Int4",
         "Varchar",
         "Int4",
-        "Bool",
         "Timestamptz",
         "Varchar"
       ]
@@ -71,5 +70,5 @@
       false
     ]
   },
-  "hash": "3414d9143a6ebbd9d43c086c0c2c9f4e435ab059f5cc018f2e68c9b6bcc4bdc3"
+  "hash": "a47cafd1dc32e0967cc86eac364aab3efed76208fdf44bd0cb17ad2eaa280c05"
 }

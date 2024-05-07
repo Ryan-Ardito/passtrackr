@@ -61,7 +61,6 @@ class PunchPass:
     guest_id: int
     passtype: str
     remaining_uses: int
-    active: bool
     notes: str
     expires_at: int
     creator: str
@@ -117,7 +116,6 @@ def generate_passes(guests: list[Guest], first_names: list[str]) -> list[PunchPa
         if passtype == "Facial":
             remaining_uses = random.choice((3, 6))
 
-        active = True
         notes = NOTES
 
         expires_at = ""
@@ -135,7 +133,6 @@ def generate_passes(guests: list[Guest], first_names: list[str]) -> list[PunchPa
             guest_id,
             passtype,
             remaining_uses,
-            active,
             notes,
             expires_at,
             creator,

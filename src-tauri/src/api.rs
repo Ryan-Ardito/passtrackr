@@ -338,7 +338,6 @@ pub async fn create_pass(
         guest_id,
         passtype: pass_data.passtype.code.pass_type_code().to_string(),
         remaining_uses,
-        active: true,
         payment_method: pass_data.pay_method.map(|method| method.code),
         amount_paid_cents,
         expires_at,

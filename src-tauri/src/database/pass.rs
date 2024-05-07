@@ -15,7 +15,6 @@ pub struct NewPassData {
     pub guest_id: i32,
     pub passtype: String,
     pub remaining_uses: Option<i32>,
-    pub active: bool,
     pub payment_method: Option<String>,
     pub amount_paid_cents: Option<i32>,
     pub expires_at: Option<OffsetDateTime>,
@@ -149,13 +148,12 @@ pub async fn insert_pass(state: &State<'_, AppState>, data: &NewPassData) -> sql
     let row = sqlx::query_as!(
         GetPassData,
         r#"INSERT
-INTO passes (guest_id, passtype, remaining_uses, active, expires_at, creator)
-VALUES ($1, $2, $3, $4, $5, $6)
+INTO passes (guest_id, passtype, remaining_uses, expires_at, creator)
+VALUES ($1, $2, $3, $4, $5)
 RETURNING *"#,
         data.guest_id,
         data.passtype,
         data.remaining_uses,
-        data.active,
         data.expires_at,
         data.creator,
     )
