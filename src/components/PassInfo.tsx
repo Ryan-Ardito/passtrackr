@@ -8,7 +8,9 @@ interface RemainingUsesTextProps {
   remaining_uses: number;
 }
 
-const RemainingUsesText = ({ remaining_uses }: RemainingUsesTextProps) => {
+export const RemainingUsesText = ({
+  remaining_uses,
+}: RemainingUsesTextProps) => {
   const color =
     remaining_uses === 0
       ? "red"
@@ -27,7 +29,7 @@ interface ExpirationTextProps {
   expires_at: number;
 }
 
-const ExpirationText = ({ expires_at }: ExpirationTextProps) => {
+export const ExpirationText = ({ expires_at }: ExpirationTextProps) => {
   const expiresAt = new Date(expires_at).toLocaleDateString();
   const color =
     Date.now() + MONTH_IN_SECONDS * 1000 > expires_at
@@ -46,7 +48,7 @@ const ExpirationText = ({ expires_at }: ExpirationTextProps) => {
   );
 };
 
-const FreePassText = () => {
+export const FreePassText = () => {
   return <b style={{ color: "green" }}>Free forever!</b>;
 };
 

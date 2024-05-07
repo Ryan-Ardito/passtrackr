@@ -9,6 +9,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
 import * as Yup from "yup";
+import { Checkbox } from "primereact/checkbox";
+import { ExpirationText, RemainingUsesText } from "./PassInfo";
 
 const validationSchema = Yup.object().shape({
   notes: Yup.string(),
@@ -98,17 +100,18 @@ export function PassDetails({
       />
       <Panel>
         <div>
-          {passData?.expires_at &&
-            (Date.now() > passData.expires_at ? (
-              <>
-                <b style={{ color: "red" }}>Expired</b> {expiresAt}
-              </>
-            ) : (
-              `Expires ${expiresAt}`
-            ))}
-          <div style={{ wordWrap: "break-word" }}>
-            Created {createdAt} by {passData?.creator}
+          <div>
+            <Checkbox checked /> <b>Favorite</b>
           </div>
+          {passData?.remaining_uses != undefined && (
+            <RemainingUsesText remaining_uses={passData.remaining_uses} />
+          )}
+          {passData?.expires_at && (
+            <ExpirationText expires_at={passData.expires_at} />
+          )}
+        </div>
+        <div style={{ wordWrap: "break-word" }}>
+          Created {createdAt} by {passData?.creator}
         </div>
       </Panel>
       <Panel header={`Owner ${guestData?.guest_id}`}>
