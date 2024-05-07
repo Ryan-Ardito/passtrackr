@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": " SELECT payments.*\nFROM payments\nJOIN passes ON passes.pass_id = payments.pass_id\nJOIN guests ON guests.guest_id = passes.guest_id\nWHERE guests.guest_id = $1\nORDER BY payments.created_at DESC;",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "payment_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "pass_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 2,
+        "name": "payment_method",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "amount_paid_cents",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 4,
+        "name": "creator",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "d65f22527e232f1b7b953bbc40dbb6b83201b4c2a563ed48d69d9bb8f98f56a6"
+}

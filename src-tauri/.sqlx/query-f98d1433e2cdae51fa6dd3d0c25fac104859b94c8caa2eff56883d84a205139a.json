@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT\nINTO payments (pass_id, payment_method, amount_paid_cents, creator)\nVALUES ($1, $2, $3, $4)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Int4",
+        "Varchar",
+        "Int4",
+        "Varchar"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "f98d1433e2cdae51fa6dd3d0c25fac104859b94c8caa2eff56883d84a205139a"
+}

@@ -1,0 +1,75 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT\nINTO passes (guest_id, passtype, remaining_uses, active, expires_at, creator)\nVALUES ($1, $2, $3, $4, $5, $6)\nRETURNING *",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "pass_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "guest_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 2,
+        "name": "passtype",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "remaining_uses",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 4,
+        "name": "active",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 5,
+        "name": "notes",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 6,
+        "name": "creator",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "expires_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 8,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4",
+        "Varchar",
+        "Int4",
+        "Bool",
+        "Timestamptz",
+        "Varchar"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "3414d9143a6ebbd9d43c086c0c2c9f4e435ab059f5cc018f2e68c9b6bcc4bdc3"
+}

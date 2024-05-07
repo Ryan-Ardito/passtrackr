@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * FROM payments WHERE pass_id = $1 ORDER BY created_at DESC;",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "payment_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "pass_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 2,
+        "name": "payment_method",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "amount_paid_cents",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 4,
+        "name": "creator",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "00ca885524f46fa0dac4db6a8494f5608e67beb43e8d57ae9f17cd2e099029e9"
+}

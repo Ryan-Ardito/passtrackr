@@ -1,0 +1,27 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT\nINTO guests (first_name, last_name, town, email, notes, creator)\nVALUES ($1, $2, $3, $4, $5, $6)\nRETURNING guest_id",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "guest_id",
+        "type_info": "Int4"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Text",
+        "Varchar"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "98fe2ca5629ca4e61a3c2ce810c4e45825bdf7de75a75ccdef42895533724d17"
+}

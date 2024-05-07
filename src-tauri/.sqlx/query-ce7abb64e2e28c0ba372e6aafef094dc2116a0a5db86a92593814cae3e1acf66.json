@@ -1,0 +1,34 @@
+{
+  "db_name": "PostgreSQL",
+  "query": " SELECT visits.*\nFROM visits\nJOIN passes ON passes.pass_id = visits.pass_id\nJOIN guests ON guests.guest_id = passes.guest_id\nWHERE guests.guest_id = $1\nORDER BY visits.created_at DESC;",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "visit_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "pass_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 2,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "ce7abb64e2e28c0ba372e6aafef094dc2116a0a5db86a92593814cae3e1acf66"
+}

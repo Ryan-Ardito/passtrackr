@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "DELETE FROM payments WHERE pass_id = $1;",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "0b8c56502ccb6b9bb40feb3fe6fa2e37693c67e9c815c9afd80657f4ef5afd2e"
+}

@@ -1,0 +1,71 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE passes\nSET expires_at = CASE \n    WHEN expires_at IS NOT NULL\n    THEN GREATEST(expires_at, CURRENT_TIMESTAMP) + ($2 * INTERVAL '1 day')\nEND\nWHERE pass_id = $1\nRETURNING *;",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "pass_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "guest_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 2,
+        "name": "passtype",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "remaining_uses",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 4,
+        "name": "active",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 5,
+        "name": "notes",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 6,
+        "name": "creator",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "expires_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 8,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4",
+        "Float8"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "5355d9fed6f679ba09cbf43221416844d30cd9e0544055792536525d073ad4d2"
+}

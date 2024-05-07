@@ -1,0 +1,70 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE passes\nSET remaining_uses = CASE\n    WHEN remaining_uses > 0 THEN remaining_uses - 1\nEND\nWHERE pass_id = $1\nRETURNING *;",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "pass_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "guest_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 2,
+        "name": "passtype",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "remaining_uses",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 4,
+        "name": "active",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 5,
+        "name": "notes",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 6,
+        "name": "creator",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "expires_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 8,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "6d99726a9623f4170a2318da1d6c3c90d5ee0570397528e0931cd9e69beec6d4"
+}
