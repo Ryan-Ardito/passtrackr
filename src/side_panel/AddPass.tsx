@@ -94,7 +94,7 @@ export const AddPass = () => {
         collapsed={formik.values.guest_id !== undefined}
         header={
           formik.values.guest_id
-            ? `Guest ${formik.values.guest_id}`
+            ? `${formik.values.last_name} ${formik.values.guest_id}`
             : "New Guest"
         }
       >
