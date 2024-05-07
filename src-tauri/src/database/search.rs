@@ -5,9 +5,7 @@ use time::OffsetDateTime;
 
 use crate::AppState;
 
-use super::queries::SEARCH_ALL;
-
-const SEARCH_RESPONSE_LIMIT: i32 = 500;
+const SEARCH_RESPONSE_LIMIT: i64 = 500;
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
 pub struct PassSearchResponse {
@@ -28,9 +26,34 @@ pub async fn search_all_passes(
     state: &State<'_, AppState>,
     search_term: &str,
 ) -> sqlx::Result<Vec<PassSearchResponse>> {
-    sqlx::query_as(SEARCH_ALL)
-        .bind(format!("{search_term}%"))
-        .bind(SEARCH_RESPONSE_LIMIT)
-        .fetch_all(&state.pg_pool)
-        .await
+    sqlx::query_as!(
+        PassSearchResponse,
+        r#"SELECT 
+    p.pass_id,
+    p.guest_id,
+    g.first_name,
+    g.last_name,
+    g.town,
+    p.remaining_uses,
+    p.passtype,
+    p.active,
+    p.creator,
+    p.expires_at,
+    p.created_at
+FROM 
+    passes AS p
+JOIN 
+    guests AS g ON p.guest_id = g.guest_id
+WHERE 
+    first_name || ' ' || last_name ILIKE $1
+    OR
+    g.last_name ILIKE $1
+ORDER BY 
+    g.last_name, g.first_name, g.guest_id, p.pass_id
+LIMIT $2;"#,
+        format!("{search_term}%"),
+        SEARCH_RESPONSE_LIMIT,
+    )
+    .fetch_all(&state.pg_pool)
+    .await
 }
