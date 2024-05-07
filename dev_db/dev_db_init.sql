@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS passes (
     passtype VARCHAR(50) NOT NULL,
     remaining_uses INT DEFAULT NULL CHECK (remaining_uses IS NULL OR remaining_uses >= 0),
     active BOOLEAN NOT NULL DEFAULT TRUE,
+    favorite BOOLEAN NOT NULL DEFAULT FALSE,
     notes TEXT,
     creator VARCHAR(50) NOT NULL,
     expires_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
