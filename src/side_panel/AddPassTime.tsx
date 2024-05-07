@@ -127,8 +127,8 @@ export const AddPassTime = ({ passData }: { passData: PassData }) => {
           />
         </div>
         <Divider style={{ margin: 6 }} />
-        {passData.pass_id && <PassInfo selectedPass={passData} />}
       </form>
+      {passData.pass_id && <PassInfo selectedPass={passData} />}
     </ScrollPanel>
   );
 };
