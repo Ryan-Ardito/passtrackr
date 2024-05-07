@@ -7,11 +7,7 @@ import { Divider } from "primereact/divider";
 import { PassData, SidePanel, addPassTimeDropOpts, payMethods } from "../types";
 import { FormikDropdown, FormikField } from "../components/FormInput";
 import { addTimeToPass } from "../api/api";
-import {
-  InvalidateQueryFilters,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
 import { CrudButton } from "../components/Buttons";
@@ -49,23 +45,12 @@ export const AddPassTime = ({ passData }: { passData: PassData }) => {
     },
     onSuccess: (expires_at) => {
       if (expires_at == undefined) {
-        showMessage(
-          "Database error",
-          "Corrupted pass; no expiration",
-          toast,
-          "error"
-        );
+        showMessage("Data error", "Pass has no expiration", toast, "error");
         formik.setSubmitting(false);
         return;
       }
-      queryClient.invalidateQueries([
-        "search",
-        search,
-      ] as InvalidateQueryFilters);
-      setSelectedPass({
-        ...passData,
-        expires_at,
-      });
+      queryClient.invalidateQueries({ queryKey: ["search", search] });
+      setSelectedPass({ ...passData, expires_at });
       showMessage("Add Time", "Success!", toast, "success");
       setPanel(SidePanel.PassInteraction);
     },

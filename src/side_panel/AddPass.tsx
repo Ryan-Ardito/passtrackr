@@ -6,11 +6,7 @@ import { Divider } from "primereact/divider";
 import { SidePanel, passtypes, payMethods } from "../types";
 import { FormikDropdown, FormikField } from "../components/FormInput";
 import { createPass } from "../api/api";
-import {
-  InvalidateQueryFilters,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
 import { CrudButton } from "../components/Buttons";
@@ -50,10 +46,7 @@ export const AddPass = () => {
       formik.setSubmitting(false);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([
-        "search",
-        search,
-      ] as InvalidateQueryFilters);
+      queryClient.invalidateQueries({ queryKey: ["search", search] });
       showMessage("Create pass", "Success!", toast, "success");
       setPanel(SidePanel.PassInteraction);
     },

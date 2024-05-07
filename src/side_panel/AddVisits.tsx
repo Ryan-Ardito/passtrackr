@@ -7,11 +7,7 @@ import { Divider } from "primereact/divider";
 import { PassData, SidePanel, numAddVisits, payMethods } from "../types";
 import { FormikDropdown, FormikField } from "../components/FormInput";
 import { addVisits } from "../api/api";
-import {
-  InvalidateQueryFilters,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
 import { CrudButton } from "../components/Buttons";
@@ -50,14 +46,8 @@ export const AddVisits = ({ passData }: { passData: PassData }) => {
       formik.setSubmitting(false);
     },
     onSuccess: (remaining_uses) => {
-      queryClient.invalidateQueries([
-        "search",
-        search,
-      ] as InvalidateQueryFilters);
-      setSelectedPass({
-        ...passData,
-        remaining_uses,
-      });
+      queryClient.invalidateQueries({ queryKey: ["search", search] });
+      setSelectedPass({ ...passData, remaining_uses });
       showMessage("Add Visits", "Success!", toast, "success");
       setPanel(SidePanel.PassInteraction);
     },

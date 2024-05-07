@@ -1,8 +1,4 @@
-import {
-  InvalidateQueryFilters,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Divider } from "primereact/divider";
 
@@ -23,14 +19,8 @@ export const PassControl = () => {
     mutationFn: logVisit,
     onError: (error) => showMessage(error.name, error.message, toast, "warn"),
     onSuccess: (remaining_uses) => {
-      queryClient.invalidateQueries([
-        "search",
-        search,
-      ] as InvalidateQueryFilters);
-      setSelectedPass({
-        ...selectedPass,
-        remaining_uses,
-      });
+      queryClient.invalidateQueries({ queryKey: ["search", search] });
+      setSelectedPass({ ...selectedPass, remaining_uses });
       showMessage("Log visit", "Success!", toast, "success");
     },
   });

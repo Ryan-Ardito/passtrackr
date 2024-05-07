@@ -1,8 +1,4 @@
-import {
-  InvalidateQueryFilters,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Divider } from "primereact/divider";
 
@@ -25,14 +21,8 @@ export const ViewPass = () => {
       mutationFn: setPassActive,
       onError: (error) => showMessage(error.name, error.message, toast, "warn"),
       onSuccess: () => {
-        queryClient.invalidateQueries([
-          "search",
-          search,
-        ] as InvalidateQueryFilters);
-        setSelectedPass({
-          ...selectedPass,
-          active: !selectedPass.active,
-        });
+        queryClient.invalidateQueries({ queryKey: ["search", search] });
+        setSelectedPass({ ...selectedPass, active: !selectedPass.active });
       },
     });
 
@@ -42,10 +32,7 @@ export const ViewPass = () => {
       mutationFn: deletePass,
       onError: (error) => showMessage(error.name, error.message, toast, "warn"),
       onSuccess: () => {
-        queryClient.invalidateQueries([
-          "search",
-          search,
-        ] as InvalidateQueryFilters);
+        queryClient.invalidateQueries({ queryKey: ["search", search] });
         setSelectedPass(blankPass);
         showMessage("Delete pass", "Success!", toast, "success");
       },

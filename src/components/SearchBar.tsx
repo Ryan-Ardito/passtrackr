@@ -1,7 +1,7 @@
 import { InputText } from "primereact/inputtext";
 import { useAppContext } from "../AppContext";
 import { Button } from "primereact/button";
-import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { FormEvent } from "react";
 import { debounce } from "lodash";
 
@@ -12,7 +12,7 @@ export function SearchBar() {
 
   const handleSearchButton = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    queryClient.invalidateQueries(["search", search] as InvalidateQueryFilters);
+    queryClient.invalidateQueries({ queryKey: ["search", search] });
   };
 
   return (

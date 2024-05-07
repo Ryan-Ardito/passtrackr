@@ -5,11 +5,7 @@ import { Panel } from "primereact/panel";
 import { GuestData } from "../types";
 import { InputTextarea } from "primereact/inputtextarea";
 import { useFormik } from "formik";
-import {
-  InvalidateQueryFilters,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
 import * as Yup from "yup";
@@ -43,10 +39,9 @@ export function PassDetails({
         formik.setSubmitting(false);
       },
       onSuccess: () => {
-        queryClient.invalidateQueries([
-          "pass",
-          passData?.pass_id,
-        ] as InvalidateQueryFilters);
+        queryClient.invalidateQueries({
+          queryKey: ["pass", passData?.pass_id],
+        });
         prevPage();
         showMessage("Edit Pass", "Success!", toast, "success");
         setFieldChange(false);
@@ -117,7 +112,9 @@ export function PassDetails({
         </div>
       </Panel>
       <Panel header={`Owner ${guestData?.guest_id}`}>
-        <div>{guestData?.first_name} {guestData?.last_name}</div>
+        <div>
+          {guestData?.first_name} {guestData?.last_name}
+        </div>
         {<div>{guestData?.town}</div>}
       </Panel>
     </form>

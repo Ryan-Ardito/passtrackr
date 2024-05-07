@@ -1,10 +1,6 @@
 import * as Yup from "yup";
 import { useAppContext } from "../AppContext";
-import {
-  InvalidateQueryFilters,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { editGuest } from "../api/api";
 import { InputTextarea } from "primereact/inputtextarea";
 import { BackRevert, CrudButton } from "./Buttons";
@@ -42,10 +38,10 @@ export function GuestInfo({ guestData, prevPage }: GuestInfoProps) {
         formik.setSubmitting(false);
       },
       onSuccess: () => {
-        queryClient.invalidateQueries([
-          "search",
-          search,
-        ] as InvalidateQueryFilters);
+        queryClient.invalidateQueries({
+          queryKey: ["guest", selectedPass.guest_id],
+        });
+        queryClient.invalidateQueries({ queryKey: ["search", search] });
         setSelectedPass({
           ...selectedPass,
           first_name: formik.values.first_name,
