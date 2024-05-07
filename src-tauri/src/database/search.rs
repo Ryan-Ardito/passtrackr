@@ -17,6 +17,7 @@ pub struct PassSearchResponse {
     pub remaining_uses: Option<i32>,
     pub passtype: String,
     pub active: bool,
+    pub favorite: bool,
     pub creator: String,
     pub expires_at: Option<OffsetDateTime>,
     pub created_at: OffsetDateTime,
@@ -37,6 +38,7 @@ pub async fn search_all_passes(
     p.remaining_uses,
     p.passtype,
     p.active,
+    p.favorite,
     p.creator,
     p.expires_at,
     p.created_at

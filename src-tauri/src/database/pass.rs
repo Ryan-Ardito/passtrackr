@@ -28,6 +28,7 @@ pub struct GetPassData {
     pub passtype: String,
     pub remaining_uses: Option<i32>,
     pub active: bool,
+    pub favorite: bool,
     pub notes: Option<String>,
     pub creator: String,
     pub expires_at: Option<OffsetDateTime>,
