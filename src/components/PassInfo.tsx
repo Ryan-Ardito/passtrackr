@@ -46,6 +46,10 @@ const ExpirationText = ({ expires_at }: ExpirationTextProps) => {
   );
 };
 
+const FreePassText = () => {
+  return <b style={{ color: "green" }}>Free forever!</b>;
+};
+
 interface PassInfoProps {
   selectedPass: PassData;
   // isLoading: boolean;
@@ -67,6 +71,7 @@ export const PassInfo = ({ selectedPass }: PassInfoProps) => {
       header={`${selectedPass.passtype?.name} Pass ${selectedPass.pass_id}`}
     >
       <div>
+        {selectedPass.passtype?.code == "Free" && <FreePassText />}
         {selectedPass.remaining_uses != undefined && (
           <RemainingUsesText remaining_uses={selectedPass.remaining_uses} />
         )}
@@ -75,7 +80,10 @@ export const PassInfo = ({ selectedPass }: PassInfoProps) => {
         )}
       </div>
       <Divider style={{ margin: "12px" }} />
-      <div>Owner ID: {selectedPass.guest_id}</div>
+      <div>
+        Held by {selectedPass.first_name} {selectedPass.last_name}{" "}
+        {selectedPass.guest_id}
+      </div>
       <div style={{ wordWrap: "break-word" }}>
         Created {createdAt} by {selectedPass.creator}
       </div>
