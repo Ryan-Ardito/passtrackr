@@ -30,21 +30,26 @@
       },
       {
         "ordinal": 5,
+        "name": "favorite",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 6,
         "name": "notes",
         "type_info": "Text"
       },
       {
-        "ordinal": 6,
+        "ordinal": 7,
         "name": "creator",
         "type_info": "Varchar"
       },
       {
-        "ordinal": 7,
+        "ordinal": 8,
         "name": "expires_at",
         "type_info": "Timestamptz"
       },
       {
-        "ordinal": 8,
+        "ordinal": 9,
         "name": "created_at",
         "type_info": "Timestamptz"
       }
@@ -59,6 +64,7 @@
       false,
       false,
       true,
+      false,
       false,
       true,
       false,
