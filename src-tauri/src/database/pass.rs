@@ -35,6 +35,22 @@ pub struct GetPassData {
     pub created_at: OffsetDateTime,
 }
 
+pub async fn update_pass_favorite(
+    state: &State<'_, AppState>,
+    new_state: bool,
+    pass_id: i32,
+) -> sqlx::Result<PgQueryResult> {
+    sqlx::query!(
+        r#"UPDATE passes
+SET favorite = $1
+WHERE pass_id = $2"#,
+        new_state,
+        pass_id,
+    )
+    .execute(&state.pg_pool)
+    .await
+}
+
 pub async fn get_pass_from_id(
     state: &State<'_, AppState>,
     pass_id: i32,

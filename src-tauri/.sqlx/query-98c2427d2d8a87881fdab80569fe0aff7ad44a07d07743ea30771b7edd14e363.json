@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT \n    p.pass_id,\n    p.guest_id,\n    g.first_name,\n    g.last_name,\n    g.town,\n    p.remaining_uses,\n    p.passtype,\n    p.active,\n    p.favorite,\n    p.creator,\n    p.expires_at,\n    p.created_at\nFROM \n    passes AS p\nJOIN \n    guests AS g ON p.guest_id = g.guest_id\nWHERE \n    first_name || ' ' || last_name ILIKE $1\n    OR\n    g.last_name ILIKE $1\nORDER BY \n    g.last_name, g.first_name, g.guest_id, p.pass_id\nLIMIT $2",
+  "query": "SELECT\n    p.pass_id,\n    p.guest_id,\n    g.first_name,\n    g.last_name,\n    g.town,\n    p.remaining_uses,\n    p.passtype,\n    p.active,\n    p.favorite,\n    p.creator,\n    p.expires_at,\n    p.created_at\nFROM\n    passes AS p\nJOIN\n    guests AS g ON p.guest_id = g.guest_id\nWHERE\n    p.favorite = TRUE\nORDER BY\n    g.last_name, g.first_name, g.guest_id, p.pass_id\nLIMIT $1",
   "describe": {
     "columns": [
       {
@@ -66,7 +66,6 @@
     ],
     "parameters": {
       "Left": [
-        "Text",
         "Int8"
       ]
     },
@@ -85,5 +84,5 @@
       false
     ]
   },
-  "hash": "3af517de50636bd9c72aec53143b7d83e6b3359415fe6be2c0a68c4eeea0429c"
+  "hash": "98c2427d2d8a87881fdab80569fe0aff7ad44a07d07743ea30771b7edd14e363"
 }

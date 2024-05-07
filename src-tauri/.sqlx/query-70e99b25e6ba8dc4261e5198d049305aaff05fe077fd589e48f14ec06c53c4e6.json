@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE passes\nSET favorite = $1\nWHERE pass_id = $2",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Bool",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "70e99b25e6ba8dc4261e5198d049305aaff05fe077fd589e48f14ec06c53c4e6"
+}

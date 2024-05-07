@@ -23,13 +23,12 @@ pub struct PassSearchResponse {
     pub created_at: OffsetDateTime,
 }
 
-pub async fn search_all_passes(
+pub async fn get_favorite_passes(
     state: &State<'_, AppState>,
-    search_term: &str,
 ) -> sqlx::Result<Vec<PassSearchResponse>> {
     sqlx::query_as!(
         PassSearchResponse,
-        r#"SELECT 
+        r#"SELECT
     p.pass_id,
     p.guest_id,
     g.first_name,
@@ -42,15 +41,49 @@ pub async fn search_all_passes(
     p.creator,
     p.expires_at,
     p.created_at
-FROM 
+FROM
     passes AS p
-JOIN 
+JOIN
     guests AS g ON p.guest_id = g.guest_id
-WHERE 
+WHERE
+    p.favorite = TRUE
+ORDER BY
+    g.last_name, g.first_name, g.guest_id, p.pass_id
+LIMIT $1"#,
+        SEARCH_RESPONSE_LIMIT,
+    )
+    .fetch_all(&state.pg_pool)
+    .await
+}
+
+pub async fn search_all_passes(
+    state: &State<'_, AppState>,
+    search_term: &str,
+) -> sqlx::Result<Vec<PassSearchResponse>> {
+    sqlx::query_as!(
+        PassSearchResponse,
+        r#"SELECT
+    p.pass_id,
+    p.guest_id,
+    g.first_name,
+    g.last_name,
+    g.town,
+    p.remaining_uses,
+    p.passtype,
+    p.active,
+    p.favorite,
+    p.creator,
+    p.expires_at,
+    p.created_at
+FROM
+    passes AS p
+JOIN
+    guests AS g ON p.guest_id = g.guest_id
+WHERE
     first_name || ' ' || last_name ILIKE $1
     OR
     g.last_name ILIKE $1
-ORDER BY 
+ORDER BY
     g.last_name, g.first_name, g.guest_id, p.pass_id
 LIMIT $2"#,
         format!("{search_term}%"),

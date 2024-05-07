@@ -14,8 +14,9 @@ mod database;
 
 use api::{
     add_time, add_visits, async_sleep, create_pass, delete_pass, edit_guest, edit_pass_notes,
-    get_guest, get_pass, get_payments, get_payments_from_pass, get_visits, get_visits_from_pass,
-    log_visit, search_passes, set_pass_owner, toggle_pass_active, was_config_error, ToastError,
+    favorite_passes, get_guest, get_pass, get_payments, get_payments_from_pass, get_visits,
+    get_visits_from_pass, log_visit, search_passes, set_pass_favorite, set_pass_owner,
+    toggle_pass_active, was_config_error, ToastError,
 };
 // use tauri::Manager;
 
@@ -101,6 +102,7 @@ async fn main() {
             get_payments_from_pass,
             create_pass,
             set_pass_owner,
+            set_pass_favorite,
             toggle_pass_active,
             delete_pass,
             get_guest,
@@ -111,6 +113,7 @@ async fn main() {
             add_visits,
             add_time,
             search_passes,
+            favorite_passes,
             async_sleep,
         ])
         .run(tauri::generate_context!())

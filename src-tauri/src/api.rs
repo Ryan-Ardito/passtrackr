@@ -8,14 +8,14 @@ use crate::{
         guest::{get_guest_from_id, insert_guest, update_guest, EditGuestData, GetGuestData},
         pass::{
             delete_pass_permanent, get_pass_from_id, increase_expiration, increase_remaining_uses,
-            insert_pass, set_pass_active, set_pass_guest_id, update_pass_notes, use_pass,
-            GetPassData, NewPassData,
+            insert_pass, set_pass_active, set_pass_guest_id, update_pass_favorite,
+            update_pass_notes, use_pass, GetPassData, NewPassData,
         },
         pay_visit::{
             get_payments_from_guest_id, get_payments_from_pass_id, get_visits_from_guest_id,
             get_visits_from_pass_id, insert_visit, PaymentRow, VisitRow,
         },
-        search::search_all_passes,
+        search::{get_favorite_passes, search_all_passes},
     },
     AppState,
 };
@@ -215,6 +215,16 @@ pub async fn log_visit(
         _ => return Err(ToastError::new("Log visit", "Invalid pass type")),
     };
     Ok(remaining_uses)
+}
+
+#[tauri::command(async)]
+pub async fn set_pass_favorite(
+    state: State<'_, AppState>,
+    favorite: bool,
+    pass_id: i32,
+) -> Result<(), ToastError> {
+    let _query_result = update_pass_favorite(&state, favorite, pass_id).await?;
+    Ok(())
 }
 
 #[tauri::command(async)]
@@ -552,6 +562,39 @@ pub async fn search_passes(
     search: &str,
 ) -> Result<Vec<SearchPassData>, ToastError> {
     let passes = search_all_passes(&state, search.trim()).await?;
+    let result = passes
+        .into_iter()
+        .map(|pass_data| {
+            let passtype_code = pass_data.passtype;
+            SearchPassData {
+                pass_id: pass_data.pass_id,
+                guest_id: pass_data.guest_id,
+                first_name: pass_data.first_name,
+                last_name: pass_data.last_name,
+                town: pass_data.town,
+                remaining_uses: pass_data.remaining_uses,
+                passtype: PassType {
+                    name: passtype_code.clone(),
+                    code: passtype_code.clone(),
+                },
+                active: pass_data.active,
+                favorite: pass_data.favorite,
+                creator: pass_data.creator,
+                expires_at: pass_data
+                    .expires_at
+                    .map(|unix_time| unix_time.unix_timestamp() * 1000),
+                created_at: pass_data.created_at.unix_timestamp() * 1000,
+            }
+        })
+        .collect();
+    Ok(result)
+}
+
+#[tauri::command(async)]
+pub async fn favorite_passes(
+    state: State<'_, AppState>,
+) -> Result<Vec<SearchPassData>, ToastError> {
+    let passes = get_favorite_passes(&state).await?;
     let result = passes
         .into_iter()
         .map(|pass_data| {
