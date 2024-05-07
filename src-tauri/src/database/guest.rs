@@ -5,8 +5,6 @@ use time::OffsetDateTime;
 
 use crate::{api::PassFormData, AppState};
 
-use super::queries::{EDIT_GUEST, GET_GUEST, INSERT_GUEST};
-
 #[derive(Deserialize, Serialize, Clone, FromRow)]
 pub struct GetGuestData {
     pub guest_id: i32,
@@ -30,40 +28,56 @@ pub struct EditGuestData {
 }
 
 pub async fn insert_guest(state: &State<'_, AppState>, data: &PassFormData) -> sqlx::Result<i32> {
-    let new_guest = sqlx::query(INSERT_GUEST)
-        .bind(&data.first_name)
-        .bind(&data.last_name)
-        .bind(&data.town)
-        .bind("")
-        .bind("")
-        .bind(&data.signature)
-        .fetch_one(&state.pg_pool)
-        .await?;
+    let new_guest = sqlx::query!(
+        r#"INSERT
+INTO guests (first_name, last_name, town, email, notes, creator)
+VALUES ($1, $2, $3, $4, $5, $6)
+RETURNING guest_id"#,
+        &data.first_name,
+        &data.last_name,
+        &data.town,
+        "",
+        "",
+        &data.signature,
+    )
+    .fetch_one(&state.pg_pool)
+    .await?;
 
-    new_guest.try_get(0)
+    Ok(new_guest.guest_id)
 }
 
 pub async fn get_guest_from_id(
     state: &State<'_, AppState>,
     guest_id: i32,
 ) -> sqlx::Result<GetGuestData> {
-    sqlx::query_as(GET_GUEST)
-        .bind(guest_id)
-        .fetch_one(&state.pg_pool)
-        .await
+    sqlx::query_as!(
+        GetGuestData,
+        r#"SELECT * FROM guests WHERE guest_id = $1"#,
+        guest_id,
+    )
+    .fetch_one(&state.pg_pool)
+    .await
 }
 
 pub async fn update_guest(
     state: &State<'_, AppState>,
     data: EditGuestData,
 ) -> sqlx::Result<PgQueryResult> {
-    sqlx::query(EDIT_GUEST)
-        .bind(&data.first_name)
-        .bind(&data.last_name)
-        .bind(&data.town)
-        .bind(&data.email)
-        .bind(&data.notes)
-        .bind(data.guest_id)
-        .execute(&state.pg_pool)
-        .await
+    sqlx::query!(
+        r#"UPDATE guests
+SET first_name = $1,
+    last_name = $2,
+    town = $3,
+    email = $4,
+    notes = $5
+WHERE guest_id = $6"#,
+        &data.first_name,
+        &data.last_name,
+        &data.town,
+        data.email,
+        data.notes,
+        data.guest_id,
+    )
+    .execute(&state.pg_pool)
+    .await
 }
