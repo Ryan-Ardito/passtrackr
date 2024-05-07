@@ -1,11 +1,11 @@
 use serde::{Deserialize, Serialize};
-use sqlx::{postgres::PgQueryResult, prelude::*};
+use sqlx::postgres::PgQueryResult;
 use tauri::State;
 use time::OffsetDateTime;
 
 use crate::{api::PassFormData, AppState};
 
-#[derive(Deserialize, Serialize, Clone, FromRow)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct GetGuestData {
     pub guest_id: i32,
     pub first_name: String,
@@ -17,7 +17,7 @@ pub struct GetGuestData {
     pub created_at: OffsetDateTime,
 }
 
-#[derive(Deserialize, Serialize, Clone, FromRow)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct EditGuestData {
     pub guest_id: i32,
     pub first_name: String,
