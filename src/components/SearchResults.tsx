@@ -52,17 +52,23 @@ const passholderTemplate = (rowData: SearchPassData) => {
 };
 
 export function SearchResults() {
-  const { search, searchData, favoritesData, selectedPass, setSelectedPass } =
-    useAppContext();
+  const {
+    search,
+    searchData,
+    isSearchFetching,
+    favoritesData,
+    selectedPass,
+    setSelectedPass,
+  } = useAppContext();
   return (
     <div id="search-results">
       <DataTable
         dataKey="pass_id"
         className="flex-box flex-col"
         size="large"
-        // showGridlines
+        loading={isSearchFetching}
+        loadingIcon="pi pi-spinner-dotted pi-spin"
         scrollable
-        // scrollHeight="90%"
         paginator
         rows={50}
         alwaysShowPaginator={false}

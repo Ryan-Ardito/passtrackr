@@ -21,6 +21,10 @@ h3 {
   font-family: inherit;
 }
 
+.p-datatable-loading-overlay {
+  background-color: rgba(20, 50, 180, 0.0);
+}
+
 .p-button-label {
   user-select: none;
   -webkit-user-select: none;
