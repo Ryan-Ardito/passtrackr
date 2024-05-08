@@ -2,8 +2,6 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { BackRevert, CrudButton } from "./Buttons";
 
 interface EditPassTemplateProps {
-  isPassLoading: boolean;
-  isGuestLoading: boolean;
   prevPage: () => void;
 }
 

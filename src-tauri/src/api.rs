@@ -325,7 +325,10 @@ pub async fn create_pass(
     pass_data.signature = signature.trim().to_string();
 
     // insert new guest if no guest_id provided
-    let guest_id = guest_id.unwrap_or(insert_guest(&state, &pass_data).await?);
+    let guest_id = match guest_id {
+        Some(id) => id,
+        None => insert_guest(&state, &pass_data).await?,
+    };
 
     let amount_paid_cents = pass_data
         .amount_paid

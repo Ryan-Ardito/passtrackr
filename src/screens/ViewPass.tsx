@@ -71,9 +71,7 @@ export function ViewPass({ prevPage }: { prevPage: () => void }) {
             style={{ paddingBottom: "40px" }}
           >
             {isPassLoading || isGuestLoading || !passData ? (
-              <EditPassTemplate
-                {...{ isPassLoading, isGuestLoading, prevPage }}
-              />
+              <EditPassTemplate {...{ prevPage }} />
             ) : (
               <PassDetails {...{ passData, guestData, prevPage }} />
             )}
