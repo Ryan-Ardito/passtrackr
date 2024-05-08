@@ -15,7 +15,7 @@ use crate::{
             get_payments_from_guest_id, get_payments_from_pass_id, get_visits_from_guest_id,
             get_visits_from_pass_id, insert_visit, PaymentRow, VisitRow,
         },
-        search::{get_favorite_passes, search_all_passes},
+        search::{get_favorite_passes, search_all_passes, PassSearchResponse},
     },
     AppState,
 };
@@ -93,6 +93,31 @@ pub struct SearchPassData {
     pub creator: String,
     pub expires_at: Option<i64>,
     pub created_at: i64,
+}
+
+impl From<PassSearchResponse> for SearchPassData {
+    fn from(value: PassSearchResponse) -> Self {
+        let passtype_code = value.passtype;
+        SearchPassData {
+            pass_id: value.pass_id,
+            guest_id: value.guest_id,
+            first_name: value.first_name,
+            last_name: value.last_name,
+            town: value.town,
+            remaining_uses: value.remaining_uses,
+            passtype: PassType {
+                name: passtype_code.clone(),
+                code: passtype_code.clone(),
+            },
+            active: value.active,
+            favorite: value.favorite,
+            creator: value.creator,
+            expires_at: value
+                .expires_at
+                .map(|unix_time| unix_time.unix_timestamp() * 1000),
+            created_at: value.created_at.unix_timestamp() * 1000,
+        }
+    }
 }
 
 #[derive(Deserialize, Serialize, Clone, FromRow)]
@@ -186,6 +211,22 @@ pub struct Visit {
     created_at: i64,
 }
 
+impl From<&VisitRow> for Visit {
+    fn from(value: &VisitRow) -> Self {
+        let VisitRow {
+            visit_id,
+            pass_id,
+            created_at,
+        } = value.clone();
+        let created_at = created_at.unix_timestamp() * 1000;
+        Visit {
+            visit_id,
+            pass_id,
+            created_at,
+        }
+    }
+}
+
 #[derive(Deserialize, Serialize, Clone, FromRow)]
 pub struct Payment {
     payment_id: i32,
@@ -194,6 +235,37 @@ pub struct Payment {
     amount_paid: Option<f64>,
     creator: String,
     created_at: i64,
+}
+
+impl From<&PaymentRow> for Payment {
+    fn from(value: &PaymentRow) -> Self {
+        let PaymentRow {
+            payment_id,
+            pass_id,
+            payment_method,
+            amount_paid_cents,
+            creator,
+            created_at,
+        } = value.clone();
+
+        let amount_paid = amount_paid_cents.and_then(|amount| {
+            amount
+                .try_into()
+                .map(|amount_float: f64| amount_float / 100.0)
+                .ok()
+        });
+
+        let created_at = created_at.unix_timestamp() * 1000;
+
+        Payment {
+            payment_id,
+            pass_id,
+            payment_method,
+            amount_paid,
+            creator,
+            created_at,
+        }
+    }
 }
 
 #[tauri::command(async)]
@@ -332,9 +404,8 @@ pub async fn create_pass(
 
     let amount_paid_cents = pass_data
         .amount_paid
-        .clone()
-        .map(|num_str| num_str.clone().parse::<f64>())
-        .and_then(|amount_opt| amount_opt.ok().map(|amount| (amount * 100.0) as i32));
+        .map(|num_str| num_str.parse::<f64>())
+        .and_then(|amount_parsed| amount_parsed.ok().map(|amount| (amount * 100.0) as i32));
 
     let (remaining_uses, num_days_valid) = match passtype.code {
         NewPassType::TenPunch => (Some(10), None),
@@ -380,34 +451,7 @@ pub async fn get_payments(
     Ok(get_payments_from_guest_id(&state, guest_id)
         .await?
         .iter()
-        .map(|payment| {
-            let PaymentRow {
-                payment_id,
-                pass_id,
-                payment_method,
-                amount_paid_cents,
-                creator,
-                created_at,
-            } = payment.clone();
-
-            let amount_paid = amount_paid_cents.and_then(|amount| {
-                amount
-                    .try_into()
-                    .map(|amount_float: f64| amount_float / 100.0)
-                    .ok()
-            });
-
-            let created_at = created_at.unix_timestamp() * 1000;
-
-            Payment {
-                payment_id,
-                pass_id,
-                payment_method,
-                amount_paid,
-                creator,
-                created_at,
-            }
-        })
+        .map(|payment| payment.into())
         .collect())
 }
 
@@ -419,18 +463,7 @@ pub async fn get_visits_from_pass(
     Ok(get_visits_from_pass_id(&state, pass_id)
         .await?
         .iter()
-        .map(|visit| {
-            let VisitRow {
-                visit_id,
-                pass_id,
-                created_at,
-            } = visit.clone();
-            Visit {
-                visit_id,
-                pass_id,
-                created_at: created_at.unix_timestamp() * 1000,
-            }
-        })
+        .map(|visit| visit.into())
         .collect())
 }
 
@@ -442,34 +475,7 @@ pub async fn get_payments_from_pass(
     Ok(get_payments_from_pass_id(&state, pass_id)
         .await?
         .iter()
-        .map(|payment| {
-            let PaymentRow {
-                payment_id,
-                pass_id,
-                payment_method,
-                amount_paid_cents,
-                creator,
-                created_at,
-            } = payment.clone();
-
-            let amount_paid = amount_paid_cents.and_then(|amount| {
-                amount
-                    .try_into()
-                    .map(|amount_float: f64| amount_float / 100.0)
-                    .ok()
-            });
-
-            let created_at = created_at.unix_timestamp() * 1000;
-
-            Payment {
-                payment_id,
-                pass_id,
-                payment_method,
-                amount_paid,
-                creator,
-                created_at,
-            }
-        })
+        .map(|payment| payment.into())
         .collect())
 }
 
@@ -481,18 +487,7 @@ pub async fn get_visits(
     Ok(get_visits_from_guest_id(&state, guest_id)
         .await?
         .iter()
-        .map(|visit| {
-            let VisitRow {
-                visit_id,
-                pass_id,
-                created_at,
-            } = visit.clone();
-            Visit {
-                visit_id,
-                pass_id,
-                created_at: created_at.unix_timestamp() * 1000,
-            }
-        })
+        .map(|visit| visit.into())
         .collect())
 }
 
@@ -567,28 +562,7 @@ pub async fn search_passes(
     let passes = search_all_passes(&state, search.trim()).await?;
     let result = passes
         .into_iter()
-        .map(|pass_data| {
-            let passtype_code = pass_data.passtype;
-            SearchPassData {
-                pass_id: pass_data.pass_id,
-                guest_id: pass_data.guest_id,
-                first_name: pass_data.first_name,
-                last_name: pass_data.last_name,
-                town: pass_data.town,
-                remaining_uses: pass_data.remaining_uses,
-                passtype: PassType {
-                    name: passtype_code.clone(),
-                    code: passtype_code.clone(),
-                },
-                active: pass_data.active,
-                favorite: pass_data.favorite,
-                creator: pass_data.creator,
-                expires_at: pass_data
-                    .expires_at
-                    .map(|unix_time| unix_time.unix_timestamp() * 1000),
-                created_at: pass_data.created_at.unix_timestamp() * 1000,
-            }
-        })
+        .map(|pass_data| pass_data.into())
         .collect();
     Ok(result)
 }
@@ -600,28 +574,7 @@ pub async fn favorite_passes(
     let passes = get_favorite_passes(&state).await?;
     let result = passes
         .into_iter()
-        .map(|pass_data| {
-            let passtype_code = pass_data.passtype;
-            SearchPassData {
-                pass_id: pass_data.pass_id,
-                guest_id: pass_data.guest_id,
-                first_name: pass_data.first_name,
-                last_name: pass_data.last_name,
-                town: pass_data.town,
-                remaining_uses: pass_data.remaining_uses,
-                passtype: PassType {
-                    name: passtype_code.clone(),
-                    code: passtype_code.clone(),
-                },
-                active: pass_data.active,
-                favorite: pass_data.favorite,
-                creator: pass_data.creator,
-                expires_at: pass_data
-                    .expires_at
-                    .map(|unix_time| unix_time.unix_timestamp() * 1000),
-                created_at: pass_data.created_at.unix_timestamp() * 1000,
-            }
-        })
+        .map(|pass_data| pass_data.into())
         .collect();
     Ok(result)
 }
