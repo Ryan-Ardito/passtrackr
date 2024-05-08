@@ -11,11 +11,13 @@ interface PanelProps {
 
 export const RightPanel = ({ panel }: PanelProps) => {
   let flex = 1;
+  let maxWidth = "400px";
   if (panel === SidePanel.AddPass || panel === SidePanel.AddVisits) {
     flex = 2;
+  maxWidth = "600px";
   }
   return (
-    <ScrollPanel id="right-panel" style={{ flex }}>
+    <ScrollPanel id="right-panel" style={{ flex, maxWidth }}>
       {panel === SidePanel.AddPass && <AddPass />}
       {panel === SidePanel.AddVisits && <RenewPass />}
       {panel === SidePanel.PassInteraction && <PassControl />}
