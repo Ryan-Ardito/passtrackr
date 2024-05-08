@@ -69,7 +69,7 @@ export function SearchResults() {
         value={
           searchData && searchData.length > 0
             ? searchData
-            : search && search.length === 0
+            : !search || search.length === 0
             ? favoritesData || []
             : []
         }
