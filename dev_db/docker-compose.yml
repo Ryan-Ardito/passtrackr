@@ -15,6 +15,7 @@ services:
   dev-db:
     build: .
     image: passtracker-dev
+    mem_limit: 512mb
     depends_on:
       dummy-data:
         condition: service_completed_successfully
