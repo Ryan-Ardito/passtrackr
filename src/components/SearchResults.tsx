@@ -3,10 +3,12 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useAppContext } from "../AppContext";
 
+const MONTH_IN_SECONDS = 2629800;
+
 const RemainingIcon = ({ expires_at }: { expires_at: number }) => {
   return Date.now() > expires_at ? (
     <i className="pi pi-times" />
-  ) : Date.now() + 2629800 * 1000 > expires_at ? (
+  ) : Date.now() + MONTH_IN_SECONDS * 1000 > expires_at ? (
     <i className="pi pi-calendar-clock" />
   ) : (
     <i className="pi pi-calendar" />

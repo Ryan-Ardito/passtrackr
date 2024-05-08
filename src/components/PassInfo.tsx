@@ -63,10 +63,6 @@ export const PassInfo = ({ selectedPass }: PassInfoProps) => {
   if (selectedPass?.created_at) {
     createdAt = new Date(selectedPass.created_at).toLocaleDateString();
   }
-  let expiresAt = undefined;
-  if (selectedPass?.expires_at) {
-    expiresAt = new Date(selectedPass.expires_at).toLocaleDateString();
-  }
 
   return (
     <Panel
