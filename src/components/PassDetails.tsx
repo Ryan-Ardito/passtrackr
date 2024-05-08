@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BackRevert, CrudButton } from "./Buttons";
+import { BackRevert, CrudButton, FavoriteButton } from "./Buttons";
 import { ViewPassData, editPassNotes, setPassFavorite } from "../api/api";
 import { Panel } from "primereact/panel";
 import { GuestData } from "../types";
@@ -9,7 +9,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
 import * as Yup from "yup";
-import { Checkbox } from "primereact/checkbox";
 import { ExpirationText, RemainingUsesText } from "./PassInfo";
 
 const validationSchema = Yup.object().shape({
@@ -111,32 +110,31 @@ export function PassDetails({
       />
       <Panel>
         {passData && (
-          <div>
+          <>
             <div>
-              <Checkbox
-                checked={passData.favorite}
-                disabled={isSetPassFavoritePending}
-                onClick={(e) => {
-                  e.preventDefault();
-                  mutateSetPassFavorite({
-                    favorite: !passData.favorite,
-                    passId: passData.pass_id,
-                  });
-                }}
-              />{" "}
-              <b>Favorite</b>
+              {passData.remaining_uses != undefined && (
+                <RemainingUsesText remaining_uses={passData.remaining_uses} />
+              )}
+              {passData.expires_at && (
+                <ExpirationText expires_at={passData.expires_at} />
+              )}
             </div>
-            {passData.remaining_uses != undefined && (
-              <RemainingUsesText remaining_uses={passData.remaining_uses} />
-            )}
-            {passData.expires_at && (
-              <ExpirationText expires_at={passData.expires_at} />
-            )}
-          </div>
+            <div style={{ wordWrap: "break-word" }}>
+              Created {createdAt} by {passData?.creator}
+            </div>
+            <FavoriteButton
+              checked={passData.favorite}
+              disabled={isSetPassFavoritePending}
+              loading={isSetPassFavoritePending}
+              onClick={() => {
+                mutateSetPassFavorite({
+                  favorite: !passData.favorite,
+                  passId: passData.pass_id,
+                });
+              }}
+            />
+          </>
         )}
-        <div style={{ wordWrap: "break-word" }}>
-          Created {createdAt} by {passData?.creator}
-        </div>
       </Panel>
       <Panel header={`Owner ${guestData?.guest_id}`}>
         <div>

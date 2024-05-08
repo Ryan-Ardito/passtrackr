@@ -2,6 +2,37 @@ import { Button, ButtonProps } from "primereact/button";
 import { IconType } from "primereact/utils";
 import { CSSProperties, MouseEventHandler, useEffect, useState } from "react";
 
+interface FavoriteButtonProps {
+  checked: boolean;
+  disabled?: boolean;
+  loading?: boolean;
+  onClick?: () => void;
+}
+
+export const FavoriteButton = ({
+  checked,
+  disabled = false,
+  loading = false,
+  onClick = () => undefined,
+}: FavoriteButtonProps) => {
+  return (
+    <div>
+      <CrudButton
+        label={checked ? "Unfavorite" : "Favorite"}
+        icon={checked ? "pi pi-star-fill" : "pi pi-star"}
+        disabled={disabled}
+        loading={loading}
+        severity={"warning"}
+        onClick={(e) => {
+          e.preventDefault();
+          e.currentTarget.blur();
+          onClick();
+        }}
+      />
+    </div>
+  );
+};
+
 interface BackRevertProps {
   fieldChange?: boolean;
   prevPage: () => void;
@@ -28,7 +59,7 @@ export const BackRevert = ({
       <CrudButton
         label="Revert"
         icon="pi pi-undo"
-        severity="warning"
+        severity="info"
         disabled={!fieldChange}
         onClick={(e) => {
           e.preventDefault();
@@ -136,6 +167,7 @@ interface CrudButtonProps {
   label?: string | undefined;
   icon?: IconType<ButtonProps>;
   type?: "submit" | "reset" | "button" | undefined;
+  iconPos?: "left" | "right";
   disabled?: boolean;
   severity?:
     | "info"
@@ -156,6 +188,7 @@ export const CrudButton = ({
   label = "Button",
   icon = "",
   type = undefined,
+  iconPos = "left",
   disabled = false,
   severity = undefined,
   size = undefined,
@@ -173,6 +206,7 @@ export const CrudButton = ({
       label={label}
       icon={icon}
       type={type}
+      iconPos={iconPos}
       disabled={disabled}
       severity={severity}
       size={size}
