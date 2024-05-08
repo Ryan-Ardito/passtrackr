@@ -10,6 +10,7 @@ import { showMessage } from "../utils/toast";
 import { useAppContext } from "../AppContext";
 import * as Yup from "yup";
 import { ExpirationText, RemainingUsesText } from "./PassInfo";
+import { TextInputButton } from "./FormInput";
 
 const validationSchema = Yup.object().shape({
   notes: Yup.string(),
@@ -85,33 +86,39 @@ export function PassDetails({
   }
 
   return (
-    <form id="pass-details" className="flex-col" onSubmit={formik.handleSubmit}>
-      <BackRevert
-        {...{ fieldChange, prevPage }}
-        onRevert={() => {
-          formik.resetForm();
-          setFieldChange(false);
-        }}
-      />
-      <InputTextarea
-        placeholder="Notes"
-        name="notes"
-        value={formik.values.notes || ""}
-        rows={8}
-        style={{ maxWidth: "100%", minWidth: "100%" }}
-        onChange={(e) => {
-          setFieldChange(true);
-          formik.handleChange(e);
-        }}
-      />
-      <CrudButton
-        label="Save"
-        icon="pi pi-save"
-        type="submit"
-        severity="danger"
-        loading={isEditPassPending}
-        disabled={!fieldChange}
-      />
+    <>
+      <form
+        id="pass-details"
+        className="flex-col"
+        onSubmit={formik.handleSubmit}
+      >
+        <BackRevert
+          {...{ fieldChange, prevPage }}
+          onRevert={() => {
+            formik.resetForm();
+            setFieldChange(false);
+          }}
+        />
+        <InputTextarea
+          placeholder="Notes"
+          name="notes"
+          value={formik.values.notes || ""}
+          rows={8}
+          style={{ maxWidth: "100%", minWidth: "100%" }}
+          onChange={(e) => {
+            setFieldChange(true);
+            formik.handleChange(e);
+          }}
+        />
+        <CrudButton
+          label="Save"
+          icon="pi pi-save"
+          type="submit"
+          severity="danger"
+          loading={isEditPassPending}
+          disabled={!fieldChange}
+        />
+      </form>
       <Panel>
         {passData && (
           <>
@@ -126,17 +133,27 @@ export function PassDetails({
             <div style={{ wordWrap: "break-word" }}>
               Created {createdAt} by {passData?.creator}
             </div>
-            <FavoriteButton
-              checked={passData.favorite}
-              disabled={isSetPassFavoritePending}
-              loading={isSetPassFavoritePending}
-              onClick={() => {
-                mutateSetPassFavorite({
-                  favorite: !passData.favorite,
-                  passId: passData.pass_id,
-                });
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "2fr 3fr",
+                gap: "6px",
               }}
-            />
+            >
+              <FavoriteButton
+                style={{ width: "100%" }}
+                checked={passData.favorite}
+                disabled={isSetPassFavoritePending}
+                loading={isSetPassFavoritePending}
+                onClick={() => {
+                  mutateSetPassFavorite({
+                    favorite: !passData.favorite,
+                    passId: passData.pass_id,
+                  });
+                }}
+              />
+              <TextInputButton label="Transfer" />
+            </div>
           </>
         )}
       </Panel>
@@ -146,6 +163,6 @@ export function PassDetails({
         </div>
         {<div>{guestData?.town}</div>}
       </Panel>
-    </form>
+    </>
   );
 }

@@ -5,6 +5,7 @@ import { CSSProperties, MouseEventHandler, useEffect, useState } from "react";
 interface FavoriteButtonProps {
   checked: boolean;
   disabled?: boolean;
+  style?: CSSProperties;
   loading?: boolean;
   onClick?: () => void;
 }
@@ -12,6 +13,7 @@ interface FavoriteButtonProps {
 export const FavoriteButton = ({
   checked,
   disabled = false,
+  style = {},
   loading = false,
   onClick = () => undefined,
 }: FavoriteButtonProps) => {
@@ -22,6 +24,7 @@ export const FavoriteButton = ({
         icon={checked ? "pi pi-star-fill" : "pi pi-star"}
         disabled={disabled}
         loading={loading}
+        style={style}
         severity={"warning"}
         onClick={(e) => {
           e.preventDefault();

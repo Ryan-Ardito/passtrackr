@@ -196,11 +196,22 @@ export const setPassActive = async (
   return invoke("toggle_pass_active", { passData });
 };
 
-export const setPassOwner = async (
-  passId: number,
-  newGuestId: number
-): Promise<string> => {
-  return invoke("set_pass_owner", { passId, newGuestId });
+interface SetPassOwnerData {
+  passId: number | undefined;
+  newGuestId: number | undefined;
+}
+
+export const setPassOwner = async (data: SetPassOwnerData): Promise<void> => {
+  if (!data.passId) {
+    throw { name: "Transfer", message: "No pass ID!" };
+  }
+  if (!data.newGuestId) {
+    throw { name: "Transfer", message: "No guest ID!" };
+  }
+  return invoke("set_pass_owner", {
+    passId: data.passId,
+    newGuestId: data.newGuestId,
+  });
 };
 
 export const deletePass = async (passId: number | undefined): Promise<void> => {

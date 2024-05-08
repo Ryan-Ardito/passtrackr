@@ -4,6 +4,11 @@ import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { Message } from "primereact/message";
 import { ChangeEventHandler, KeyboardEventHandler, useState } from "react";
+import { CrudButton } from "./Buttons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { setPassOwner } from "../api/api";
+import { useAppContext } from "../AppContext";
+import { showMessage } from "../utils/toast";
 
 interface InputFieldProps {
   label: string;
@@ -151,25 +156,64 @@ export const LabeledDropdown = ({
 interface TextInputButtonProps {
   label: string;
   disabled?: boolean;
+  onSubmit?: () => void;
 }
 
-export const TextInputButton = ({ label, disabled }: TextInputButtonProps) => {
-  const [addVisits, setAddVisits] = useState(false);
+export const TextInputButton = ({
+  label,
+  disabled = false,
+  onSubmit = () => undefined,
+}: TextInputButtonProps) => {
+  const { selectedPass, toast } = useAppContext();
+  const [transferPass, setTransferPass] = useState(false);
+  const [guestId, setGuestId] = useState("");
+  const queryClient = useQueryClient();
+
+  const { mutate: mutateTransferPass, isPending: isTransferPassPending } =
+    useMutation({
+      mutationKey: ["transferPass", selectedPass.pass_id],
+      mutationFn: setPassOwner,
+      onError: (error) => {
+        showMessage(error.name, error.message, toast, "warn");
+      },
+      onSuccess: () => {
+        setTransferPass(false);
+        setGuestId("");
+        queryClient.invalidateQueries({ queryKey: ["search"] });
+        queryClient.invalidateQueries({
+          queryKey: ["pass", selectedPass.pass_id],
+        });
+        showMessage("Transfer pass", "Success!", toast, "success");
+      },
+    });
 
   return (
     <>
-      {!addVisits ? (
-        <Button
+      {!transferPass ? (
+        <CrudButton
           label={label}
-          icon="pi pi-plus"
+          icon="pi pi-arrow-right-arrow-left"
           iconPos="right"
+          style={{ width: "100%" }}
           disabled={disabled}
-          onClick={() => setAddVisits(true)}
+          onClick={() => {
+            setGuestId("");
+            setTransferPass(true);
+          }}
         />
       ) : (
         <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            mutateTransferPass({
+              passId: selectedPass.pass_id,
+              newGuestId: parseInt(guestId),
+            });
+            onSubmit();
+          }}
           style={{
-            display: "flex",
+            display: "grid",
+            gridTemplateColumns: "1fr auto",
             gap: "6px",
             width: "100%",
             height: "41.5px",
@@ -177,14 +221,29 @@ export const TextInputButton = ({ label, disabled }: TextInputButtonProps) => {
         >
           <InputText
             autoFocus
+            className="p-inputtext-sm"
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                setTransferPass(false);
+              }
+            }}
+            onBlur={() => setTransferPass(false)}
+            placeholder="Guest ID"
+            value={guestId}
             style={{ width: "100%" }}
-            name="addVisit"
-            onChange={() => null}
+            name="transferPass"
+            onChange={(e) => {
+              const newValue = e.currentTarget.value.replace(/[^0-9]/g, "");
+              setGuestId(newValue);
+            }}
           />
           <Button
+            label=""
+            rounded
+            loading={isTransferPassPending}
+            severity="danger"
             style={{ width: "48px" }}
-            icon="pi pi-plus"
-            onClick={() => setAddVisits(false)}
+            icon="pi pi-times"
           />
         </form>
       )}
