@@ -4,7 +4,12 @@ import * as Yup from "yup";
 import { ScrollPanel } from "primereact/scrollpanel";
 import { Divider } from "primereact/divider";
 
-import { SearchPassData, SidePanel, addPassTimeDropOpts, payMethods } from "../types";
+import {
+  SearchPassData,
+  SidePanel,
+  addPassTimeDropOpts,
+  payMethods,
+} from "../types";
 import { FormikDropdown, FormikField } from "../components/FormInput";
 import { addTimeToPass } from "../api/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -33,7 +38,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export const AddPassTime = ({ passData }: { passData: SearchPassData }) => {
-  const { setSelectedPass, setPanel, toast, search } = useAppContext();
+  const { setSelectedPass, setPanel, toast } = useAppContext();
   const queryClient = useQueryClient();
 
   const { mutate: mutateAddPassTime } = useMutation({
@@ -49,7 +54,7 @@ export const AddPassTime = ({ passData }: { passData: SearchPassData }) => {
         formik.setSubmitting(false);
         return;
       }
-      queryClient.invalidateQueries({ queryKey: ["search", search] });
+      queryClient.invalidateQueries({ queryKey: ["search"] });
       setSelectedPass({ ...passData, expires_at });
       showMessage("Add Time", "Success!", toast, "success");
       setPanel(SidePanel.PassInteraction);

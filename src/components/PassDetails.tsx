@@ -29,7 +29,7 @@ export function PassDetails({
   prevPage,
 }: PassDetailsProps) {
   const [fieldChange, setFieldChange] = useState(false);
-  const { search, toast } = useAppContext();
+  const { toast } = useAppContext();
   const queryClient = useQueryClient();
 
   const { mutate: mutateEditPassNotes, isPending: isEditPassPending } =
@@ -59,11 +59,10 @@ export function PassDetails({
         showMessage(error.name, error.message, toast, "warn");
       },
       onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["search"] });
+        queryClient.invalidateQueries({ queryKey: ["favorites"] });
         queryClient.invalidateQueries({
           queryKey: ["pass", passData?.pass_id],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ["search", search],
         });
       },
     });
@@ -80,11 +79,6 @@ export function PassDetails({
   let createdAt = undefined;
   if (passData?.created_at) {
     createdAt = new Date(passData.created_at).toLocaleDateString();
-  }
-
-  let expiresAt = undefined;
-  if (passData?.expires_at) {
-    expiresAt = new Date(passData.expires_at).toLocaleDateString();
   }
 
   return (

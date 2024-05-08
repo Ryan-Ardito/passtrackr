@@ -6,13 +6,14 @@ import { FormEvent } from "react";
 import { debounce } from "lodash";
 
 export function SearchBar() {
-  const { search, setSearch, isSearchFetching } = useAppContext();
+  const { setSearch, isSearchFetching } = useAppContext();
   const debouncedSetSearch = debounce(setSearch, 400);
   const queryClient = useQueryClient();
 
   const handleSearchButton = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    queryClient.invalidateQueries({ queryKey: ["search", search] });
+    queryClient.invalidateQueries({ queryKey: ["search"] });
+    queryClient.invalidateQueries({ queryKey: ["favorites"] });
   };
 
   return (

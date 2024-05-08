@@ -10,7 +10,7 @@ import { CrudButton } from "../components/Buttons";
 import { PassInfo } from "../components/PassInfo";
 
 export const PassControl = () => {
-  const { selectedPass, setSelectedPass, setScreen, setPanel, toast, search } =
+  const { selectedPass, setSelectedPass, setScreen, setPanel, toast } =
     useAppContext();
   const queryClient = useQueryClient();
 
@@ -19,7 +19,7 @@ export const PassControl = () => {
     mutationFn: logVisit,
     onError: (error) => showMessage(error.name, error.message, toast, "warn"),
     onSuccess: (remaining_uses) => {
-      queryClient.invalidateQueries({ queryKey: ["search", search] });
+      queryClient.invalidateQueries({ queryKey: ["search"] });
       setSelectedPass({ ...selectedPass, remaining_uses });
       showMessage("Log visit", "Success!", toast, "success");
     },

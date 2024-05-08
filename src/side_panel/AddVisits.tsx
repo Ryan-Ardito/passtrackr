@@ -35,7 +35,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export const AddVisits = ({ passData }: { passData: SearchPassData }) => {
-  const { setSelectedPass, setPanel, toast, search } = useAppContext();
+  const { setSelectedPass, setPanel, toast } = useAppContext();
   const queryClient = useQueryClient();
 
   const { mutate: mutateAddVisits } = useMutation({
@@ -46,7 +46,7 @@ export const AddVisits = ({ passData }: { passData: SearchPassData }) => {
       formik.setSubmitting(false);
     },
     onSuccess: (remaining_uses) => {
-      queryClient.invalidateQueries({ queryKey: ["search", search] });
+      queryClient.invalidateQueries({ queryKey: ["search"] });
       setSelectedPass({ ...passData, remaining_uses });
       showMessage("Add Visits", "Success!", toast, "success");
       setPanel(SidePanel.PassInteraction);

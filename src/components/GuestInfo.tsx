@@ -26,7 +26,7 @@ interface GuestInfoProps {
 
 export function GuestInfo({ guestData, prevPage }: GuestInfoProps) {
   const [fieldChange, setFieldChange] = useState(false);
-  const { search, selectedPass, setSelectedPass, toast } = useAppContext();
+  const { selectedPass, setSelectedPass, toast } = useAppContext();
   const queryClient = useQueryClient();
 
   const { mutate: mutateEditGuest, isPending: isEditGuestPending } =
@@ -41,7 +41,7 @@ export function GuestInfo({ guestData, prevPage }: GuestInfoProps) {
         queryClient.invalidateQueries({
           queryKey: ["guest", selectedPass.guest_id],
         });
-        queryClient.invalidateQueries({ queryKey: ["search", search] });
+        queryClient.invalidateQueries({ queryKey: ["search"] });
         setSelectedPass({
           ...selectedPass,
           first_name: formik.values.first_name,

@@ -11,8 +11,7 @@ import { PassInfo } from "../components/PassInfo";
 import { InputSwitch } from "primereact/inputswitch";
 
 export const ViewPass = () => {
-  const { selectedPass, setSelectedPass, setPanel, toast, search } =
-    useAppContext();
+  const { selectedPass, setSelectedPass, setPanel, toast } = useAppContext();
   const queryClient = useQueryClient();
 
   const { mutate: mutateSetPassActive, isPending: isSetPassActivePending } =
@@ -21,7 +20,7 @@ export const ViewPass = () => {
       mutationFn: setPassActive,
       onError: (error) => showMessage(error.name, error.message, toast, "warn"),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["search", search] });
+        queryClient.invalidateQueries({ queryKey: ["search"] });
         setSelectedPass({ ...selectedPass, active: !selectedPass.active });
       },
     });
@@ -32,7 +31,7 @@ export const ViewPass = () => {
       mutationFn: deletePass,
       onError: (error) => showMessage(error.name, error.message, toast, "warn"),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["search", search] });
+        queryClient.invalidateQueries({ queryKey: ["search"] });
         setSelectedPass(blankPass);
         showMessage("Delete pass", "Success!", toast, "success");
       },

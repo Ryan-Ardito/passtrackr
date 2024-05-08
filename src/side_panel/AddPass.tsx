@@ -35,7 +35,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export const AddPass = () => {
-  const { selectedPass, setPanel, toast, search } = useAppContext();
+  const { selectedPass, setPanel, toast } = useAppContext();
   const queryClient = useQueryClient();
 
   const { mutate: mutateCreatePass } = useMutation({
@@ -46,7 +46,7 @@ export const AddPass = () => {
       formik.setSubmitting(false);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["search", search] });
+      queryClient.invalidateQueries({ queryKey: ["search"] });
       showMessage("Create pass", "Success!", toast, "success");
       setPanel(SidePanel.PassInteraction);
     },

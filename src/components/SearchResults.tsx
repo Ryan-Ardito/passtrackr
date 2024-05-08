@@ -43,14 +43,17 @@ const passtypeTemplate = (rowData: SearchPassData) => rowData?.passtype?.name;
 const passholderTemplate = (rowData: SearchPassData) => {
   return (
     <>
-      {rowData.favorite && <i className="pi pi-sparkles" />} {rowData?.first_name}{" "}
-      {rowData?.last_name}
+      {rowData.favorite && (
+        <i className="pi pi-sparkles" style={{ color: "goldenrod" }} />
+      )}{" "}
+      {rowData?.first_name} {rowData?.last_name}
     </>
   );
 };
 
 export function SearchResults() {
-  const { searchData, selectedPass, setSelectedPass } = useAppContext();
+  const { search, searchData, favoritesData, selectedPass, setSelectedPass } =
+    useAppContext();
   return (
     <div id="search-results">
       <DataTable
@@ -63,7 +66,13 @@ export function SearchResults() {
         paginator
         rows={50}
         alwaysShowPaginator={false}
-        value={searchData}
+        value={
+          searchData.length > 0
+            ? searchData
+            : search.length === 0
+            ? favoritesData || []
+            : []
+        }
         metaKeySelection={false}
         selectionMode="single"
         selection={selectedPass}

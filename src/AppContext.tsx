@@ -13,8 +13,14 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Toast } from "primereact/toast";
 import "primeicons/primeicons.css";
 
-import { SearchPassData, Screen, blankPass, SidePanel, GuestData } from "./types";
-import { searchPasses } from "./api/api";
+import {
+  SearchPassData,
+  Screen,
+  blankPass,
+  SidePanel,
+  GuestData,
+} from "./types";
+import { getFavoritePasses, searchPasses } from "./api/api";
 import { showMessage } from "./utils/toast";
 import { message } from "@tauri-apps/api/dialog";
 import { invoke } from "@tauri-apps/api";
@@ -31,6 +37,7 @@ interface AppContextProps {
   panel: SidePanel;
   setPanel: Dispatch<SetStateAction<SidePanel>>;
   searchData: SearchPassData[];
+  favoritesData: SearchPassData[];
   guestData: GuestData | undefined;
   isSearchFetching: boolean;
   searchStatus: "error" | "success" | "pending";
@@ -57,6 +64,23 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [panel, setPanel] = useState(SidePanel.PassInteraction);
 
   const {
+    data: favoritesData,
+    isFetching: isFavoritesFetching,
+    status: favoritesStatus,
+    error: favoritesError,
+  } = useQuery({
+    queryKey: ["favorites", search],
+    queryFn: () => getFavoritePasses(),
+    placeholderData: keepPreviousData,
+  });
+
+  useEffect(() => {
+    if (favoritesError && favoritesStatus === "error") {
+      showMessage(favoritesError.name, favoritesError.message, toast, "warn");
+    }
+  }, [favoritesStatus]);
+
+  const {
     data: searchData,
     isFetching: isSearchFetching,
     status: searchStatus,
@@ -69,6 +93,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     placeholderData: keepPreviousData,
   });
 
+  useEffect(() => {
+    if (searchError && searchStatus === "error") {
+      showMessage(searchError.name, searchError.message, toast, "warn");
+    }
+  }, [searchStatus]);
+
   const toast = useRef<Toast>(null);
 
   useEffect(() => {
@@ -78,12 +108,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       }
     });
   }, []);
-
-  useEffect(() => {
-    if (searchError && searchStatus === "error") {
-      showMessage(searchError.name, searchError.message, toast, "warn");
-    }
-  }, [searchStatus]);
 
   useEffect(() => {
     setSelectedPass(blankPass);
@@ -101,7 +125,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     panel,
     setPanel,
     searchData,
+    favoritesData,
     isSearchFetching,
+    isFavoritesFetching,
     searchStatus,
     isSearchSuccess,
     searchError,
