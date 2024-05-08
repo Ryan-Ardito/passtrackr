@@ -48,9 +48,7 @@ JOIN
 WHERE
     p.favorite = TRUE
 ORDER BY
-    g.last_name, g.first_name, g.guest_id, p.pass_id
-LIMIT $1"#,
-        SEARCH_RESPONSE_LIMIT,
+    g.last_name, g.first_name, g.guest_id, p.pass_id"#
     )
     .fetch_all(&state.pg_pool)
     .await
