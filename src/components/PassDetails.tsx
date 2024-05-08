@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BackRevert, CrudButton, FavoriteButton } from "./Buttons";
 import { ViewPassData, editPassNotes, setPassFavorite } from "../api/api";
 import { Panel } from "primereact/panel";
-import { GuestData } from "../types";
+import { GuestData, blankPass } from "../types";
 import { InputTextarea } from "primereact/inputtextarea";
 import { useFormik } from "formik";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -28,7 +28,7 @@ export function PassDetails({
   prevPage,
 }: PassDetailsProps) {
   const [fieldChange, setFieldChange] = useState(false);
-  const { toast } = useAppContext();
+  const { search, setSelectedPass, toast } = useAppContext();
   const queryClient = useQueryClient();
 
   const { mutate: mutateEditPassNotes, isPending: isEditPassPending } =
@@ -63,6 +63,10 @@ export function PassDetails({
         queryClient.invalidateQueries({
           queryKey: ["pass", passData?.pass_id],
         });
+        if (search.length === 0) {
+          setSelectedPass(blankPass);
+          prevPage();
+        }
       },
     });
 
