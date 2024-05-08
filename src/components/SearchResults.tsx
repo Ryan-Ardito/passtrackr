@@ -67,9 +67,9 @@ export function SearchResults() {
         rows={50}
         alwaysShowPaginator={false}
         value={
-          searchData.length > 0
+          searchData && searchData.length > 0
             ? searchData
-            : search.length === 0
+            : search && search.length === 0
             ? favoritesData || []
             : []
         }
