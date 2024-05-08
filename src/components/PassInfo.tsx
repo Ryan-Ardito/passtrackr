@@ -1,8 +1,6 @@
 import { Panel } from "primereact/panel";
-import { SearchPassData } from "../types";
+import { MONTH_IN_SECONDS, SearchPassData } from "../types";
 import { Divider } from "primereact/divider";
-
-const MONTH_IN_SECONDS = 2629800;
 
 interface RemainingUsesTextProps {
   remaining_uses: number;

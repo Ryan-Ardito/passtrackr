@@ -1,9 +1,7 @@
-import { SearchPassData, blankPass } from "../types";
+import { MONTH_IN_SECONDS, SearchPassData, blankPass } from "../types";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useAppContext } from "../AppContext";
-
-const MONTH_IN_SECONDS = 2629800;
 
 const RemainingIcon = ({ expires_at }: { expires_at: number }) => {
   return Date.now() > expires_at ? (
