@@ -36,7 +36,7 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
   return (
     <DataTable
       dataKey="payment_id"
-      value={payments}
+      value={payments || []}
       size="small"
       scrollable
       showGridlines

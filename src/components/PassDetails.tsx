@@ -92,7 +92,7 @@ export function PassDetails({
       <InputTextarea
         placeholder="Notes"
         name="notes"
-        value={formik.values.notes}
+        value={formik.values.notes || ""}
         rows={8}
         style={{ maxWidth: "100%", minWidth: "100%" }}
         onChange={(e) => {

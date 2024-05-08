@@ -134,7 +134,7 @@ export function GuestInfo({ guestData, prevPage }: GuestInfoProps) {
       <InputTextarea
         placeholder="Notes"
         name="notes"
-        value={formik.values.notes}
+        value={formik.values.notes || ""}
         rows={8}
         // autoResize
         style={{ maxWidth: "100%", minWidth: "100%" }}

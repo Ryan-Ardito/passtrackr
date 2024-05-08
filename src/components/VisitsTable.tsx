@@ -14,7 +14,7 @@ export function VisitsTable({ visits }: { visits: VisitsRow[] | undefined }) {
   return (
     <DataTable
       dataKey="visit_id"
-      value={visits}
+      value={visits || []}
       size="small"
       scrollable
       showGridlines
