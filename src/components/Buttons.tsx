@@ -114,7 +114,12 @@ export const DeleteButton = ({
     <>
       <div style={{ display: "grid", width: "100%" }}>
         {confirm && !disabled ? (
-          <div style={{ display: "grid", gridTemplateColumns: "50px 1fr" }}>
+          <span
+            style={{
+              display: "grid",
+              gridTemplateColumns: "50px 1fr",
+            }}
+          >
             <Button
               id="delete-button"
               rounded
@@ -124,6 +129,7 @@ export const DeleteButton = ({
               disabled={disabled}
               severity={severity}
               size={size}
+              style={{ height: "47px", width: "49px" }}
               loading={loading}
               onBlur={() => setConfirm(false)}
               onClick={(e) => {
@@ -142,7 +148,7 @@ export const DeleteButton = ({
               loading={loading}
               onClick={() => setConfirm(false)}
             />
-          </div>
+          </span>
         ) : (
           <Button
             id="delete-button"

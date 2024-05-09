@@ -1,6 +1,16 @@
 import { useState } from "react";
-import { BackRevert, CrudButton, FavoriteButton } from "./Buttons";
-import { ViewPassData, editPassNotes, setPassFavorite } from "../api/api";
+import {
+  BackRevert,
+  CrudButton,
+  DeleteButton,
+  FavoriteButton,
+} from "./Buttons";
+import {
+  ViewPassData,
+  deletePass,
+  editPassNotes,
+  setPassFavorite,
+} from "../api/api";
 import { Panel } from "primereact/panel";
 import { GuestData, blankPass } from "../types";
 import { InputTextarea } from "primereact/inputtextarea";
@@ -71,6 +81,25 @@ export function PassDetails({
       },
     });
 
+  const { mutate: mutateDeletePass, isPending: isDeletePassPending } =
+    useMutation({
+      mutationKey: ["deletePass", passData?.pass_id],
+      mutationFn: deletePass,
+      onError: (error) => {
+        showMessage(error.name, error.message, toast, "warn");
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["search"] });
+        queryClient.invalidateQueries({ queryKey: ["favorites"] });
+        queryClient.invalidateQueries({
+          queryKey: ["pass", passData?.pass_id],
+        });
+        setSelectedPass(blankPass);
+        showMessage("Delete pass", "Success!", toast, "success");
+        prevPage();
+      },
+    });
+
   const formik = useFormik({
     initialValues: {
       notes: passData?.notes,
@@ -103,7 +132,7 @@ export function PassDetails({
           placeholder="Notes"
           name="notes"
           value={formik.values.notes || ""}
-          rows={8}
+          rows={7}
           style={{ maxWidth: "100%", minWidth: "100%" }}
           onChange={(e) => {
             setFieldChange(true);
@@ -163,6 +192,13 @@ export function PassDetails({
         </div>
         {<div>{guestData?.town}</div>}
       </Panel>
+      <DeleteButton
+        label="Delete pass"
+        severity="danger"
+        icon="pi pi-delete-left"
+        loading={isDeletePassPending}
+        onClick={() => mutateDeletePass(passData?.pass_id)}
+      />
     </>
   );
 }
