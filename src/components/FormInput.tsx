@@ -194,7 +194,6 @@ export const TextInputButton = ({
           label={label}
           icon="pi pi-arrow-right-arrow-left"
           iconPos="right"
-          style={{ width: "100%" }}
           disabled={disabled}
           onClick={() => {
             setGuestId("");
@@ -215,7 +214,6 @@ export const TextInputButton = ({
             display: "grid",
             gridTemplateColumns: "1fr auto",
             gap: "6px",
-            width: "100%",
             height: "41.5px",
           }}
         >

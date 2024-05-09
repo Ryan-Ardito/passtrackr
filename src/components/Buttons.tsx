@@ -49,7 +49,12 @@ export const BackRevert = ({
 }: BackRevertProps) => {
   return (
     <div
-      style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}
+      style={{
+        display: "grid",
+        width: "fit-content",
+        gridTemplateColumns: "1fr 1fr",
+        gap: "6px",
+      }}
     >
       <CrudButton
         label="Back"
@@ -112,7 +117,7 @@ export const DeleteButton = ({
 
   return (
     <>
-      <div style={{ display: "grid", width: "100%" }}>
+      <div style={{ display: "grid", width: "fit-content" }}>
         {confirm && !disabled ? (
           <span
             style={{
@@ -123,6 +128,7 @@ export const DeleteButton = ({
             <Button
               id="delete-button"
               rounded
+              autoFocus
               raised={!disabled}
               icon={icon}
               type={type}

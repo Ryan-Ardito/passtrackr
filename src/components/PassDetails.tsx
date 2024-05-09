@@ -165,8 +165,9 @@ export function PassDetails({
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "2fr 3fr",
+                gridTemplateColumns: "auto auto",
                 gap: "6px",
+                width: "fit-content"
               }}
             >
               <FavoriteButton
