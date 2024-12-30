@@ -3,5 +3,6 @@
 ## Demo
 
 ```bash
-./run-dev.sh
+yarn install
+yarn run demo
 ```
